@@ -1,384 +1,668 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>St. Monica LK3C Bible Study</title>
 
+    <meta
+        name="description"
+        content="St. Monica LK3C interactive Bible study."
+    >
+
     <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
-    <!-- =========================
-         HOME
-    ========================== -->
 
-    <section id="home" class="section active">
+    <!-- =========================================
+         HOME SCREEN
+    ========================================== -->
 
-        <div class="hero">
+    <section id="home" class="screen active">
 
-            <div class="hero-icon">✝️</div>
+        <div class="welcome-content">
 
-            <h1>St. Monica LK3C</h1>
-
-            <h2>Bible Study</h2>
-
-            <p>
-                Reflect. Discuss. Grow in Faith.
-            </p>
-
-        </div>
-
-
-        <div class="home-menu">
-
-            <button onclick="showSection('story')">
-                📖
-                <span>Story</span>
-            </button>
-
-            <button onclick="showSection('questions')">
-                ❓
-                <span>Reflection Questions</span>
-            </button>
-
-            <button onclick="showSection('prayers')">
-                🙏
-                <span>Catholic Prayers</span>
-            </button>
-
-            <button onclick="showSection('public-chat')">
-                💬
-                <span>Public Chat</span>
-            </button>
-
-            <!-- ADMIN BUTTON -->
-            <button
-                id="admin-button"
-                onclick="openAdmin()"
-                style="display: none;"
-            >
-                🔐
-                <span>Admin</span>
-            </button>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =========================
-         STORY
-    ========================== -->
-
-    <section id="story" class="section">
-
-        <div class="section-header">
-
-            <button
-                onclick="showSection('home')"
-                class="back-button"
-            >
-                ← Back
-            </button>
-
-            <h1>📖 Story</h1>
-
-        </div>
-
-
-        <div
-            id="story-content"
-            class="content-card"
-        >
-
-            <p>Loading story...</p>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =========================
-         QUESTIONS
-    ========================== -->
-
-    <section id="questions" class="section">
-
-        <div class="section-header">
-
-            <button
-                onclick="showSection('home')"
-                class="back-button"
-            >
-                ← Back
-            </button>
-
-            <h1>❓ Reflection Questions</h1>
-
-        </div>
-
-
-        <div
-            id="questions-content"
-            class="content-card"
-        >
-
-            <p>Loading questions...</p>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =========================
-         PRAYERS
-    ========================== -->
-
-    <section id="prayers" class="section">
-
-        <div class="section-header">
-
-            <button
-                onclick="showSection('home')"
-                class="back-button"
-            >
-                ← Back
-            </button>
-
-            <h1>🙏 Catholic Prayers</h1>
-
-        </div>
-
-
-        <div class="content-card">
-
-            <h2>Our Father</h2>
-
-            <p>
-                Our Father, who art in heaven,
-                hallowed be thy name;
-                thy kingdom come;
-                thy will be done,
-                on earth as it is in heaven.
-            </p>
-
-            <p>
-                Give us this day our daily bread,
-                and forgive us our trespasses,
-                as we forgive those who trespass against us;
-                and lead us not into temptation,
-                but deliver us from evil.
-                Amen.
-            </p>
-
-
-            <h2>Hail Mary</h2>
-
-            <p>
-                Hail Mary, full of grace,
-                the Lord is with thee.
-                Blessed art thou among women,
-                and blessed is the fruit of thy womb, Jesus.
-            </p>
-
-            <p>
-                Holy Mary, Mother of God,
-                pray for us sinners,
-                now and at the hour of our death.
-                Amen.
-            </p>
-
-
-            <h2>Glory Be</h2>
-
-            <p>
-                Glory be to the Father,
-                and to the Son,
-                and to the Holy Spirit,
-                as it was in the beginning,
-                is now, and ever shall be,
-                world without end.
-                Amen.
-            </p>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =========================
-         PUBLIC CHAT LOGIN
-    ========================== -->
-
-    <section id="public-chat" class="section">
-
-        <div class="section-header">
-
-            <button
-                onclick="showSection('home')"
-                class="back-button"
-            >
-                ← Back
-            </button>
-
-            <h1>💬 Public Chat</h1>
-
-        </div>
-
-
-        <!-- CHAT LOGIN -->
-
-        <div
-            id="chat-login"
-            class="chat-login"
-        >
-
-            <div class="chat-login-icon">
-                💬
+            <div class="logo-placeholder">
+                ✝
             </div>
 
-            <h2>Join the Discussion</h2>
+            <p class="community-name">
+                ST. MONICA LK3C
+            </p>
 
-            <p>
-                Choose an anonymous name to join
-                the Bible Study conversation.
+            <h1>
+                Bible Study
+            </h1>
+
+            <p class="welcome-text">
+                Read. Reflect. Pray. Connect.
             </p>
 
 
-            <input
-                type="text"
-                id="anonymous-name"
-                placeholder="Enter your anonymous name"
-                maxlength="25"
-                autocomplete="off"
-            >
+            <div class="menu">
+
+                <button
+                    class="menu-button"
+                    onclick="showSection('story')"
+                >
+
+                    <span class="icon">
+                        📖
+                    </span>
+
+                    <span>
+
+                        <strong>
+                            Story
+                        </strong>
+
+                        <small>
+                            Read the Bible study story
+                        </small>
+
+                    </span>
+
+                </button>
 
 
-            <button
-                id="enter-chat-button"
-                type="button"
-            >
-                Enter Public Chat
-            </button>
+                <button
+                    class="menu-button"
+                    onclick="showSection('questions')"
+                >
+
+                    <span class="icon">
+                        ❓
+                    </span>
+
+                    <span>
+
+                        <strong>
+                            Questions
+                        </strong>
+
+                        <small>
+                            Reflect and share your thoughts
+                        </small>
+
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="menu-button"
+                    onclick="showSection('prayers')"
+                >
+
+                    <span class="icon">
+                        🙏
+                    </span>
+
+                    <span>
+
+                        <strong>
+                            Prayers
+                        </strong>
+
+                        <small>
+                            Explore Catholic prayers
+                        </small>
+
+                    </span>
+
+                </button>
+
+
+                <button
+                    class="menu-button"
+                    onclick="showSection('public-chat')"
+                >
+
+                    <span class="icon">
+                        💬
+                    </span>
+
+                    <span>
+
+                        <strong>
+                            Public Chat
+                        </strong>
+
+                        <small>
+                            Join the anonymous discussion
+                        </small>
+
+                    </span>
+
+                </button>
+
+            </div>
 
         </div>
 
+    </section>
 
 
-        <!-- CHAT ROOM -->
 
-        <div
-            id="chat-room"
-            class="chat-room"
-            style="display: none;"
-        >
+    <!-- =========================================
+         STORY
+    ========================================== -->
 
-            <!-- CHAT HEADER -->
+    <section id="story" class="screen">
 
-            <div class="chat-header">
+        <div class="page">
 
-                <div>
+            <button
+                class="back-button"
+                onclick="showSection('home')"
+            >
+                ← Back
+            </button>
+
+
+            <h2>
+                The Missing Piece
+            </h2>
+
+
+            <div class="story-content">
+
+                <p>
+                    Daniel had been dating Michelle for almost two years.
+                    They knew each other well—or at least Daniel thought
+                    they did.
+                </p>
+
+                <p>
+                    As the semester became busier, however, they slowly
+                    grew distant. During that period, Daniel became close
+                    to Aisha, a friend he had met through campus activities.
+                </p>
+
+                <p>
+                    What began as ordinary conversations gradually crossed
+                    a boundary neither of them had planned to cross.
+                </p>
+
+                <p>
+                    Aisha once told him that sometimes the things we seek
+                    outside our relationships reveal something missing
+                    within us.
+                </p>
+
+                <p>
+                    Daniel eventually found himself facing a situation
+                    that forced him to think about trust, responsibility,
+                    relationships, choices, and the consequences of
+                    our actions.
+                </p>
+
+                <p>
+                    The experience became a turning point for everyone
+                    involved.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         QUESTIONS
+    ========================================== -->
+
+    <section id="questions" class="screen">
+
+        <div class="page">
+
+            <button
+                class="back-button"
+                onclick="showSection('home')"
+            >
+                ← Back
+            </button>
+
+
+            <h2>
+                Reflection Questions
+            </h2>
+
+
+            <p class="section-intro">
+                Take a moment to reflect on the story.
+            </p>
+
+
+            <ol>
+
+                <li>
+                    What do you think was the main problem in
+                    Daniel's relationship with Michelle?
+                </li>
+
+                <li>
+                    At what point do you think Daniel crossed a boundary?
+                </li>
+
+                <li>
+                    What role does communication play in relationships?
+                </li>
+
+                <li>
+                    How should Christians respond when they make mistakes?
+                </li>
+
+                <li>
+                    What can we learn from Daniel, Michelle, and Aisha?
+                </li>
+
+                <li>
+                    How can we make better decisions when facing
+                    difficult situations?
+                </li>
+
+            </ol>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         PRAYERS
+    ========================================== -->
+
+    <section id="prayers" class="screen">
+
+        <div class="page">
+
+            <button
+                class="back-button"
+                onclick="showSection('home')"
+            >
+                ← Back
+            </button>
+
+
+            <h2>
+                Catholic Prayers
+            </h2>
+
+
+            <div class="prayer">
+
+                <h3>
+                    Our Father
+                </h3>
+
+                <p>
+                    Our Father, who art in heaven,
+                    hallowed be thy name;
+                    thy kingdom come;
+                    thy will be done,
+                    on earth as it is in heaven.
+                </p>
+
+                <p>
+                    Give us this day our daily bread,
+                    and forgive us our trespasses,
+                    as we forgive those who trespass against us;
+                    and lead us not into temptation,
+                    but deliver us from evil.
+                    Amen.
+                </p>
+
+            </div>
+
+
+            <div class="prayer">
+
+                <h3>
+                    Hail Mary
+                </h3>
+
+                <p>
+                    Hail Mary, full of grace,
+                    the Lord is with thee.
+                    Blessed art thou among women,
+                    and blessed is the fruit of thy womb, Jesus.
+                </p>
+
+                <p>
+                    Holy Mary, Mother of God,
+                    pray for us sinners,
+                    now and at the hour of our death.
+                    Amen.
+                </p>
+
+            </div>
+
+
+            <div class="prayer">
+
+                <h3>
+                    Glory Be
+                </h3>
+
+                <p>
+                    Glory be to the Father,
+                    and to the Son,
+                    and to the Holy Spirit;
+                    as it was in the beginning,
+                    is now, and ever shall be,
+                    world without end.
+                    Amen.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         PUBLIC CHAT
+    ========================================== -->
+
+    <section id="public-chat" class="screen">
+
+        <div class="chat-page">
+
+
+            <!-- =================================
+                 CHAT LOGIN
+            ================================== -->
+
+            <div
+                id="chat-login"
+                class="chat-login"
+            >
+
+                <button
+                    class="back-button"
+                    onclick="showSection('home')"
+                >
+                    ← Back
+                </button>
+
+
+                <div class="chat-login-card">
+
+                    <div class="chat-login-icon">
+                        💬
+                    </div>
+
+
+                    <p class="chat-community">
+                        ST. MONICA LK3C
+                    </p>
+
 
                     <h2>
-                        💬 Public Discussion
+                        Public Chat
                     </h2>
 
-                    <small>
-                        Share, listen and grow together.
-                    </small>
+
+                    <p class="chat-login-description">
+                        Join the Bible study discussion anonymously.
+                        Choose a name that other participants will see.
+                    </p>
+
+
+                    <label
+                        for="anonymous-name"
+                        class="chat-label"
+                    >
+                        Your anonymous name
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="anonymous-name"
+                        class="anonymous-name-input"
+                        placeholder="e.g. Faithful Soul"
+                        maxlength="25"
+                        autocomplete="off"
+                    >
+
+
+                    <p
+                        id="chat-login-error"
+                        class="chat-login-error"
+                    ></p>
+
+
+                    <button
+                        id="enter-chat-button"
+                        class="enter-chat-button"
+                    >
+                        Enter Public Chat
+                    </button>
+
+
+                    <p class="chat-privacy-note">
+                        Your real name is not required.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 ACTUAL GROUP CHAT
+            ================================== -->
+
+            <div
+                id="chat-room"
+                class="chat-room"
+                style="display: none;"
+            >
+
+
+                <!-- CHAT HEADER -->
+
+                <header class="chat-header">
+
+                    <button
+                        class="chat-back-button"
+                        onclick="showSection('home')"
+                        aria-label="Back to home"
+                    >
+                        ←
+                    </button>
+
+
+                    <div class="chat-header-info">
+
+                        <div class="chat-header-icon">
+                            💬
+                        </div>
+
+                        <div>
+
+                            <h2>
+                                Bible Study Chat
+                            </h2>
+
+                            <p>
+                                Public discussion
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        id="change-chat-name"
+                        class="chat-menu-button"
+                        aria-label="Change anonymous name"
+                    >
+                        ⋮
+                    </button>
+
+                </header>
+
+
+
+                <!-- CHAT INFORMATION -->
+
+                <div class="chat-notice">
+
+                    <span>
+                        🔒
+                    </span>
+
+                    <p>
+                        You are chatting anonymously.
+                        Be respectful and kind to everyone.
+                    </p>
 
                 </div>
 
 
-                <button
-                    id="change-name-button"
-                    type="button"
-                >
-                    Change Name
-                </button>
 
-            </div>
+                <!-- MESSAGES -->
 
-
-
-            <!-- ANONYMOUS ID -->
-
-            <div class="anonymous-bar">
-
-                <span>
-                    You are chatting as
-                </span>
-
-                <strong id="anonymous-id">
-                    Anonymous
-                </strong>
-
-            </div>
-
-
-
-            <!-- MESSAGES -->
-
-            <div
-                id="chat-messages"
-                class="chat-messages"
-            >
-            </div>
-
-
-
-            <!-- REPLY PREVIEW -->
-
-            <div
-                id="reply-preview"
-                class="reply-preview"
-                style="display: none;"
-            >
-            </div>
-
-
-
-            <!-- MESSAGE FORM -->
-
-            <form
-                id="chat-form"
-                class="chat-form"
-            >
-
-                <button
-                    type="button"
-                    id="emoji-button"
-                    class="emoji-button"
-                    title="Add emoji"
-                >
-                    😊
-                </button>
-
-
-                <input
-                    type="text"
-                    id="chat-message"
-                    placeholder="Write a message..."
-                    maxlength="500"
-                    autocomplete="off"
+                <div
+                    id="chat-messages"
+                    class="chat-messages"
                 >
 
+                    <div class="chat-welcome">
 
-                <button
-                    type="submit"
-                    class="send-button"
+                        <div class="chat-welcome-icon">
+                            ✝
+                        </div>
+
+                        <h3>
+                            Welcome to the discussion
+                        </h3>
+
+                        <p>
+                            Share your thoughts about the Bible study
+                            and listen to what others have to say.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- REPLY PREVIEW -->
+
+                <div
+                    id="reply-preview"
+                    class="reply-preview"
+                    style="display: none;"
                 >
-                    ➤
-                </button>
 
-            </form>
+                    <div class="reply-preview-line"></div>
+
+
+                    <div class="reply-preview-content">
+
+                        <strong>
+                            Replying to
+                            <span id="reply-name">
+                                Anonymous
+                            </span>
+                        </strong>
+
+                        <p id="reply-text">
+                            Message
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        id="cancel-reply"
+                        class="cancel-reply"
+                        aria-label="Cancel reply"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+
+
+                <!-- MESSAGE COMPOSER -->
+
+                <form
+                    id="chat-form"
+                    class="chat-composer"
+                >
+
+                    <button
+                        type="button"
+                        id="emoji-button"
+                        class="composer-button"
+                        aria-label="Emoji"
+                    >
+                        😊
+                    </button>
+
+
+                    <input
+                        type="text"
+                        id="chat-message"
+                        placeholder="Message..."
+                        autocomplete="off"
+                        maxlength="500"
+                        required
+                    >
+
+
+                    <button
+                        type="submit"
+                        class="send-button"
+                        aria-label="Send message"
+                    >
+                        ➤
+                    </button>
+
+                </form>
+
+
+
+                <!-- CURRENT USER -->
+
+                <div class="current-user-bar">
+
+                    <span>
+                        You're chatting as
+                    </span>
+
+                    <strong id="anonymous-id">
+                        Anonymous
+                    </strong>
+
+                </div>
+
+            </div>
 
         </div>
 
@@ -386,140 +670,12 @@
 
 
 
-    <!-- =========================
-         ADMIN EDITOR
-    ========================== -->
-
-    <section id="admin" class="section">
-
-        <div class="section-header">
-
-            <button
-                onclick="showSection('home')"
-                class="back-button"
-            >
-                ← Back
-            </button>
-
-            <h1>🔐 Admin Editor</h1>
-
-            <p>
-                Only your authorized account can edit
-                the Bible Study content.
-            </p>
-
-        </div>
-
-
-
-        <!-- STORY EDITOR -->
-
-        <div class="admin-editor-card">
-
-            <h2>📖 Edit Story</h2>
-
-            <label for="admin-story-title">
-                Story Title
-            </label>
-
-            <input
-                type="text"
-                id="admin-story-title"
-                placeholder="Enter story title"
-                maxlength="150"
-            >
-
-
-            <label for="admin-story-body">
-                Story
-            </label>
-
-            <textarea
-                id="admin-story-body"
-                rows="18"
-                placeholder="Write or paste the story here..."
-            ></textarea>
-
-
-            <button
-                type="button"
-                onclick="saveStory()"
-                class="admin-save-button"
-            >
-                💾 Save Story
-            </button>
-
-        </div>
-
-
-
-        <!-- QUESTIONS EDITOR -->
-
-        <div class="admin-editor-card">
-
-            <h2>❓ Edit Questions</h2>
-
-            <label for="admin-questions-title">
-                Questions Title
-            </label>
-
-            <input
-                type="text"
-                id="admin-questions-title"
-                placeholder="Enter questions title"
-                maxlength="150"
-            >
-
-
-            <label for="admin-questions-body">
-                Questions
-            </label>
-
-            <textarea
-                id="admin-questions-body"
-                rows="15"
-                placeholder="Write or paste the questions here..."
-            ></textarea>
-
-
-            <button
-                type="button"
-                onclick="saveQuestions()"
-                class="admin-save-button"
-            >
-                💾 Save Questions
-            </button>
-
-        </div>
-
-
-
-        <!-- ADMIN NOTE -->
-
-        <div class="admin-note">
-
-            <strong>🔒 Private Admin Area</strong>
-
-            <p>
-                Only authorized Firebase admin accounts
-                can save changes. Regular users can only
-                read the content.
-            </p>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =========================
+    <!-- =========================================
          JAVASCRIPT
-    ========================== -->
+    ========================================== -->
 
-    <script
-        type="module"
-        src="script.js"
-    ></script>
+    <script src="script.js"></script>
 
 </body>
+
 </html>
