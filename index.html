@@ -14,7 +14,7 @@
 
     <meta
         name="description"
-        content="An interactive Bible study space for St. Monica LK3C."
+        content="St. Monica LK3C interactive Bible study."
     >
 
     <link rel="stylesheet" href="style.css">
@@ -26,88 +26,178 @@
 
 
     <!-- =========================
-         WELCOME
+         WELCOME SCREEN
     ========================== -->
 
-    <header id="welcome">
+    <section id="home" class="screen active">
 
-        <h1>St. Monica LK3C</h1>
+        <div class="welcome-content">
 
-        <h2>Bible Study</h2>
+            <div class="logo-placeholder">
+                ✝
+            </div>
 
-        <p>
-            Welcome to our interactive Bible study space.
-        </p>
+            <p class="community-name">
+                ST. MONICA LK3C
+            </p>
 
-        <p>
-            Read the story, reflect on the questions,
-            explore the prayers, and join the conversation.
-        </p>
+            <h1>
+                Bible Study
+            </h1>
 
-        <button type="button">
-            Enter Bible Study
-        </button>
+            <p class="welcome-text">
+                Read. Reflect. Pray. Connect.
+            </p>
 
-    </header>
+
+            <!-- MAIN MENU -->
+
+            <div class="menu">
+
+                <button
+                    class="menu-button"
+                    onclick="showSection('story')"
+                >
+                    <span class="icon">📖</span>
+
+                    <span>
+                        <strong>Story</strong>
+                        <small>Read the Bible study story</small>
+                    </span>
+                </button>
+
+
+                <button
+                    class="menu-button"
+                    onclick="showSection('questions')"
+                >
+                    <span class="icon">❓</span>
+
+                    <span>
+                        <strong>Questions</strong>
+                        <small>Reflect and share your thoughts</small>
+                    </span>
+                </button>
+
+
+                <button
+                    class="menu-button"
+                    onclick="showSection('prayers')"
+                >
+                    <span class="icon">🙏</span>
+
+                    <span>
+                        <strong>Prayers</strong>
+                        <small>Explore Catholic prayers</small>
+                    </span>
+                </button>
+
+
+                <button
+                    class="menu-button"
+                    onclick="showSection('public-chat')"
+                >
+                    <span class="icon">💬</span>
+
+                    <span>
+                        <strong>Public Chat</strong>
+                        <small>Join the anonymous discussion</small>
+                    </span>
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
 
 
 
     <!-- =========================
-         MAIN CONTENT
+         STORY
     ========================== -->
 
-    <main>
+    <section id="story" class="screen">
 
+        <div class="page">
 
-        <!-- STORY -->
+            <button
+                class="back-button"
+                onclick="showSection('home')"
+            >
+                ← Back
+            </button>
 
-        <section id="story">
 
             <h2>The Missing Piece</h2>
 
-            <p>
-                Daniel had been dating Michelle for almost two years.
-                They knew each other well—or at least Daniel thought they did.
-            </p>
+            <div class="story-content">
 
-            <p>
-                As the semester became busier, however, they slowly
-                grew distant. During that period, Daniel became close
-                to Aisha, a friend he had met through campus activities.
-            </p>
+                <p>
+                    Daniel had been dating Michelle for almost two years.
+                    They knew each other well—or at least Daniel thought
+                    they did.
+                </p>
 
-            <p>
-                What began as ordinary conversations gradually crossed
-                a boundary neither of them had planned to cross.
-            </p>
+                <p>
+                    As the semester became busier, however, they slowly
+                    grew distant. During that period, Daniel became close
+                    to Aisha, a friend he had met through campus activities.
+                </p>
 
-            <p>
-                Aisha once told him that sometimes the things we seek
-                outside our relationships reveal something missing
-                within us.
-            </p>
+                <p>
+                    What began as ordinary conversations gradually crossed
+                    a boundary neither of them had planned to cross.
+                </p>
 
-            <p>
-                Daniel eventually found himself facing a situation
-                that forced him to think about trust, responsibility,
-                relationships, choices, and the consequences of our actions.
-            </p>
+                <p>
+                    Aisha once told him that sometimes the things we seek
+                    outside our relationships reveal something missing
+                    within us.
+                </p>
 
-            <p>
-                The experience became a turning point for everyone involved.
-            </p>
+                <p>
+                    Daniel eventually found himself facing a situation
+                    that forced him to think about trust, responsibility,
+                    relationships, choices, and the consequences of
+                    our actions.
+                </p>
 
-        </section>
+                <p>
+                    The experience became a turning point for everyone
+                    involved.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
 
 
 
-        <!-- =========================
-             QUESTIONS
-        ========================== -->
+    <!-- =========================
+         QUESTIONS
+    ========================== -->
 
-        <section id="questions">
+    <section id="questions" class="screen">
+
+        <div class="page">
+
+            <button
+                class="back-button"
+                onclick="showSection('home')"
+            >
+                ← Back
+            </button>
+
 
             <h2>Reflection Questions</h2>
+
+            <p class="section-intro">
+                Take a moment to reflect on the story.
+            </p>
+
 
             <ol>
 
@@ -139,20 +229,32 @@
 
             </ol>
 
-        </section>
+        </div>
+
+    </section>
 
 
 
-        <!-- =========================
-             PRAYERS
-        ========================== -->
+    <!-- =========================
+         PRAYERS
+    ========================== -->
 
-        <section id="prayers">
+    <section id="prayers" class="screen">
+
+        <div class="page">
+
+            <button
+                class="back-button"
+                onclick="showSection('home')"
+            >
+                ← Back
+            </button>
+
 
             <h2>Catholic Prayers</h2>
 
 
-            <article>
+            <div class="prayer">
 
                 <h3>Our Father</h3>
 
@@ -170,12 +272,13 @@
                     as we forgive those who trespass against us;
                     and lead us not into temptation,
                     but deliver us from evil.
+                    Amen.
                 </p>
 
-            </article>
+            </div>
 
 
-            <article>
+            <div class="prayer">
 
                 <h3>Hail Mary</h3>
 
@@ -193,10 +296,10 @@
                     Amen.
                 </p>
 
-            </article>
+            </div>
 
 
-            <article>
+            <div class="prayer">
 
                 <h3>Glory Be</h3>
 
@@ -210,65 +313,63 @@
                     Amen.
                 </p>
 
-            </article>
+            </div>
 
-        </section>
+        </div>
+
+    </section>
 
 
 
-        <!-- =========================
-             PUBLIC CHAT
-        ========================== -->
+    <!-- =========================
+         PUBLIC CHAT
+    ========================== -->
 
-        <section id="public-chat">
+    <section id="public-chat" class="screen">
+
+        <div class="page">
+
+            <button
+                class="back-button"
+                onclick="showSection('home')"
+            >
+                ← Back
+            </button>
+
 
             <h2>Public Chat</h2>
 
-            <p>
-                Join the conversation with other Bible study participants.
-            </p>
-
-            <p>
-                You can participate using an anonymous identity.
+            <p class="section-intro">
+                Join the discussion with other Bible study participants.
             </p>
 
 
-            <!-- USER ID -->
+            <div class="anonymous-user">
 
-            <div id="anonymous-user">
+                <span>Your identity</span>
 
-                <p>
-                    Your anonymous ID:
-                    <strong>Connecting...</strong>
-                </p>
+                <strong id="anonymous-id">
+                    Connecting...
+                </strong>
 
             </div>
 
 
-            <!-- CHAT MESSAGES -->
-
             <div id="chat-messages">
 
-                <p>
+                <p class="empty-chat">
                     No messages yet.
                 </p>
 
             </div>
 
 
-            <!-- CHAT FORM -->
-
             <form id="chat-form">
-
-                <label for="chat-message">
-                    Message
-                </label>
 
                 <input
                     type="text"
                     id="chat-message"
-                    name="chat-message"
-                    placeholder="Write your message..."
+                    placeholder="Write a message..."
                     autocomplete="off"
                     required
                 >
@@ -279,32 +380,15 @@
 
             </form>
 
-        </section>
+        </div>
 
-
-    </main>
+    </section>
 
 
 
     <!-- =========================
-         FOOTER
+         JAVASCRIPT
     ========================== -->
-
-    <footer>
-
-        <p>
-            St. Monica LK3C
-        </p>
-
-        <p>
-            Bible Study
-        </p>
-
-    </footer>
-
-
-
-    <!-- JAVASCRIPT -->
 
     <script src="script.js"></script>
 
