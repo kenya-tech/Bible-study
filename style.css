@@ -1,1650 +1,766 @@
-/* ========================================
-   ST. MONICA LK3C BIBLE STUDY
-   COMPLETE APP STYLING
-======================================== */
-
-
-/* ========================================
-   RESET
-======================================== */
+/* =========================================================
+   ST. MONICA LK3C — BIBLE STUDY
+   Modern Catholic Bible Study UI
+   ========================================================= */
 
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-html {
-    scroll-behavior: smooth;
+:root {
+  --purple: #5b3a82;
+  --purple-dark: #3f275f;
+  --purple-light: #eee7f6;
+
+  --cream: #fffaf2;
+  --cream-dark: #f5ecdf;
+
+  --gold: #c49a45;
+  --gold-light: #ead9aa;
+
+  --text: #2f2935;
+  --muted: #776f7d;
+
+  --white: #ffffff;
+  --border: #e8deed;
+
+  --shadow: 0 10px 30px rgba(63, 39, 95, 0.10);
+  --shadow-soft: 0 5px 18px rgba(63, 39, 95, 0.08);
+
+  --radius: 18px;
 }
+
+/* =========================================================
+   BODY
+   ========================================================= */
 
 body {
-    font-family: Georgia, "Times New Roman", serif;
-    background: #f3eee7;
-    color: #332d35;
-    line-height: 1.8;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(196, 154, 69, 0.10), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(91, 58, 130, 0.10), transparent 35%),
+    var(--cream);
+
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
 }
 
+/* =========================================================
+   MAIN APP
+   ========================================================= */
 
-/* ========================================
-   GENERAL SCREENS
-======================================== */
-
-.screen {
-    display: none;
-    min-height: 100vh;
-    padding: 25px 20px;
+.app {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 18px 60px;
 }
 
-.screen.active {
-    display: block;
+/* =========================================================
+   HOME HEADER
+   ========================================================= */
+
+header {
+  text-align: center;
+  padding: 42px 20px 32px;
 }
 
-
-/* ========================================
-   HOME
-======================================== */
-
-#home {
-    background:
-        radial-gradient(
-            circle at 15% 10%,
-            rgba(255,255,255,0.12),
-            transparent 30%
-        ),
-        radial-gradient(
-            circle at 85% 90%,
-            rgba(255,255,255,0.08),
-            transparent 30%
-        ),
-        linear-gradient(
-            145deg,
-            #24152f,
-            #4d3062,
-            #725181
-        );
-
-    color: white;
-
-    display: none;
-
-    align-items: center;
-    justify-content: center;
+header h1 {
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  color: var(--purple-dark);
+  font-weight: 800;
+  letter-spacing: -1px;
 }
 
-#home.active {
-    display: flex;
+header p {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 1.05rem;
 }
 
-.welcome-content {
-    width: 100%;
-    max-width: 600px;
-    text-align: center;
+/* =========================================================
+   NAVIGATION / HOME BUTTONS
+   ========================================================= */
+
+nav {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin: 15px auto 30px;
+  max-width: 720px;
 }
 
-.logo-placeholder {
-    width: 82px;
-    height: 82px;
-
-    margin: 0 auto 20px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border: 1px solid rgba(255,255,255,0.45);
-
-    border-radius: 50%;
-
-    font-size: 2rem;
-
-    background: rgba(255,255,255,0.08);
-
-    backdrop-filter: blur(10px);
-
-    box-shadow:
-        0 10px 35px rgba(0,0,0,0.15);
-}
-
-.community-name {
-    font-family: Arial, sans-serif;
-    font-size: 0.82rem;
-    letter-spacing: 4px;
-    opacity: 0.8;
-    margin-bottom: 5px;
-}
-
-.welcome-content h1 {
-    font-size: 3rem;
-    margin-bottom: 8px;
-}
-
-.welcome-text {
-    opacity: 0.8;
-    margin-bottom: 35px;
-}
-
-
-/* ========================================
-   HOME MENU
-======================================== */
-
-.menu {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-
+nav button,
 .menu-button {
-    width: 100%;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--purple-dark);
 
-    display: flex;
-    align-items: center;
+  padding: 22px 16px;
+  border-radius: var(--radius);
 
-    text-align: left;
+  font-size: 1rem;
+  font-weight: 700;
 
-    gap: 18px;
+  cursor: pointer;
 
-    padding: 18px;
+  box-shadow: var(--shadow-soft);
 
-    border: 1px solid rgba(255,255,255,0.16);
-
-    border-radius: 18px;
-
-    background: rgba(255,255,255,0.10);
-
-    color: white;
-
-    cursor: pointer;
-
-    transition: all 0.25s ease;
-
-    backdrop-filter: blur(10px);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
+nav button:hover,
 .menu-button:hover {
-    background: rgba(255,255,255,0.19);
-
-    transform: translateY(-3px);
-
-    box-shadow:
-        0 10px 25px rgba(0,0,0,0.12);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+  background: var(--white);
 }
 
-.icon {
-    font-size: 1.8rem;
-    width: 42px;
-    text-align: center;
+nav button:active,
+.menu-button:active {
+  transform: scale(0.98);
 }
 
-.menu-button strong {
-    display: block;
-    font-family: Arial, sans-serif;
-    font-size: 1.05rem;
+/* =========================================================
+   PAGE SECTIONS
+   ========================================================= */
+
+section {
+  animation: fadeIn 0.3s ease;
 }
 
-.menu-button small {
-    display: block;
-    margin-top: 2px;
-    opacity: 0.7;
-    font-family: Arial, sans-serif;
-    font-size: 0.82rem;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
+section h2 {
+  color: var(--purple-dark);
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
 
-/* ========================================
-   GENERAL INNER PAGES
-======================================== */
+section h3 {
+  color: var(--purple);
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+}
 
-#story,
-#questions,
+/* =========================================================
+   CONTENT CARDS
+   ========================================================= */
+
+.content-card,
+.story-card,
+.questions-card,
+.prayer-card,
+.admin-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-soft);
+}
+
+.content-card:hover,
+.story-card:hover,
+.questions-card:hover,
+.prayer-card:hover {
+  box-shadow: var(--shadow);
+}
+
+/* =========================================================
+   STORY
+   ========================================================= */
+
+#story h2 {
+  text-transform: capitalize;
+}
+
+#storyContent {
+  font-size: 1.04rem;
+  line-height: 1.85;
+  color: #443d49;
+}
+
+#storyContent p {
+  margin-bottom: 18px;
+}
+
+#storyContent p:last-child {
+  margin-bottom: 0;
+}
+
+/* =========================================================
+   QUESTIONS
+   ========================================================= */
+
+#questionsContent {
+  font-size: 1.03rem;
+  line-height: 1.8;
+}
+
+#questionsContent p {
+  margin-bottom: 16px;
+}
+
+/* =========================================================
+   PRAYERS
+   ========================================================= */
+
 #prayers {
-
-    background:
-        radial-gradient(
-            circle at top left,
-            rgba(174,143,190,0.16),
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at bottom right,
-            rgba(210,180,150,0.13),
-            transparent 35%
-        ),
-        #f3eee7;
+  max-width: 850px;
+  margin: auto;
 }
 
-.page {
-    max-width: 850px;
-    margin: auto;
-    padding: 10px 0 55px;
+#prayers h2 {
+  margin-bottom: 20px;
 }
 
-.page h2 {
-    color: #392047;
-    font-size: 2.35rem;
-    margin: 28px 0 8px;
+#prayers h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--gold-light);
 }
 
-.section-intro {
-    color: #766b76;
-    margin-bottom: 28px;
+#prayers p {
+  color: #49424e;
+  line-height: 1.85;
 }
 
-
-/* ========================================
+/* =========================================================
    BACK BUTTON
-======================================== */
+   ========================================================= */
 
 .back-button {
-    border: none;
+  border: none;
+  background: transparent;
 
-    background: rgba(57,32,71,0.08);
+  color: var(--purple);
+  font-size: 0.95rem;
+  font-weight: 700;
 
-    color: #392047;
+  cursor: pointer;
 
-    font-family: Arial, sans-serif;
+  padding: 10px 0;
+  margin-bottom: 15px;
 
-    font-size: 0.9rem;
-
-    cursor: pointer;
-
-    padding: 9px 17px;
-
-    border-radius: 30px;
-
-    transition: all 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 .back-button:hover {
-    background: rgba(57,32,71,0.16);
-    transform: translateX(-2px);
+  color: var(--purple-dark);
 }
 
-
-/* ========================================
-   STORY
-======================================== */
-
-#story .page h2 {
-    text-align: center;
-    font-size: 2.7rem;
-    margin-top: 35px;
-}
-
-#story .page h2::after {
-    content: "";
-
-    display: block;
-
-    width: 55px;
-
-    height: 3px;
-
-    margin: 14px auto 28px;
-
-    background: #9670a5;
-
-    border-radius: 10px;
-}
-
-.story-content {
-    position: relative;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,0.96),
-            rgba(249,243,235,0.96)
-        );
-
-    padding: 45px 48px;
-
-    border-radius: 24px;
-
-    border: 1px solid rgba(91,65,100,0.12);
-
-    box-shadow:
-        0 20px 50px rgba(49,31,57,0.09),
-        0 3px 10px rgba(49,31,57,0.04);
-
-    overflow: hidden;
-}
-
-.story-content::before {
-    content: "✦";
-
-    position: absolute;
-
-    top: 18px;
-    right: 25px;
-
-    font-size: 1.5rem;
-
-    color: #9670a5;
-
-    opacity: 0.5;
-}
-
-.story-content p {
-    margin-bottom: 22px;
-    font-size: 1.06rem;
-    color: #403943;
-}
-
-.story-content p:first-child::first-letter {
-    float: left;
-
-    font-size: 4rem;
-
-    line-height: 0.8;
-
-    padding-right: 8px;
-
-    color: #6b477b;
-}
-
-.story-content p:last-child {
-    margin-bottom: 0;
-
-    padding-top: 15px;
-
-    border-top: 1px solid rgba(90,70,95,0.12);
-
-    color: #5d4b63;
-
-    font-style: italic;
-}
-
-
-/* ========================================
-   QUESTIONS
-======================================== */
-
-#questions .page h2 {
-    text-align: center;
-}
-
-#questions .section-intro {
-    text-align: center;
-}
-
-#questions ol {
-    background:
-        linear-gradient(
-            135deg,
-            #ffffff,
-            #faf6fb
-        );
-
-    padding: 30px 35px 30px 58px;
-
-    border-radius: 22px;
-
-    border: 1px solid rgba(80,50,90,0.08);
-
-    box-shadow:
-        0 15px 40px rgba(50,35,55,0.08);
-}
-
-#questions li {
-    margin-bottom: 16px;
-
-    padding: 17px 18px;
-
-    border-radius: 14px;
-
-    background: rgba(244,237,247,0.45);
-
-    transition: all 0.2s ease;
-}
-
-#questions li:hover {
-    background: #f1e8f4;
-    transform: translateX(3px);
-}
-
-#questions li:last-child {
-    margin-bottom: 0;
-}
-
-
-/* ========================================
-   PRAYERS
-======================================== */
-
-#prayers .page h2 {
-    text-align: center;
-    margin-bottom: 28px;
-}
-
-.prayer {
-    position: relative;
-
-    background:
-        linear-gradient(
-            135deg,
-            #fffdfb,
-            #f8f1f8
-        );
-
-    padding: 32px;
-
-    margin-bottom: 20px;
-
-    border-radius: 22px;
-
-    border: 1px solid rgba(85,55,95,0.08);
-
-    box-shadow:
-        0 12px 35px rgba(55,35,65,0.08);
-
-    overflow: hidden;
-}
-
-.prayer::after {
-    content: "✦";
-
-    position: absolute;
-
-    top: 18px;
-    right: 23px;
-
-    color: #a283ad;
-
-    opacity: 0.45;
-
-    font-size: 1.2rem;
-}
-
-.prayer h3 {
-    color: #482653;
-
-    margin-bottom: 15px;
-
-    font-size: 1.4rem;
-}
-
-.prayer p {
-    margin-bottom: 14px;
-    color: #443b45;
-}
-
-.prayer p:last-child {
-    margin-bottom: 0;
-}
-
-
-/* ========================================
+/* =========================================================
    PUBLIC CHAT
-======================================== */
+   ========================================================= */
 
-#public-chat {
-    padding: 0;
+.chat-container {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--border);
+  border-radius: 22px;
 
-    background:
-        linear-gradient(
-            145deg,
-            #eee7f1,
-            #f6f1ec
-        );
+  overflow: hidden;
+
+  box-shadow: var(--shadow);
 }
 
-.chat-page {
-    width: 100%;
-    min-height: 100vh;
-}
-
-
-/* ========================================
-   CHAT LOGIN
-======================================== */
-
-.chat-login {
-
-    min-height: 100vh;
-
-    max-width: 700px;
-
-    margin: auto;
-
-    padding: 25px 20px;
-
-    display: flex;
-
-    flex-direction: column;
-}
-
-.chat-login-card {
-
-    width: 100%;
-
-    max-width: 470px;
-
-    margin: auto;
-
-    padding: 45px 38px;
-
-    text-align: center;
-
-    background:
-        linear-gradient(
-            145deg,
-            #ffffff,
-            #f8f1f8
-        );
-
-    border-radius: 28px;
-
-    border: 1px solid rgba(75,45,85,0.10);
-
-    box-shadow:
-        0 25px 65px rgba(52,35,60,0.12);
-}
-
-.chat-login-icon {
-
-    width: 72px;
-
-    height: 72px;
-
-    margin: 0 auto 18px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background:
-        linear-gradient(
-            145deg,
-            #482653,
-            #80608e
-        );
-
-    color: white;
-
-    font-size: 1.8rem;
-
-    box-shadow:
-        0 10px 25px rgba(72,38,83,0.20);
-}
-
-.chat-community {
-
-    font-family: Arial, sans-serif;
-
-    font-size: 0.72rem;
-
-    letter-spacing: 3px;
-
-    color: #80608e;
-
-    margin-bottom: 5px;
-}
-
-.chat-login-card h2 {
-
-    color: #392047;
-
-    font-size: 2rem;
-
-    margin-bottom: 12px;
-}
-
-.chat-login-description {
-
-    color: #756b76;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 0.9rem;
-
-    line-height: 1.6;
-
-    margin-bottom: 28px;
-}
-
-.chat-label {
-
-    display: block;
-
-    text-align: left;
-
-    color: #4d4050;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 0.85rem;
-
-    font-weight: bold;
-
-    margin-bottom: 8px;
-}
-
-.anonymous-name-input {
-
-    width: 100%;
-
-    padding: 15px 16px;
-
-    border: 1px solid #d9d0dc;
-
-    border-radius: 14px;
-
-    outline: none;
-
-    background: white;
-
-    color: #332d35;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 1rem;
-
-    transition: 0.2s;
-}
-
-.anonymous-name-input:focus {
-
-    border-color: #80608e;
-
-    box-shadow:
-        0 0 0 4px rgba(128,96,142,0.10);
-}
-
-.chat-login-error {
-
-    min-height: 22px;
-
-    color: #a04444;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 0.8rem;
-
-    text-align: left;
-
-    margin-top: 7px;
-}
-
-.enter-chat-button {
-
-    width: 100%;
-
-    margin-top: 10px;
-
-    padding: 15px;
-
-    border: none;
-
-    border-radius: 14px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #482653,
-            #6b477b
-        );
-
-    color: white;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 0.95rem;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-    transition: all 0.2s ease;
-
-    box-shadow:
-        0 10px 25px rgba(72,38,83,0.18);
-}
-
-.enter-chat-button:hover {
-
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 14px 30px rgba(72,38,83,0.23);
-}
-
-.chat-privacy-note {
-
-    margin-top: 17px;
-
-    color: #999;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 0.75rem;
-}
-
-
-/* ========================================
-   CHAT ROOM
-======================================== */
-
-.chat-room {
-
-    width: 100%;
-
-    max-width: 850px;
-
-    height: 100vh;
-
-    min-height: 650px;
-
-    margin: 0 auto;
-
-    display: flex;
-
-    flex-direction: column;
-
-    background: #f5f1f4;
-
-    box-shadow:
-        0 0 45px rgba(50,30,60,0.10);
-}
-
-
-/* ========================================
-   CHAT HEADER
-======================================== */
+/* Chat header */
 
 .chat-header {
+  background: linear-gradient(
+    135deg,
+    var(--purple-dark),
+    var(--purple)
+  );
 
-    height: 75px;
-
-    flex-shrink: 0;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    padding: 0 18px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #482653,
-            #674575
-        );
-
-    color: white;
-
-    box-shadow:
-        0 3px 12px rgba(40,25,50,0.15);
-
-    z-index: 5;
-}
-
-.chat-back-button {
-
-    width: 42px;
-
-    height: 42px;
-
-    border: none;
-
-    border-radius: 50%;
-
-    background: rgba(255,255,255,0.10);
-
-    color: white;
-
-    font-size: 1.35rem;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-}
-
-.chat-back-button:hover {
-
-    background: rgba(255,255,255,0.20);
-}
-
-.chat-header-info {
-
-    flex: 1;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
-    margin-left: 12px;
-}
-
-.chat-header-icon {
-
-    width: 42px;
-
-    height: 42px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background: rgba(255,255,255,0.12);
-
-    font-size: 1.15rem;
+  color: white;
+  padding: 20px 22px;
 }
 
 .chat-header h2 {
-
-    font-family: Arial, sans-serif;
-
-    font-size: 1rem;
-
-    line-height: 1.2;
-
-    margin: 0;
+  color: white;
+  margin-bottom: 3px;
 }
 
 .chat-header p {
-
-    font-family: Arial, sans-serif;
-
-    font-size: 0.72rem;
-
-    opacity: 0.68;
-
-    margin-top: 2px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.9rem;
 }
 
-.chat-menu-button {
+/* Identity bar */
 
-    width: 42px;
+.chat-identity {
+  background: var(--purple-light);
+  padding: 12px 18px;
 
-    height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-    border: none;
+  gap: 10px;
 
-    background: transparent;
-
-    color: white;
-
-    font-size: 1.5rem;
-
-    cursor: pointer;
+  border-bottom: 1px solid var(--border);
 }
 
-
-/* ========================================
-   CHAT NOTICE
-======================================== */
-
-.chat-notice {
-
-    flex-shrink: 0;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 9px;
-
-    padding: 9px 18px;
-
-    background: #eee7f1;
-
-    border-bottom: 1px solid #ddd3e0;
+.chat-identity strong {
+  color: var(--purple-dark);
 }
 
-.chat-notice span {
-
-    font-size: 0.85rem;
+.chat-identity button {
+  border: none;
+  background: transparent;
+  color: var(--purple);
+  font-weight: 700;
+  cursor: pointer;
 }
 
-.chat-notice p {
+/* =========================================================
+   CHAT MESSAGES
+   ========================================================= */
 
-    color: #766d78;
+#chatMessages,
+.messages {
+  min-height: 360px;
+  max-height: 520px;
 
-    font-family: Arial, sans-serif;
+  overflow-y: auto;
 
-    font-size: 0.72rem;
+  padding: 20px;
 
-    line-height: 1.4;
+  background:
+    radial-gradient(circle at top right, rgba(196, 154, 69, 0.08), transparent 30%),
+    #fffdf9;
 }
 
+/* Individual message */
 
-/* ========================================
-   MESSAGE AREA
-======================================== */
+.message {
+  max-width: 78%;
+  margin-bottom: 14px;
 
-.chat-messages {
+  padding: 11px 14px;
 
-    flex: 1;
+  border-radius: 16px;
 
-    overflow-y: auto;
+  background: #f0ebf5;
+  color: var(--text);
 
-    padding: 25px 20px;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.04);
 
-    background:
-        radial-gradient(
-            circle at top,
-            rgba(255,255,255,0.8),
-            transparent 45%
-        ),
-        #f5f1f4;
-
-    scroll-behavior: smooth;
+  position: relative;
 }
 
+/* Other people's messages */
 
-/* ========================================
-   CHAT WELCOME
-======================================== */
-
-.chat-welcome {
-
-    max-width: 320px;
-
-    margin: 45px auto;
-
-    padding: 28px;
-
-    text-align: center;
-
-    background: rgba(255,255,255,0.75);
-
-    border-radius: 22px;
-
-    border: 1px solid rgba(80,50,90,0.07);
-
-    box-shadow:
-        0 8px 25px rgba(50,35,55,0.05);
+.message:not(.own-message) {
+  margin-right: auto;
+  border-bottom-left-radius: 5px;
 }
 
-.chat-welcome-icon {
+/* Current user's messages */
 
-    width: 50px;
+.message.own-message,
+.message.mine {
+  margin-left: auto;
+  margin-right: 0;
 
-    height: 50px;
+  background: var(--purple);
+  color: white;
 
-    margin: 0 auto 13px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background: #eee4f1;
-
-    color: #62416f;
-
-    font-size: 1.3rem;
+  border-bottom-right-radius: 5px;
 }
 
-.chat-welcome h3 {
+/* Username */
 
-    color: #4b3552;
-
-    font-size: 1rem;
-
-    margin-bottom: 6px;
+.message-user {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--purple);
+  margin-bottom: 3px;
 }
 
-.chat-welcome p {
-
-    color: #837985;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 0.78rem;
-
-    line-height: 1.6;
+.message.own-message .message-user,
+.message.mine .message-user {
+  color: #ead9ff;
 }
 
-
-/* ========================================
-   MESSAGE WRAPPERS
-======================================== */
-
-.message-wrapper {
-
-    display: flex;
-
-    width: 100%;
-
-    margin-bottom: 10px;
-
-    transition: transform 0.2s ease;
-}
-
-.message-wrapper.other {
-
-    justify-content: flex-start;
-}
-
-.message-wrapper.mine {
-
-    justify-content: flex-end;
-}
-
-
-/* ========================================
-   MESSAGE BUBBLE
-======================================== */
-
-.message-bubble {
-
-    position: relative;
-
-    max-width: 72%;
-
-    padding: 10px 13px 7px;
-
-    border-radius: 17px;
-
-    box-shadow:
-        0 2px 5px rgba(50,30,60,0.06);
-
-    transition: 0.15s ease;
-}
-
-
-/* OTHER USERS */
-
-.message-wrapper.other .message-bubble {
-
-    background: white;
-
-    border: 1px solid #e4dfe5;
-
-    border-top-left-radius: 5px;
-
-    color: #3b353d;
-}
-
-
-/* CURRENT USER */
-
-.message-wrapper.mine .message-bubble {
-
-    background:
-        linear-gradient(
-            135deg,
-            #6b477b,
-            #80608e
-        );
-
-    color: white;
-
-    border-top-right-radius: 5px;
-}
-
-
-/* ========================================
-   USERNAME
-======================================== */
-
-.message-username {
-
-    display: block;
-
-    margin-bottom: 2px;
-
-    color: #674575;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 0.73rem;
-}
-
-
-/* ========================================
-   MESSAGE TEXT
-======================================== */
+/* Message text */
 
 .message-text {
-
-    display: inline;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 0.9rem;
-
-    line-height: 1.45;
-
-    word-break: break-word;
+  font-size: 0.95rem;
+  word-wrap: break-word;
 }
 
-
-/* ========================================
-   MESSAGE TIME
-======================================== */
+/* Timestamp */
 
 .message-time {
-
-    display: inline-block;
-
-    margin-left: 8px;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 0.62rem;
-
-    opacity: 0.55;
-
-    vertical-align: bottom;
+  font-size: 0.68rem;
+  opacity: 0.6;
+  margin-top: 5px;
 }
 
-
-/* ========================================
-   REPLY INSIDE MESSAGE
-======================================== */
-
-.message-reply {
-
-    margin-bottom: 7px;
-
-    padding: 7px 9px;
-
-    border-left: 3px solid #9670a5;
-
-    border-radius: 7px;
-
-    background: rgba(0,0,0,0.045);
-
-    overflow: hidden;
-}
-
-.message-wrapper.mine .message-reply {
-
-    border-left-color: rgba(255,255,255,0.75);
-
-    background: rgba(255,255,255,0.10);
-}
-
-.message-reply strong {
-
-    display: block;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 0.67rem;
-
-    opacity: 0.8;
-}
-
-.message-reply p {
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 0.69rem;
-
-    opacity: 0.7;
-
-    line-height: 1.3;
-}
-
-
-/* ========================================
-   REPLY BUTTON
-======================================== */
-
-.message-reply-button {
-
-    position: absolute;
-
-    top: 50%;
-
-    width: 30px;
-
-    height: 30px;
-
-    border: none;
-
-    border-radius: 50%;
-
-    background: #ffffff;
-
-    color: #62416f;
-
-    box-shadow:
-        0 3px 10px rgba(40,25,50,0.15);
-
-    font-size: 0.9rem;
-
-    cursor: pointer;
-
-    opacity: 0;
-
-    transform: translateY(-50%);
-
-    transition: all 0.2s ease;
-}
-
-.message-wrapper.other .message-reply-button {
-
-    right: -38px;
-}
-
-.message-wrapper.mine .message-reply-button {
-
-    left: -38px;
-}
-
-.message-bubble:hover .message-reply-button {
-
-    opacity: 1;
-}
-
-.message-reply-button:hover {
-
-    transform: translateY(-50%) scale(1.08);
-
-    background: #f2eaf4;
-}
-
-
-/* ========================================
-   REPLY PREVIEW
-======================================== */
+/* =========================================================
+   REPLY DISPLAY
+   ========================================================= */
 
 .reply-preview {
+  background: rgba(196, 154, 69, 0.12);
 
-    flex-shrink: 0;
+  border-left: 4px solid var(--gold);
 
-    display: flex;
+  padding: 8px 10px;
 
-    align-items: center;
+  border-radius: 8px;
 
-    padding: 9px 15px;
+  margin-bottom: 7px;
 
-    background: white;
-
-    border-top: 1px solid #ddd5df;
-
-    box-shadow:
-        0 -3px 10px rgba(50,30,60,0.04);
+  font-size: 0.8rem;
+  color: #665b48;
 }
 
-.reply-preview-line {
-
-    width: 4px;
-
-    height: 40px;
-
-    flex-shrink: 0;
-
-    margin-right: 10px;
-
-    background: #80608e;
-
-    border-radius: 5px;
+.message.own-message .reply-preview,
+.message.mine .reply-preview {
+  background: rgba(255, 255, 255, 0.14);
+  color: #f4eefa;
+  border-left-color: var(--gold-light);
 }
 
-.reply-preview-content {
+/* =========================================================
+   REPLY BUTTON
+   ========================================================= */
 
-    flex: 1;
+.reply-button {
+  border: none;
+  background: transparent;
 
-    min-width: 0;
+  color: var(--purple);
+
+  font-size: 0.72rem;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  margin-top: 4px;
 }
 
-.reply-preview-content strong {
-
-    display: block;
-
-    color: #62416f;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 0.72rem;
+.message.own-message .reply-button,
+.message.mine .reply-button {
+  color: #ead9ff;
 }
 
-.reply-preview-content p {
-
-    color: #777;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 0.72rem;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-.cancel-reply {
-
-    width: 32px;
-
-    height: 32px;
-
-    border: none;
-
-    border-radius: 50%;
-
-    background: transparent;
-
-    color: #777;
-
-    font-size: 1.3rem;
-
-    cursor: pointer;
-}
-
-.cancel-reply:hover {
-
-    background: #f1edf2;
-}
-
-
-/* ========================================
-   MESSAGE COMPOSER
-======================================== */
+/* =========================================================
+   CHAT COMPOSER
+   ========================================================= */
 
 .chat-composer {
+  padding: 14px;
 
-    flex-shrink: 0;
+  border-top: 1px solid var(--border);
 
-    display: flex;
+  background: white;
 
-    align-items: center;
-
-    gap: 8px;
-
-    padding: 10px 13px;
-
-    background: #ffffff;
-
-    border-top: 1px solid #ddd5df;
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
-.composer-button {
+.chat-composer input,
+#messageInput {
+  flex: 1;
 
-    width: 42px;
+  border: 1px solid var(--border);
 
-    height: 42px;
+  background: #faf7fc;
 
-    flex-shrink: 0;
+  padding: 12px 14px;
 
-    border: none;
+  border-radius: 14px;
 
-    border-radius: 50%;
+  outline: none;
 
-    background: #f0ebf1;
+  font-size: 0.95rem;
 
-    font-size: 1.15rem;
-
-    cursor: pointer;
-
-    transition: 0.2s;
+  color: var(--text);
 }
 
-.composer-button:hover {
-
-    background: #e7ddea;
-
+.chat-composer input:focus,
+#messageInput:focus {
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(91, 58, 130, 0.08);
 }
 
-#chat-message {
+.chat-composer button {
+  border: none;
 
-    flex: 1;
+  background: var(--purple);
 
-    min-width: 0;
+  color: white;
 
-    height: 44px;
+  width: 44px;
+  height: 44px;
 
-    padding: 0 17px;
+  border-radius: 50%;
 
-    border: 1px solid #ddd5df;
+  cursor: pointer;
 
-    border-radius: 24px;
+  font-size: 1.1rem;
 
-    outline: none;
-
-    background: #f8f6f8;
-
-    color: #332d35;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 0.9rem;
-
-    transition: 0.2s;
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
-#chat-message:focus {
-
-    border-color: #80608e;
-
-    background: white;
-
-    box-shadow:
-        0 0 0 3px rgba(128,96,142,0.08);
+.chat-composer button:hover {
+  background: var(--purple-dark);
+  transform: translateY(-2px);
 }
 
-.send-button {
+/* =========================================================
+   EMOJI BUTTON
+   ========================================================= */
 
-    width: 44px;
-
-    height: 44px;
-
-    flex-shrink: 0;
-
-    border: none;
-
-    border-radius: 50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            #482653,
-            #80608e
-        );
-
-    color: white;
-
-    font-size: 1.1rem;
-
-    cursor: pointer;
-
-    transition: all 0.2s ease;
-
-    box-shadow:
-        0 5px 15px rgba(72,38,83,0.18);
+#emojiButton {
+  background: var(--cream-dark);
+  color: var(--purple-dark);
 }
 
-.send-button:hover {
-
-    transform: scale(1.05);
-
+#emojiButton:hover {
+  background: var(--gold-light);
 }
 
+/* =========================================================
+   ADMIN AREA
+   ========================================================= */
 
-/* ========================================
-   CURRENT USER BAR
-======================================== */
-
-.current-user-bar {
-
-    flex-shrink: 0;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    gap: 5px;
-
-    padding: 5px;
-
-    background: #f8f5f8;
-
-    color: #999;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 0.65rem;
-
-    border-top: 1px solid #e7e0e8;
+#admin {
+  margin-top: 30px;
 }
 
-.current-user-bar strong {
-
-    color: #674575;
-
+.admin-card {
+  border: 1px solid var(--gold-light);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.97),
+      rgba(250, 245, 235, 0.97)
+    );
 }
 
+.admin-card > p {
+  color: var(--muted);
+  margin-bottom: 25px;
+}
 
-/* ========================================
+.admin-editor {
+  margin-top: 20px;
+}
+
+.admin-editor label {
+  display: block;
+
+  color: var(--purple-dark);
+
+  font-weight: 700;
+
+  margin: 14px 0 7px;
+}
+
+.admin-editor input,
+.admin-editor textarea {
+  width: 100%;
+
+  border: 1px solid var(--border);
+
+  background: white;
+
+  padding: 12px 14px;
+
+  border-radius: 12px;
+
+  outline: none;
+
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.admin-editor textarea {
+  min-height: 220px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.admin-editor input:focus,
+.admin-editor textarea:focus {
+  border-color: var(--purple);
+
+  box-shadow:
+    0 0 0 3px rgba(91, 58, 130, 0.08);
+}
+
+.admin-editor button {
+  margin-top: 12px;
+
+  border: none;
+
+  background: var(--purple);
+
+  color: white;
+
+  padding: 11px 18px;
+
+  border-radius: 10px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.admin-editor button:hover {
+  background: var(--purple-dark);
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   ADMIN LOCK NOTICE
+   ========================================================= */
+
+.admin-lock {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 13px 15px;
+
+  border-radius: 12px;
+
+  background: #f5f0f8;
+
+  color: var(--purple-dark);
+
+  font-size: 0.9rem;
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f5efe8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cdbed9;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--purple);
+}
+
+/* =========================================================
    MOBILE
-======================================== */
+   ========================================================= */
 
 @media (max-width: 600px) {
 
-    .screen {
-        padding: 18px 14px;
-    }
+  .app {
+    padding: 15px 12px 40px;
+  }
 
+  header {
+    padding: 30px 10px 22px;
+  }
 
-    /* HOME */
+  header h1 {
+    font-size: 2rem;
+  }
 
-    .welcome-content h1 {
-        font-size: 2.3rem;
-    }
+  header p {
+    font-size: 0.95rem;
+  }
 
-    .menu-button {
-        padding: 16px;
-    }
+  nav {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
 
+  nav button,
+  .menu-button {
+    padding: 17px 10px;
+    font-size: 0.88rem;
+  }
 
-    /* STORY */
+  .content-card,
+  .story-card,
+  .questions-card,
+  .prayer-card,
+  .admin-card {
+    padding: 20px 17px;
+  }
 
-    .page h2 {
-        font-size: 2rem;
-    }
+  section h2 {
+    font-size: 1.5rem;
+  }
 
-    #story .page h2 {
-        font-size: 2.25rem;
-    }
+  #chatMessages,
+  .messages {
+    min-height: 380px;
+    max-height: 55vh;
+    padding: 14px;
+  }
 
-    .story-content {
-        padding: 30px 24px;
-        border-radius: 20px;
-    }
+  .message {
+    max-width: 88%;
+  }
 
-    .story-content p {
-        font-size: 1rem;
-    }
+  .chat-composer {
+    padding: 10px;
+  }
 
+  .chat-composer input,
+  #messageInput {
+    min-width: 0;
+  }
+}
 
-    /* QUESTIONS */
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
 
-    #questions ol {
-        padding: 22px 20px 22px 45px;
-    }
+@media (max-width: 380px) {
 
-    #questions li {
-        padding: 14px;
-    }
+  nav {
+    grid-template-columns: 1fr;
+  }
 
+  .message {
+    max-width: 92%;
+  }
 
-    /* PRAYERS */
-
-    .prayer {
-        padding: 25px 22px;
-    }
-
-
-    /* CHAT LOGIN */
-
-    .chat-login {
-        padding: 18px 14px;
-    }
-
-    .chat-login-card {
-        padding: 35px 24px;
-        border-radius: 24px;
-    }
-
-
-    /* CHAT ROOM */
-
-    .chat-room {
-        min-height: 100vh;
-    }
-
-    .chat-header {
-        height: 68px;
-        padding: 0 12px;
-    }
-
-    .chat-header-info {
-        margin-left: 8px;
-    }
-
-    .chat-header-icon {
-        width: 38px;
-        height: 38px;
-    }
-
-    .chat-messages {
-        padding: 18px 12px;
-    }
-
-
-    /* MESSAGE BUBBLES */
-
-    .message-bubble {
-        max-width: 82%;
-    }
-
-
-    /* Hide desktop reply buttons */
-
-    .message-reply-button {
-        display: none;
-    }
-
-
-    /* Composer */
-
-    .chat-composer {
-        padding: 8px 9px;
-    }
-
-    .composer-button {
-        width: 39px;
-        height: 39px;
-    }
-
-    #chat-message {
-        height: 41px;
-    }
-
-    .send-button {
-        width: 41px;
-        height: 41px;
-    }
-
+  header h1 {
+    font-size: 1.75rem;
+  }
 }
