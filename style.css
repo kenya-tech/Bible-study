@@ -1,5 +1,5 @@
 /* =========================
-   GENERAL SETTINGS
+   RESET
 ========================= */
 
 * {
@@ -8,106 +8,262 @@
     padding: 0;
 }
 
+
 html {
     scroll-behavior: smooth;
 }
 
+
 body {
     font-family: Arial, sans-serif;
-    background: #f5f3ef;
-    color: #292929;
+
+    background: #f6f3f8;
+
+    color: #29242f;
+
     line-height: 1.7;
 }
 
 
 /* =========================
-   WELCOME SECTION
+   SCREENS
 ========================= */
 
-header {
+.screen {
+    display: none;
+
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
 
-    padding: 30px;
-
-    background: linear-gradient(
-        135deg,
-        #3d2b56,
-        #70558f
-    );
-
-    color: white;
+    padding: 25px 20px;
 }
 
-header h1 {
-    font-size: 1.4rem;
-    margin-bottom: 10px;
-}
 
-header h2 {
-    font-size: 3rem;
-    margin-bottom: 20px;
-}
-
-header p {
-    max-width: 600px;
-    margin-bottom: 10px;
-}
-
-header button {
-    margin-top: 25px;
-    padding: 14px 28px;
-
-    border: none;
-    border-radius: 30px;
-
-    background: white;
-    color: #3d2b56;
-
-    font-size: 1rem;
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-header button:hover {
-    transform: translateY(-2px);
+.screen.active {
+    display: block;
 }
 
 
 /* =========================
-   MAIN CONTENT
+   HOME
 ========================= */
 
-main {
-    max-width: 900px;
-    margin: auto;
-    padding: 30px 20px;
+#home {
+    background:
+        linear-gradient(
+            145deg,
+            #342044,
+            #684b83
+        );
+
+    color: white;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
 }
 
-section {
+
+#home.active {
+    display: flex;
+}
+
+
+.welcome-content {
+    width: 100%;
+    max-width: 600px;
+
+    text-align: center;
+}
+
+
+.logo-placeholder {
+    width: 75px;
+    height: 75px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid rgba(255,255,255,0.7);
+
+    border-radius: 50%;
+
+    font-size: 2rem;
+}
+
+
+.community-name {
+    font-size: 0.9rem;
+
+    letter-spacing: 3px;
+
+    opacity: 0.85;
+
+    margin-bottom: 5px;
+}
+
+
+.welcome-content h1 {
+    font-size: 3rem;
+
+    margin-bottom: 8px;
+}
+
+
+.welcome-text {
+    opacity: 0.85;
+
+    margin-bottom: 35px;
+}
+
+
+/* =========================
+   MENU
+========================= */
+
+.menu {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+}
+
+
+.menu-button {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    text-align: left;
+
+    gap: 18px;
+
+    padding: 18px;
+
+    border: 1px solid rgba(255,255,255,0.18);
+
+    border-radius: 16px;
+
+    background: rgba(255,255,255,0.12);
+
+    color: white;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.menu-button:hover {
+    background: rgba(255,255,255,0.2);
+
+    transform: translateY(-2px);
+}
+
+
+.icon {
+    font-size: 1.8rem;
+
+    width: 40px;
+
+    text-align: center;
+}
+
+
+.menu-button strong {
+    display: block;
+
+    font-size: 1.05rem;
+}
+
+
+.menu-button small {
+    display: block;
+
+    margin-top: 2px;
+
+    opacity: 0.75;
+
+    font-size: 0.85rem;
+}
+
+
+/* =========================
+   PAGES
+========================= */
+
+.page {
+    max-width: 850px;
+
+    margin: auto;
+
+    padding: 10px 0 40px;
+}
+
+
+.page h2 {
+    color: #43295c;
+
+    font-size: 2rem;
+
+    margin: 25px 0;
+}
+
+
+.section-intro {
+    color: #777;
+
+    margin-bottom: 25px;
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.back-button {
+    border: none;
+
+    background: transparent;
+
+    color: #43295c;
+
+    font-size: 1rem;
+
+    cursor: pointer;
+
+    padding: 8px 0;
+}
+
+
+/* =========================
+   STORY
+========================= */
+
+.story-content {
     background: white;
 
-    margin-bottom: 30px;
     padding: 30px;
 
     border-radius: 18px;
 
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.06);
 }
 
-section h2 {
-    color: #3d2b56;
-    margin-bottom: 20px;
-    font-size: 1.8rem;
+
+.story-content p {
+    margin-bottom: 18px;
 }
 
-section p {
-    margin-bottom: 15px;
+
+.story-content p:last-child {
+    margin-bottom: 0;
 }
 
 
@@ -116,11 +272,23 @@ section p {
 ========================= */
 
 #questions ol {
-    padding-left: 25px;
+    background: white;
+
+    padding: 30px 30px 30px 55px;
+
+    border-radius: 18px;
+
+    box-shadow: 0 5px 20px rgba(0,0,0,0.06);
 }
 
+
 #questions li {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+
+#questions li:last-child {
+    margin-bottom: 0;
 }
 
 
@@ -128,114 +296,159 @@ section p {
    PRAYERS
 ========================= */
 
-#prayers article {
-    padding: 20px;
+.prayer {
+    background: white;
 
-    margin-bottom: 20px;
+    padding: 25px;
 
-    border-left: 4px solid #70558f;
+    margin-bottom: 18px;
 
-    background: #faf8fc;
+    border-radius: 18px;
 
-    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.06);
 }
 
-#prayers article:last-child {
+
+.prayer h3 {
+    color: #43295c;
+
+    margin-bottom: 12px;
+}
+
+
+.prayer p {
+    margin-bottom: 12px;
+}
+
+
+.prayer p:last-child {
     margin-bottom: 0;
-}
-
-#prayers h3 {
-    margin-bottom: 10px;
-    color: #3d2b56;
 }
 
 
 /* =========================
-   PUBLIC CHAT
+   CHAT
 ========================= */
 
-#public-chat {
-    margin-bottom: 40px;
+.anonymous-user {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    background: #eee8f3;
+
+    padding: 15px 18px;
+
+    border-radius: 12px;
+
+    margin-bottom: 15px;
 }
 
-#anonymous-user {
-    background: #f1edf6;
 
-    padding: 15px;
-
-    border-radius: 10px;
-
-    margin-bottom: 20px;
+.anonymous-user span {
+    color: #777;
 }
+
+
+.anonymous-user strong {
+    color: #43295c;
+}
+
 
 #chat-messages {
-    min-height: 250px;
+    min-height: 350px;
+
+    background: white;
 
     padding: 20px;
 
-    margin-bottom: 20px;
+    border-radius: 18px;
 
-    background: #f7f7f7;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.06);
 
-    border-radius: 12px;
+    margin-bottom: 15px;
 
     overflow-y: auto;
 }
 
+
+.empty-chat {
+    color: #999;
+
+    text-align: center;
+
+    padding-top: 130px;
+}
+
+
+.chat-message {
+    padding: 12px 15px;
+
+    background: #f2eef5;
+
+    border-radius: 12px;
+
+    margin-bottom: 10px;
+}
+
+
+.chat-message strong {
+    color: #43295c;
+
+    font-size: 0.85rem;
+}
+
+
+.chat-message p {
+    margin-top: 3px;
+}
+
+
 #chat-form {
     display: flex;
+
     gap: 10px;
 }
+
 
 #chat-message {
     flex: 1;
 
-    padding: 14px;
+    padding: 15px;
 
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
 
-    border-radius: 10px;
+    border-radius: 12px;
+
+    outline: none;
 
     font-size: 1rem;
 }
 
+
+#chat-message:focus {
+    border-color: #70558f;
+}
+
+
 #chat-form button {
-    padding: 14px 20px;
+    padding: 15px 22px;
 
     border: none;
 
-    border-radius: 10px;
+    border-radius: 12px;
 
-    background: #3d2b56;
+    background: #43295c;
 
     color: white;
 
     font-weight: bold;
 
     cursor: pointer;
-}
-
-#chat-form button:hover {
-    background: #2f2142;
-}
-
-
-/* =========================
-   FOOTER
-========================= */
-
-footer {
-    text-align: center;
-
-    padding: 30px;
-
-    background: #3d2b56;
-
-    color: white;
-}
-
-footer p {
-    margin-bottom: 5px;
 }
 
 
@@ -245,23 +458,45 @@ footer p {
 
 @media (max-width: 600px) {
 
-    header h2 {
-        font-size: 2.2rem;
+    .screen {
+        padding: 20px 15px;
     }
 
-    main {
-        padding: 20px 12px;
+
+    .welcome-content h1 {
+        font-size: 2.3rem;
     }
 
-    section {
+
+    .menu-button {
+        padding: 16px;
+    }
+
+
+    .story-content {
         padding: 22px;
     }
+
+
+    #questions ol {
+        padding: 22px 22px 22px 45px;
+    }
+
+
+    .anonymous-user {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
 
     #chat-form {
         flex-direction: column;
     }
 
+
     #chat-form button {
         width: 100%;
     }
+
 }
