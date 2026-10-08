@@ -53,7 +53,6 @@ const firebaseConfig = {
 
     measurementId:
         "G-D5D1178QMV"
-
 };
 
 
@@ -61,24 +60,11 @@ const firebaseConfig = {
 // INITIALIZE FIREBASE
 // ========================================
 
-const app =
-    initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
+const auth = getAuth(app);
 
-// ========================================
-// INITIALIZE AUTHENTICATION
-// ========================================
-
-const auth =
-    getAuth(app);
-
-
-// ========================================
-// INITIALIZE FIRESTORE
-// ========================================
-
-const db =
-    getFirestore(app);
+const db = getFirestore(app);
 
 
 // ========================================
@@ -87,52 +73,35 @@ const db =
 
 function showSection(sectionId) {
 
-    const screens =
-        document.querySelectorAll(".screen");
-
+    const screens = document.querySelectorAll(".screen");
 
     screens.forEach(function(screen) {
-
         screen.classList.remove("active");
-
     });
-
 
     const selectedSection =
         document.getElementById(sectionId);
 
-
-    if (selectedSection) {
-
-        selectedSection.classList.add("active");
-
-
-        window.scrollTo({
-
-            top: 0,
-
-            behavior: "smooth"
-
-        });
-
+    if (!selectedSection) {
+        return;
     }
 
+    selectedSection.classList.add("active");
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 
     if (sectionId === "public-chat") {
 
         setTimeout(function() {
-
             openChat();
-
         }, 50);
-
     }
-
 }
 
-
-window.showSection =
-    showSection;
+window.showSection = showSection;
 
 
 // ========================================
@@ -190,21 +159,13 @@ const emojiButton =
 // ========================================
 
 let currentUserName =
-    localStorage.getItem(
-        "bibleStudyAnonymousName"
-    );
+    localStorage.getItem("bibleStudyAnonymousName");
 
+let replyingTo = null;
 
-let replyingTo =
-    null;
+let unsubscribeMessages = null;
 
-
-let unsubscribeMessages =
-    null;
-
-
-let latestMessages =
-    [];
+let latestMessages = [];
 
 
 // ========================================
@@ -216,43 +177,32 @@ async function authenticateUser() {
     try {
 
         if (auth.currentUser) {
-
             return auth.currentUser;
-
         }
-
 
         const result =
             await signInAnonymously(auth);
-
 
         console.log(
             "Anonymous Firebase user signed in:",
             result.user.uid
         );
 
-
         return result.user;
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         console.error(
             "Anonymous authentication failed:",
             error
         );
 
-
         showChatLoginError(
             "Unable to connect to the chat. Please try again."
         );
 
-
         throw error;
-
     }
-
 }
 
 
@@ -263,11 +213,8 @@ async function authenticateUser() {
 async function openChat() {
 
     if (!chatLogin || !chatRoom) {
-
         return;
-
     }
-
 
     if (currentUserName) {
 
@@ -275,52 +222,36 @@ async function openChat() {
 
             await authenticateUser();
 
+            chatLogin.style.display = "none";
 
-            chatLogin.style.display =
-                "none";
-
-
-            chatRoom.style.display =
-                "flex";
-
+            chatRoom.style.display = "flex";
 
             updateUserDisplay();
 
-
             startRealtimeMessages();
 
+        } catch (error) {
+
+            console.error(
+                "Could not open chat:",
+                error
+            );
         }
 
-        catch (error) {
+    } else {
 
-            console.error(error);
+        chatLogin.style.display = "flex";
 
-        }
-
-    }
-
-    else {
-
-        chatLogin.style.display =
-            "flex";
-
-
-        chatRoom.style.display =
-            "none";
-
+        chatRoom.style.display = "none";
 
         setTimeout(function() {
 
             if (anonymousNameInput) {
-
                 anonymousNameInput.focus();
-
             }
 
         }, 100);
-
     }
-
 }
 
 
@@ -331,17 +262,11 @@ async function openChat() {
 if (enterChatButton) {
 
     enterChatButton.addEventListener(
-
         "click",
-
         function() {
-
             enterPublicChat();
-
         }
-
     );
-
 }
 
 
@@ -352,9 +277,7 @@ if (enterChatButton) {
 if (anonymousNameInput) {
 
     anonymousNameInput.addEventListener(
-
         "keydown",
-
         function(event) {
 
             if (event.key === "Enter") {
@@ -362,13 +285,9 @@ if (anonymousNameInput) {
                 event.preventDefault();
 
                 enterPublicChat();
-
             }
-
         }
-
     );
-
 }
 
 
@@ -379,15 +298,11 @@ if (anonymousNameInput) {
 async function enterPublicChat() {
 
     if (!anonymousNameInput) {
-
         return;
-
     }
-
 
     const enteredName =
         anonymousNameInput.value.trim();
-
 
     if (!enteredName) {
 
@@ -396,9 +311,7 @@ async function enterPublicChat() {
         );
 
         return;
-
     }
-
 
     if (enteredName.length < 2) {
 
@@ -407,9 +320,7 @@ async function enterPublicChat() {
         );
 
         return;
-
     }
-
 
     if (enteredName.length > 25) {
 
@@ -418,79 +329,51 @@ async function enterPublicChat() {
         );
 
         return;
-
     }
-
 
     try {
 
-        enterChatButton.disabled =
-            true;
+        enterChatButton.disabled = true;
 
-
-        enterChatButton.textContent =
-            "Connecting...";
-
+        enterChatButton.textContent = "Connecting...";
 
         await authenticateUser();
 
-
-        currentUserName =
-            enteredName;
-
+        currentUserName = enteredName;
 
         localStorage.setItem(
-
             "bibleStudyAnonymousName",
-
             currentUserName
-
         );
 
+        chatLoginError.textContent = "";
 
-        chatLoginError.textContent =
-            "";
+        chatLogin.style.display = "none";
 
-
-        chatLogin.style.display =
-            "none";
-
-
-        chatRoom.style.display =
-            "flex";
-
+        chatRoom.style.display = "flex";
 
         updateUserDisplay();
 
-
         startRealtimeMessages();
 
-    }
+    } catch (error) {
 
-    catch (error) {
-
-        console.error(error);
-
-
-        showChatLoginError(
-
-            "Could not connect to the chat. Please try again."
-
+        console.error(
+            "Error entering public chat:",
+            error
         );
 
-    }
+        showChatLoginError(
+            "Could not connect to the chat. Please try again."
+        );
 
-    finally {
+    } finally {
 
-        enterChatButton.disabled =
-            false;
-
+        enterChatButton.disabled = false;
 
         enterChatButton.textContent =
             "Enter Public Chat";
-
     }
-
 }
 
 
@@ -501,15 +384,10 @@ async function enterPublicChat() {
 function showChatLoginError(message) {
 
     if (!chatLoginError) {
-
         return;
-
     }
 
-
-    chatLoginError.textContent =
-        message;
-
+    chatLoginError.textContent = message;
 }
 
 
@@ -522,10 +400,8 @@ function updateUserDisplay() {
     if (anonymousIDElement) {
 
         anonymousIDElement.textContent =
-            currentUserName;
-
+            currentUserName || "Anonymous";
     }
-
 }
 
 
@@ -536,31 +412,21 @@ function updateUserDisplay() {
 if (changeChatNameButton) {
 
     changeChatNameButton.addEventListener(
-
         "click",
-
         function() {
 
             const newName =
                 prompt(
-
                     "Choose a new anonymous name:",
-
                     currentUserName || ""
-
                 );
 
-
             if (!newName) {
-
                 return;
-
             }
-
 
             const cleanedName =
                 newName.trim();
-
 
             if (cleanedName.length < 2) {
 
@@ -569,9 +435,7 @@ if (changeChatNameButton) {
                 );
 
                 return;
-
             }
-
 
             if (cleanedName.length > 25) {
 
@@ -580,32 +444,20 @@ if (changeChatNameButton) {
                 );
 
                 return;
-
             }
 
-
-            currentUserName =
-                cleanedName;
-
+            currentUserName = cleanedName;
 
             localStorage.setItem(
-
                 "bibleStudyAnonymousName",
-
                 currentUserName
-
             );
-
 
             updateUserDisplay();
 
-
             renderCurrentMessages();
-
         }
-
     );
-
 }
 
 
@@ -615,11 +467,8 @@ if (changeChatNameButton) {
 
 const messagesCollection =
     collection(
-
         db,
-
         "publicChatMessages"
-
     );
 
 
@@ -630,56 +479,38 @@ const messagesCollection =
 function startRealtimeMessages() {
 
     if (unsubscribeMessages) {
-
         unsubscribeMessages();
-
+        unsubscribeMessages = null;
     }
-
 
     const messagesQuery =
         query(
-
             messagesCollection,
-
             orderBy(
-
                 "timestamp",
-
                 "asc"
-
             )
-
         );
-
 
     unsubscribeMessages =
         onSnapshot(
-
             messagesQuery,
 
             function(snapshot) {
 
                 latestMessages = [];
 
-
                 snapshot.forEach(function(doc) {
 
                     latestMessages.push({
-
-                        id:
-                            doc.id,
-
+                        id: doc.id,
                         ...doc.data()
-
                     });
 
                 });
 
-
                 renderCurrentMessages();
-
             },
-
 
             function(error) {
 
@@ -687,7 +518,6 @@ function startRealtimeMessages() {
                     "Firestore error:",
                     error
                 );
-
 
                 if (chatMessages) {
 
@@ -711,13 +541,9 @@ function startRealtimeMessages() {
                         </div>
 
                     `;
-
                 }
-
             }
-
         );
-
 }
 
 
@@ -728,15 +554,10 @@ function startRealtimeMessages() {
 function renderCurrentMessages() {
 
     if (!chatMessages) {
-
         return;
-
     }
 
-
-    chatMessages.innerHTML =
-        "";
-
+    chatMessages.innerHTML = "";
 
     if (latestMessages.length === 0) {
 
@@ -762,25 +583,15 @@ function renderCurrentMessages() {
         `;
 
         return;
-
     }
 
+    latestMessages.forEach(function(message) {
 
-    latestMessages.forEach(
+        createMessageElement(message);
 
-        function(message) {
-
-            createMessageElement(
-                message
-            );
-
-        }
-
-    );
-
+    });
 
     scrollChatToBottom();
-
 }
 
 
@@ -793,22 +604,16 @@ function createMessageElement(message) {
     const messageWrapper =
         document.createElement("div");
 
-
     const isMine =
         message.uid === auth.currentUser?.uid;
 
-
     messageWrapper.className =
         isMine
-
             ? "message-wrapper mine"
-
             : "message-wrapper other";
-
 
     const bubble =
         document.createElement("div");
-
 
     bubble.className =
         "message-bubble";
@@ -823,41 +628,26 @@ function createMessageElement(message) {
         const originalReply =
             document.createElement("div");
 
-
         originalReply.className =
             "message-reply";
-
 
         const replyUser =
             document.createElement("strong");
 
-
         replyUser.textContent =
-            message.replyTo.user;
-
+            message.replyTo.user || "Anonymous";
 
         const replyMessage =
             document.createElement("p");
 
-
         replyMessage.textContent =
-            message.replyTo.text;
+            message.replyTo.text || "";
 
+        originalReply.appendChild(replyUser);
 
-        originalReply.appendChild(
-            replyUser
-        );
+        originalReply.appendChild(replyMessage);
 
-
-        originalReply.appendChild(
-            replyMessage
-        );
-
-
-        bubble.appendChild(
-            originalReply
-        );
-
+        bubble.appendChild(originalReply);
     }
 
 
@@ -870,19 +660,13 @@ function createMessageElement(message) {
         const username =
             document.createElement("strong");
 
-
         username.className =
             "message-username";
 
-
         username.textContent =
-            message.user;
+            message.user || "Anonymous";
 
-
-        bubble.appendChild(
-            username
-        );
-
+        bubble.appendChild(username);
     }
 
 
@@ -893,18 +677,13 @@ function createMessageElement(message) {
     const messageText =
         document.createElement("p");
 
-
     messageText.className =
         "message-text";
 
-
     messageText.textContent =
-        message.text;
+        message.text || "";
 
-
-    bubble.appendChild(
-        messageText
-    );
+    bubble.appendChild(messageText);
 
 
     // ====================================
@@ -914,20 +693,13 @@ function createMessageElement(message) {
     const messageTime =
         document.createElement("span");
 
-
     messageTime.className =
         "message-time";
 
-
     messageTime.textContent =
-        formatTime(
-            message.timestamp
-        );
+        formatTime(message.timestamp);
 
-
-    bubble.appendChild(
-        messageTime
-    );
+    bubble.appendChild(messageTime);
 
 
     // ====================================
@@ -937,66 +709,40 @@ function createMessageElement(message) {
     const replyButton =
         document.createElement("button");
 
-
     replyButton.className =
         "message-reply-button";
-
 
     replyButton.type =
         "button";
 
-
     replyButton.textContent =
         "↩";
 
-
     replyButton.setAttribute(
-
         "aria-label",
-
         "Reply to message"
-
     );
 
-
     replyButton.addEventListener(
-
         "click",
-
         function(event) {
 
             event.stopPropagation();
 
             startReply(message);
-
         }
-
     );
 
+    bubble.appendChild(replyButton);
 
-    bubble.appendChild(
-        replyButton
-    );
+    messageWrapper.appendChild(bubble);
 
-
-    messageWrapper.appendChild(
-        bubble
-    );
-
-
-    chatMessages.appendChild(
-        messageWrapper
-    );
-
+    chatMessages.appendChild(messageWrapper);
 
     enableSwipeReply(
-
         messageWrapper,
-
         message
-
     );
-
 }
 
 
@@ -1007,47 +753,34 @@ function createMessageElement(message) {
 function formatTime(timestamp) {
 
     if (!timestamp) {
-
         return "";
-
     }
 
-
     let date;
-
 
     if (
         timestamp &&
         typeof timestamp.toDate === "function"
     ) {
 
-        date =
-            timestamp.toDate();
+        date = timestamp.toDate();
 
+    } else {
+
+        date = new Date(timestamp);
     }
 
-    else {
-
-        date =
-            new Date(timestamp);
-
+    if (Number.isNaN(date.getTime())) {
+        return "";
     }
-
 
     return date.toLocaleTimeString(
-
         [],
-
         {
-
             hour: "numeric",
-
             minute: "2-digit"
-
         }
-
     );
-
 }
 
 
@@ -1058,22 +791,17 @@ function formatTime(timestamp) {
 if (chatForm) {
 
     chatForm.addEventListener(
-
         "submit",
-
         async function(event) {
 
             event.preventDefault();
-
 
             if (!currentUserName) {
 
                 openChat();
 
                 return;
-
             }
-
 
             if (!auth.currentUser) {
 
@@ -1081,27 +809,31 @@ if (chatForm) {
 
                     await authenticateUser();
 
-                }
-
-                catch (error) {
+                } catch (error) {
 
                     return;
-
                 }
-
             }
 
+            if (!chatInput) {
+                return;
+            }
 
             const text =
                 chatInput.value.trim();
 
-
             if (!text) {
-
                 return;
-
             }
 
+            if (text.length > 500) {
+
+                alert(
+                    "Your message is too long. Please keep it under 500 characters."
+                );
+
+                return;
+            }
 
             const newMessage = {
 
@@ -1118,66 +850,40 @@ if (chatForm) {
                     Date.now(),
 
                 replyTo:
-
                     replyingTo
-
                         ? {
-
                             user:
                                 replyingTo.user,
-
                             text:
                                 replyingTo.text
-
                         }
-
                         : null
-
             };
-
 
             try {
 
                 await addDoc(
-
                     messagesCollection,
-
                     newMessage
-
                 );
 
-
-                chatInput.value =
-                    "";
-
+                chatInput.value = "";
 
                 cancelReply();
 
-            }
-
-            catch (error) {
+            } catch (error) {
 
                 console.error(
-
                     "Error sending message:",
-
                     error
-
                 );
-
 
                 alert(
-
                     "Your message could not be sent. Please try again."
-
                 );
-
             }
-
         }
-
     );
-
 }
 
 
@@ -1187,40 +893,29 @@ if (chatForm) {
 
 function startReply(message) {
 
-    replyingTo =
-        message;
-
+    replyingTo = message;
 
     if (replyPreview) {
 
         replyPreview.style.display =
             "flex";
-
     }
-
 
     if (replyName) {
 
         replyName.textContent =
-            message.user;
-
+            message.user || "Anonymous";
     }
-
 
     if (replyText) {
 
         replyText.textContent =
-            message.text;
-
+            message.text || "";
     }
-
 
     if (chatInput) {
-
         chatInput.focus();
-
     }
-
 }
 
 
@@ -1230,17 +925,13 @@ function startReply(message) {
 
 function cancelReply() {
 
-    replyingTo =
-        null;
-
+    replyingTo = null;
 
     if (replyPreview) {
 
         replyPreview.style.display =
             "none";
-
     }
-
 }
 
 
@@ -1251,17 +942,13 @@ function cancelReply() {
 if (cancelReplyButton) {
 
     cancelReplyButton.addEventListener(
-
         "click",
-
         function() {
 
             cancelReply();
 
         }
-
     );
-
 }
 
 
@@ -1270,134 +957,92 @@ if (cancelReplyButton) {
 // ========================================
 
 function enableSwipeReply(
-
     element,
-
     message
-
 ) {
 
-    let startX =
-        0;
+    let startX = 0;
 
+    let currentX = 0;
 
-    let currentX =
-        0;
-
-
-    let isSwiping =
-        false;
+    let isSwiping = false;
 
 
     element.addEventListener(
-
         "touchstart",
-
         function(event) {
+
+            if (!event.touches.length) {
+                return;
+            }
 
             startX =
                 event.touches[0].clientX;
 
-
             currentX =
                 startX;
 
-
-            isSwiping =
-                true;
+            isSwiping = true;
 
         },
-
         {
-
             passive: true
-
         }
-
     );
 
 
     element.addEventListener(
-
         "touchmove",
-
         function(event) {
 
-            if (!isSwiping) {
-
+            if (!isSwiping || !event.touches.length) {
                 return;
-
             }
-
 
             currentX =
                 event.touches[0].clientX;
 
-
             const distance =
                 currentX - startX;
-
 
             if (distance < -20) {
 
                 element.style.transform =
-
                     `translateX(${Math.max(
-
                         distance,
-
                         -80
-
                     )}px)`;
-
             }
 
         },
-
         {
-
             passive: true
-
         }
-
     );
 
 
     element.addEventListener(
-
         "touchend",
-
         function() {
 
             if (!isSwiping) {
-
                 return;
-
             }
-
 
             const distance =
                 currentX - startX;
 
-
-            element.style.transform =
-                "";
-
+            element.style.transform = "";
 
             if (distance < -55) {
 
                 startReply(message);
-
             }
 
-
-            isSwiping =
-                false;
+            isSwiping = false;
 
         }
-
     );
-
 }
 
 
@@ -1408,25 +1053,18 @@ function enableSwipeReply(
 function scrollChatToBottom() {
 
     if (!chatMessages) {
-
         return;
-
     }
 
-
     setTimeout(
-
         function() {
 
             chatMessages.scrollTop =
                 chatMessages.scrollHeight;
 
         },
-
         50
-
     );
-
 }
 
 
@@ -1437,20 +1075,14 @@ function scrollChatToBottom() {
 if (emojiButton) {
 
     emojiButton.addEventListener(
-
         "click",
-
         function() {
 
             if (!chatInput) {
-
                 return;
-
             }
 
-
             const emojis = [
-
                 "🙏",
                 "❤️",
                 "😊",
@@ -1460,34 +1092,21 @@ if (emojiButton) {
                 "✨",
                 "😇",
                 "💯"
-
             ];
 
-
             const randomEmoji =
-
                 emojis[
-
                     Math.floor(
-
                         Math.random() *
                         emojis.length
-
                     )
-
                 ];
 
-
-            chatInput.value +=
-                randomEmoji;
-
+            chatInput.value += randomEmoji;
 
             chatInput.focus();
-
         }
-
     );
-
 }
 
 
@@ -1496,5 +1115,5 @@ if (emojiButton) {
 // ========================================
 
 console.log(
-    "St. Monica LK3C Bible Study chat initialized."
+    "St. Monica LK3C Bible Study initialized."
 );
