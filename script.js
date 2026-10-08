@@ -1,9 +1,11 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+
 import {
     getAuth,
     signInAnonymously,
     signInWithEmailAndPassword,
-    onAuthStateChanged
+    onAuthStateChanged,
+    signOut
 } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
 
 import {
@@ -19,9 +21,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
 
 
-/* =========================
+/* =========================================================
    FIREBASE
-========================= */
+========================================================= */
 
 const firebaseConfig = {
     apiKey: "AIzaSyDAm9gekwQUIeJ51sX9QraOEejHBJc6Xf4",
@@ -34,15 +36,18 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth(app);
+
 const db = getFirestore(app);
 
 
-/* =========================
+/* =========================================================
    PAGE NAVIGATION
-========================= */
+========================================================= */
 
 function showSection(sectionId) {
+
     document.querySelectorAll(".section").forEach(section => {
         section.classList.remove("active");
     });
@@ -53,10 +58,6 @@ function showSection(sectionId) {
         section.classList.add("active");
     }
 
-    if (sectionId === "public-chat") {
-        openChat();
-    }
-
     if (sectionId === "story") {
         loadStory();
     }
@@ -64,215 +65,454 @@ function showSection(sectionId) {
     if (sectionId === "questions") {
         loadQuestions();
     }
+
+    if (sectionId === "public-chat") {
+        openChat();
+    }
 }
 
 window.showSection = showSection;
 
 
-/* =========================
+/* =========================================================
+   HTML SAFETY
+========================================================= */
+
+function escapeHtml(text) {
+
+    const div = document.createElement("div");
+
+    div.textContent = text || "";
+
+    return div.innerHTML;
+}
+
+
+function formatContent(text) {
+
+    return escapeHtml(text)
+        .replace(/\n\n/g, "</p><p>")
+        .replace(/\n/g, "<br>");
+}
+
+
+/* =========================================================
    STORY
-========================= */
+========================================================= */
 
 async function loadStory() {
-    const storyContainer = document.getElementById("story-content");
 
-    if (!storyContainer) return;
+    const container =
+        document.getElementById("story-content");
+
+    if (!container) return;
 
     try {
-        const storyRef = doc(db, "content", "story");
-        const storySnap = await getDoc(storyRef);
 
-        if (!storySnap.exists()) {
-            storyContainer.innerHTML = "<p>Story coming soon.</p>";
+        const storyRef =
+            doc(db, "content", "story");
+
+        const snapshot =
+            await getDoc(storyRef);
+
+        if (!snapshot.exists()) {
+
+            container.innerHTML =
+                "<p>Story coming soon.</p>";
+
             return;
         }
 
-        const data = storySnap.data();
+        const data = snapshot.data();
 
-        storyContainer.innerHTML = `
-            <h2>${escapeHtml(data.title || "The Missing Piece")}</h2>
+        const title =
+            data.title || "The Missing Piece";
+
+        const body =
+            data.body || "Story coming soon.";
+
+        container.innerHTML = `
+            <h2>${escapeHtml(title)}</h2>
+
             <div class="story-text">
-                ${formatContent(data.body || "Story coming soon.")}
+                <p>${formatContent(body)}</p>
             </div>
         `;
 
     } catch (error) {
-        console.error("Error loading story:", error);
-        storyContainer.innerHTML =
+
+        console.error(
+            "Error loading story:",
+            error
+        );
+
+        container.innerHTML =
             "<p>Unable to load the story right now.</p>";
     }
 }
 
 
-/* =========================
+/* =========================================================
    QUESTIONS
-========================= */
+========================================================= */
 
 async function loadQuestions() {
-    const questionsContainer =
+
+    const container =
         document.getElementById("questions-content");
 
-    if (!questionsContainer) return;
+    if (!container) return;
 
     try {
-        const questionsRef = doc(db, "content", "questions");
-        const questionsSnap = await getDoc(questionsRef);
 
-        if (!questionsSnap.exists()) {
-            questionsContainer.innerHTML =
+        const questionsRef =
+            doc(db, "content", "questions");
+
+        const snapshot =
+            await getDoc(questionsRef);
+
+        if (!snapshot.exists()) {
+
+            container.innerHTML =
                 "<p>Questions coming soon.</p>";
+
             return;
         }
 
-        const data = questionsSnap.data();
+        const data = snapshot.data();
 
-        questionsContainer.innerHTML = `
-            <h2>${escapeHtml(data.title || "Reflection Questions")}</h2>
+        const title =
+            data.title || "Reflection Questions";
+
+        const body =
+            data.body || "Questions coming soon.";
+
+        container.innerHTML = `
+            <h2>${escapeHtml(title)}</h2>
+
             <div class="questions-text">
-                ${formatContent(data.body || "Questions coming soon.")}
+                <p>${formatContent(body)}</p>
             </div>
         `;
 
     } catch (error) {
-        console.error("Error loading questions:", error);
-        questionsContainer.innerHTML =
+
+        console.error(
+            "Error loading questions:",
+            error
+        );
+
+        container.innerHTML =
             "<p>Unable to load the questions right now.</p>";
     }
 }
 
 
-/* =========================
-   CONTENT FORMATTING
-========================= */
-
-function escapeHtml(text) {
-    const div = document.createElement("div");
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-function formatContent(text) {
-    return escapeHtml(text)
-        .replace(/\n\n/g, "</p><p>")
-        .replace(/\n/g, "<br>");
-
-}
-
-
-/* =========================
+/* =========================================================
    ADMIN
-========================= */
+========================================================= */
 
 let currentUser = null;
+
 let isAdmin = false;
 
-onAuthStateChanged(auth, async (user) => {
 
-    currentUser = user;
+/* =========================================================
+   CHECK ADMIN
+========================================================= */
+
+async function checkAdmin(user) {
 
     if (!user) {
+
         isAdmin = false;
-        return;
+
+        return false;
     }
 
     try {
-        const adminRef = doc(db, "admins", user.uid);
-        const adminSnap = await getDoc(adminRef);
 
-        isAdmin = adminSnap.exists();
+        const adminRef =
+            doc(db, "admins", user.uid);
 
-        if (isAdmin) {
-            console.log("Admin access granted.");
-            showAdminButton();
-        } else {
-            console.log("Regular user.");
-        }
+        const adminSnapshot =
+            await getDoc(adminRef);
+
+        isAdmin =
+            adminSnapshot.exists();
+
+        return isAdmin;
 
     } catch (error) {
-        console.error("Admin check failed:", error);
+
+        console.error(
+            "Admin check failed:",
+            error
+        );
+
         isAdmin = false;
-    }
-});
 
-
-function showAdminButton() {
-
-    const button = document.getElementById("admin-button");
-
-    if (button) {
-        button.style.display = "block";
+        return false;
     }
 }
 
 
-window.openAdmin = function () {
+/* =========================================================
+   AUTH STATE
+========================================================= */
 
-    if (!isAdmin) {
-        alert("You do not have permission to access the admin area.");
-        return;
+onAuthStateChanged(
+    auth,
+    async (user) => {
+
+        currentUser = user;
+
+        if (!user) {
+
+            isAdmin = false;
+
+            hideAdminButton();
+
+            return;
+        }
+
+        const admin =
+            await checkAdmin(user);
+
+        if (admin) {
+
+            showAdminButton();
+
+            console.log(
+                "Admin authenticated."
+            );
+
+        } else {
+
+            hideAdminButton();
+
+            console.log(
+                "User is not an admin."
+            );
+        }
+    }
+);
+
+
+/* =========================================================
+   ADMIN BUTTON
+========================================================= */
+
+function showAdminButton() {
+
+    const button =
+        document.getElementById("admin-button");
+
+    if (button) {
+
+        button.style.display =
+            "flex";
+    }
+}
+
+
+function hideAdminButton() {
+
+    const button =
+        document.getElementById("admin-button");
+
+    if (button) {
+
+        button.style.display =
+            "none";
+    }
+}
+
+
+/* =========================================================
+   OPEN ADMIN
+========================================================= */
+
+window.openAdmin = async function () {
+
+    /*
+       If the current user is already authenticated
+       and is an admin, open the editor.
+    */
+
+    if (currentUser) {
+
+        const admin =
+            await checkAdmin(currentUser);
+
+        if (admin) {
+
+            showSection("admin");
+
+            await loadAdminContent();
+
+            return;
+        }
     }
 
-    showSection("admin");
-    loadAdminContent();
 
+    /*
+       Otherwise ask for the admin email/password.
+    */
+
+    const email =
+        prompt(
+            "Enter your admin email:"
+        );
+
+    if (!email) return;
+
+
+    const password =
+        prompt(
+            "Enter your admin password:"
+        );
+
+    if (!password) return;
+
+
+    try {
+
+        const result =
+            await signInWithEmailAndPassword(
+                auth,
+                email.trim(),
+                password
+            );
+
+        const admin =
+            await checkAdmin(result.user);
+
+        if (!admin) {
+
+            alert(
+                "This account does not have admin access."
+            );
+
+            await signOut(auth);
+
+            return;
+        }
+
+
+        currentUser =
+            result.user;
+
+        isAdmin = true;
+
+        showAdminButton();
+
+        showSection("admin");
+
+        await loadAdminContent();
+
+    } catch (error) {
+
+        console.error(
+            "Admin login error:",
+            error
+        );
+
+        if (
+            error.code ===
+            "auth/invalid-credential"
+        ) {
+
+            alert(
+                "Incorrect email or password."
+            );
+
+        } else {
+
+            alert(
+                "Admin login failed. Please try again."
+            );
+        }
+    }
 };
 
 
-/* =========================
-   ADMIN CONTENT EDITOR
-========================= */
+/* =========================================================
+   LOAD ADMIN CONTENT
+========================================================= */
 
 async function loadAdminContent() {
 
     if (!isAdmin) return;
 
+
     const storyTitle =
-        document.getElementById("admin-story-title");
+        document.getElementById(
+            "admin-story-title"
+        );
 
     const storyBody =
-        document.getElementById("admin-story-body");
+        document.getElementById(
+            "admin-story-body"
+        );
 
     const questionsTitle =
-        document.getElementById("admin-questions-title");
+        document.getElementById(
+            "admin-questions-title"
+        );
 
     const questionsBody =
-        document.getElementById("admin-questions-body");
+        document.getElementById(
+            "admin-questions-body"
+        );
+
 
     try {
 
-        const storySnap =
-            await getDoc(doc(db, "content", "story"));
+        const storySnapshot =
+            await getDoc(
+                doc(db, "content", "story")
+            );
 
-        if (storySnap.exists()) {
 
-            const story = storySnap.data();
+        if (storySnapshot.exists()) {
+
+            const story =
+                storySnapshot.data();
 
             if (storyTitle) {
+
                 storyTitle.value =
                     story.title || "";
             }
 
             if (storyBody) {
+
                 storyBody.value =
                     story.body || "";
             }
         }
 
 
-        const questionsSnap =
-            await getDoc(doc(db, "content", "questions"));
+        const questionsSnapshot =
+            await getDoc(
+                doc(db, "content", "questions")
+            );
 
-        if (questionsSnap.exists()) {
+
+        if (questionsSnapshot.exists()) {
 
             const questions =
-                questionsSnap.data();
+                questionsSnapshot.data();
 
             if (questionsTitle) {
+
                 questionsTitle.value =
                     questions.title || "";
             }
 
             if (questionsBody) {
+
                 questionsBody.value =
                     questions.body || "";
             }
@@ -285,27 +525,56 @@ async function loadAdminContent() {
             error
         );
 
-        alert("Unable to load the content.");
+        alert(
+            "Unable to load the editor content."
+        );
     }
 }
 
 
-/* =========================
+/* =========================================================
    SAVE STORY
-========================= */
+========================================================= */
 
 window.saveStory = async function () {
 
     if (!isAdmin) {
-        alert("You are not authorized.");
+
+        alert(
+            "You are not authorized to edit the story."
+        );
+
         return;
     }
 
+
     const title =
-        document.getElementById("admin-story-title").value.trim();
+        document
+            .getElementById(
+                "admin-story-title"
+            )
+            .value
+            .trim();
+
 
     const body =
-        document.getElementById("admin-story-body").value.trim();
+        document
+            .getElementById(
+                "admin-story-body"
+            )
+            .value
+            .trim();
+
+
+    if (!title || !body) {
+
+        alert(
+            "Please enter both a title and the story."
+        );
+
+        return;
+    }
+
 
     try {
 
@@ -315,44 +584,76 @@ window.saveStory = async function () {
                 title: title,
                 body: body
             },
-            { merge: true }
+            {
+                merge: true
+            }
         );
 
-        alert("Story saved successfully.");
 
-        loadStory();
+        alert(
+            "Story saved successfully."
+        );
+
+
+        await loadStory();
 
     } catch (error) {
 
-        console.error("Story save error:", error);
+        console.error(
+            "Story save error:",
+            error
+        );
 
-        alert("Could not save the story.");
+        alert(
+            "Could not save the story."
+        );
     }
 };
 
 
-/* =========================
+/* =========================================================
    SAVE QUESTIONS
-========================= */
+========================================================= */
 
 window.saveQuestions = async function () {
 
     if (!isAdmin) {
-        alert("You are not authorized.");
+
+        alert(
+            "You are not authorized to edit the questions."
+        );
+
         return;
     }
 
+
     const title =
         document
-            .getElementById("admin-questions-title")
+            .getElementById(
+                "admin-questions-title"
+            )
             .value
             .trim();
 
+
     const body =
         document
-            .getElementById("admin-questions-body")
+            .getElementById(
+                "admin-questions-body"
+            )
             .value
             .trim();
+
+
+    if (!title || !body) {
+
+        alert(
+            "Please enter both a title and the questions."
+        );
+
+        return;
+    }
+
 
     try {
 
@@ -362,12 +663,18 @@ window.saveQuestions = async function () {
                 title: title,
                 body: body
             },
-            { merge: true }
+            {
+                merge: true
+            }
         );
 
-        alert("Questions saved successfully.");
 
-        loadQuestions();
+        alert(
+            "Questions saved successfully."
+        );
+
+
+        await loadQuestions();
 
     } catch (error) {
 
@@ -376,20 +683,26 @@ window.saveQuestions = async function () {
             error
         );
 
-        alert("Could not save the questions.");
+        alert(
+            "Could not save the questions."
+        );
     }
 };
 
 
-/* =========================
+/* =========================================================
    PUBLIC CHAT
-========================= */
+========================================================= */
 
 let currentUserName =
-    localStorage.getItem("bibleStudyAnonymousName");
+    localStorage.getItem(
+        "bibleStudyAnonymousName"
+    );
 
 let messagesListener = null;
+
 let replyingTo = null;
+
 
 const chatLogin =
     document.getElementById("chat-login");
@@ -425,13 +738,21 @@ const emojiButton =
     document.getElementById("emoji-button");
 
 
-/* =========================
-   AUTHENTICATION
-========================= */
+/* =========================================================
+   ANONYMOUS CHAT AUTH
+========================================================= */
 
-async function authenticateUser() {
+async function authenticateChatUser() {
+
+    /*
+       If an admin is already logged in,
+       we use that authenticated account.
+
+       Otherwise we use Firebase Anonymous Auth.
+    */
 
     if (auth.currentUser) {
+
         return auth.currentUser;
     }
 
@@ -442,43 +763,57 @@ async function authenticateUser() {
 }
 
 
-/* =========================
+/* =========================================================
    OPEN CHAT
-========================= */
+========================================================= */
 
 async function openChat() {
 
-    if (!chatLogin || !chatRoom) return;
+    if (!chatLogin || !chatRoom) {
+        return;
+    }
+
 
     if (!currentUserName) {
 
-        chatLogin.style.display = "block";
-        chatRoom.style.display = "none";
+        chatLogin.style.display =
+            "block";
+
+        chatRoom.style.display =
+            "none";
 
         return;
     }
 
+
     try {
 
-        const user =
-            await authenticateUser();
+        await authenticateChatUser();
+
 
         if (anonymousId) {
+
             anonymousId.textContent =
                 currentUserName;
         }
 
-        chatLogin.style.display = "none";
-        chatRoom.style.display = "flex";
+
+        chatLogin.style.display =
+            "none";
+
+        chatRoom.style.display =
+            "flex";
+
 
         if (!messagesListener) {
+
             startRealtimeMessages();
         }
 
     } catch (error) {
 
         console.error(
-            "Authentication failed:",
+            "Chat authentication failed:",
             error
         );
 
@@ -489,9 +824,9 @@ async function openChat() {
 }
 
 
-/* =========================
+/* =========================================================
    ENTER CHAT
-========================= */
+========================================================= */
 
 if (enterChatButton) {
 
@@ -501,6 +836,7 @@ if (enterChatButton) {
 
             const name =
                 anonymousName.value.trim();
+
 
             if (
                 name.length < 2 ||
@@ -514,16 +850,21 @@ if (enterChatButton) {
                 return;
             }
 
+
             try {
 
-                await authenticateUser();
+                await authenticateChatUser();
 
-                currentUserName = name;
+
+                currentUserName =
+                    name;
+
 
                 localStorage.setItem(
                     "bibleStudyAnonymousName",
                     name
                 );
+
 
                 openChat();
 
@@ -535,15 +876,14 @@ if (enterChatButton) {
                     "Unable to enter the chat."
                 );
             }
-
         }
     );
 }
 
 
-/* =========================
+/* =========================================================
    CHANGE NAME
-========================= */
+========================================================= */
 
 if (changeNameButton) {
 
@@ -557,24 +897,33 @@ if (changeNameButton) {
 
             currentUserName = null;
 
+
             if (chatLogin) {
-                chatLogin.style.display = "block";
+
+                chatLogin.style.display =
+                    "block";
             }
 
+
             if (chatRoom) {
-                chatRoom.style.display = "none";
+
+                chatRoom.style.display =
+                    "none";
             }
         }
     );
 }
 
 
-/* =========================
-   REALTIME MESSAGES
-========================= */
+/* =========================================================
+   REALTIME CHAT
+========================================================= */
 
 const messagesCollection =
-    collection(db, "publicChatMessages");
+    collection(
+        db,
+        "publicChatMessages"
+    );
 
 
 function startRealtimeMessages() {
@@ -582,115 +931,149 @@ function startRealtimeMessages() {
     const messagesQuery =
         query(
             messagesCollection,
-            orderBy("timestamp", "asc")
+            orderBy(
+                "timestamp",
+                "asc"
+            )
         );
+
 
     messagesListener =
         onSnapshot(
             messagesQuery,
-            (snapshot) => {
+            snapshot => {
 
-                if (!chatMessages) return;
+                if (!chatMessages) {
+                    return;
+                }
+
 
                 chatMessages.innerHTML = "";
 
+
                 snapshot.forEach(
-                    (docSnapshot) => {
+                    messageSnapshot => {
 
                         createMessageElement(
-                            docSnapshot.data(),
-                            docSnapshot.id
+                            messageSnapshot.data(),
+                            messageSnapshot.id
                         );
-
                     }
                 );
+
 
                 chatMessages.scrollTop =
                     chatMessages.scrollHeight;
 
             },
-            (error) => {
+            error => {
 
                 console.error(
                     "Realtime chat error:",
                     error
                 );
-
             }
         );
 }
 
 
-/* =========================
-   CREATE MESSAGE
-========================= */
+/* =========================================================
+   CREATE CHAT MESSAGE
+========================================================= */
 
 function createMessageElement(
     message,
     messageId
 ) {
 
-    if (!chatMessages) return;
+    if (!chatMessages) {
+        return;
+    }
 
-    const messageElement =
+
+    const element =
         document.createElement("div");
 
-    const isMine =
-        message.uid === auth.currentUser?.uid;
 
-    messageElement.className =
+    const isMine =
+        message.uid ===
+        auth.currentUser?.uid;
+
+
+    element.className =
         `chat-message ${
-            isMine ? "mine" : "other"
+            isMine
+                ? "mine"
+                : "other"
         }`;
 
+
     let replyHTML = "";
+
 
     if (message.replyTo) {
 
         replyHTML = `
             <div class="reply-message">
+
                 <strong>
                     ${escapeHtml(
-                        message.replyTo.user || ""
+                        message.replyTo.user ||
+                        "Anonymous"
                     )}
                 </strong>
+
                 <span>
                     ${escapeHtml(
-                        message.replyTo.text || ""
+                        message.replyTo.text ||
+                        ""
                     )}
                 </span>
+
             </div>
         `;
     }
+
 
     const time =
         message.timestamp
             ? new Date(
                 message.timestamp
-              ).toLocaleTimeString(
+            ).toLocaleTimeString(
                 [],
                 {
                     hour: "2-digit",
                     minute: "2-digit"
                 }
-              )
+            )
             : "";
 
-    messageElement.innerHTML = `
 
-        ${!isMine ? `
-            <div class="message-user">
-                ${escapeHtml(
-                    message.user || "Anonymous"
-                )}
-            </div>
-        ` : ""}
+    element.innerHTML = `
+
+        ${
+            !isMine
+                ? `
+                    <div class="message-user">
+                        ${escapeHtml(
+                            message.user ||
+                            "Anonymous"
+                        )}
+                    </div>
+                  `
+                : ""
+        }
+
 
         ${replyHTML}
 
+
         <div class="message-text">
-            ${escapeHtml(message.text || "")}
+            ${escapeHtml(
+                message.text || ""
+            )}
         </div>
+
 
         <div class="message-bottom">
 
@@ -710,9 +1093,10 @@ function createMessageElement(
 
 
     const replyButton =
-        messageElement.querySelector(
+        element.querySelector(
             ".reply-button"
         );
+
 
     if (replyButton) {
 
@@ -724,28 +1108,27 @@ function createMessageElement(
                     message,
                     messageId
                 );
-
             }
         );
     }
 
 
     addSwipeReply(
-        messageElement,
+        element,
         message,
         messageId
     );
 
 
     chatMessages.appendChild(
-        messageElement
+        element
     );
 }
 
 
-/* =========================
-   REPLY
-========================= */
+/* =========================================================
+   SET REPLY
+========================================================= */
 
 function setReply(
     message,
@@ -753,28 +1136,44 @@ function setReply(
 ) {
 
     replyingTo = {
+
         id: messageId,
-        user: message.user,
-        text: message.text
+
+        user:
+            message.user,
+
+        text:
+            message.text
     };
 
-    if (!replyPreview) return;
+
+    if (!replyPreview) {
+        return;
+    }
+
 
     replyPreview.style.display =
         "block";
 
+
     replyPreview.innerHTML = `
+
         Replying to
+
         <strong>
             ${escapeHtml(
-                message.user || "Anonymous"
+                message.user ||
+                "Anonymous"
             )}
         </strong>
+
         <span>
             ${escapeHtml(
-                message.text || ""
+                message.text ||
+                ""
             )}
         </span>
+
         <button
             type="button"
             id="cancel-reply"
@@ -783,93 +1182,123 @@ function setReply(
         </button>
     `;
 
-    const cancel =
+
+    const cancelButton =
         document.getElementById(
             "cancel-reply"
         );
 
-    if (cancel) {
 
-        cancel.addEventListener(
+    if (cancelButton) {
+
+        cancelButton.addEventListener(
             "click",
             clearReply
         );
     }
 
-    chatMessage.focus();
+
+    if (chatMessage) {
+
+        chatMessage.focus();
+    }
 }
 
+
+/* =========================================================
+   CLEAR REPLY
+========================================================= */
 
 function clearReply() {
 
     replyingTo = null;
+
 
     if (replyPreview) {
 
         replyPreview.style.display =
             "none";
 
-        replyPreview.innerHTML = "";
+        replyPreview.innerHTML =
+            "";
     }
 }
 
 
-/* =========================
-   SEND MESSAGE
-========================= */
+/* =========================================================
+   SEND CHAT MESSAGE
+========================================================= */
 
 if (chatForm) {
 
     chatForm.addEventListener(
         "submit",
-        async (event) => {
+        async event => {
 
             event.preventDefault();
+
 
             const text =
                 chatMessage.value.trim();
 
-            if (!text) return;
+
+            if (!text) {
+                return;
+            }
+
 
             if (!currentUserName) {
+
                 alert(
                     "Please enter the chat first."
                 );
+
                 return;
             }
+
 
             try {
 
                 const user =
-                    await authenticateUser();
+                    await authenticateChatUser();
+
 
                 const newMessage = {
 
-                    uid: user.uid,
+                    uid:
+                        user.uid,
 
-                    user: currentUserName,
+                    user:
+                        currentUserName,
 
-                    text: text,
+                    text:
+                        text,
 
-                    timestamp: Date.now(),
+                    timestamp:
+                        Date.now(),
 
                     replyTo:
                         replyingTo
                             ? {
                                 user:
                                     replyingTo.user,
+
                                 text:
                                     replyingTo.text
                               }
                             : null
                 };
 
+
                 await addDoc(
                     messagesCollection,
                     newMessage
                 );
 
-                chatMessage.value = "";
+
+                chatMessage.value =
+                    "";
+
 
                 clearReply();
 
@@ -889,9 +1318,9 @@ if (chatForm) {
 }
 
 
-/* =========================
+/* =========================================================
    EMOJI
-========================= */
+========================================================= */
 
 if (emojiButton) {
 
@@ -908,6 +1337,7 @@ if (emojiButton) {
         "✝️"
     ];
 
+
     emojiButton.addEventListener(
         "click",
         () => {
@@ -920,7 +1350,10 @@ if (emojiButton) {
                     )
                 ];
 
-            chatMessage.value += emoji;
+
+            chatMessage.value +=
+                emoji;
+
 
             chatMessage.focus();
         }
@@ -928,9 +1361,9 @@ if (emojiButton) {
 }
 
 
-/* =========================
-   SWIPE LEFT TO REPLY
-========================= */
+/* =========================================================
+   MOBILE SWIPE TO REPLY
+========================================================= */
 
 function addSwipeReply(
     element,
@@ -939,28 +1372,35 @@ function addSwipeReply(
 ) {
 
     let startX = 0;
+
     let currentX = 0;
+
 
     element.addEventListener(
         "touchstart",
-        (event) => {
+        event => {
 
             startX =
                 event.touches[0].clientX;
+
         },
-        { passive: true }
+        {
+            passive: true
+        }
     );
 
 
     element.addEventListener(
         "touchmove",
-        (event) => {
+        event => {
 
             currentX =
                 event.touches[0].clientX;
 
         },
-        { passive: true }
+        {
+            passive: true
+        }
     );
 
 
@@ -971,6 +1411,7 @@ function addSwipeReply(
             const distance =
                 currentX - startX;
 
+
             if (distance < -60) {
 
                 setReply(
@@ -979,21 +1420,25 @@ function addSwipeReply(
                 );
             }
 
-            startX = 0;
-            currentX = 0;
 
+            startX = 0;
+
+            currentX = 0;
         }
     );
 }
 
 
-/* =========================
+/* =========================================================
    INITIAL LOAD
-========================= */
+========================================================= */
 
 loadStory();
+
 loadQuestions();
 
+
 if (currentUserName) {
+
     openChat();
 }
