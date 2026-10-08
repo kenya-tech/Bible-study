@@ -1,7 +1,71 @@
 // ========================================
 // ST. MONICA LK3C BIBLE STUDY
-// CHAT + NAVIGATION
+// FIREBASE FIRESTORE CHAT + NAVIGATION
 // ========================================
+
+
+// ========================================
+// FIREBASE IMPORTS
+// ========================================
+
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    query,
+    orderBy,
+    onSnapshot
+} from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
+
+
+// ========================================
+// FIREBASE CONFIGURATION
+// ========================================
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyDAm9gekwQUIeJ51sX9QraOEejHBJc6Xf4",
+
+    authDomain:
+        "bible-study-2440c.firebaseapp.com",
+
+    projectId:
+        "bible-study-2440c",
+
+    storageBucket:
+        "bible-study-2440c.firebasestorage.app",
+
+    messagingSenderId:
+        "856615640461",
+
+    appId:
+        "1:856615640461:web:b792dd2867a71f12a731c4",
+
+    measurementId:
+        "G-D5D1178QMV"
+
+};
+
+
+// ========================================
+// INITIALIZE FIREBASE
+// ========================================
+
+const app =
+    initializeApp(firebaseConfig);
+
+
+// ========================================
+// INITIALIZE FIRESTORE
+// ========================================
+
+const db =
+    getFirestore(app);
 
 
 // ========================================
@@ -10,10 +74,14 @@
 
 function showSection(sectionId) {
 
-    const screens = document.querySelectorAll(".screen");
+    const screens =
+        document.querySelectorAll(".screen");
+
 
     screens.forEach(function(screen) {
+
         screen.classList.remove("active");
+
     });
 
 
@@ -25,14 +93,37 @@ function showSection(sectionId) {
 
         selectedSection.classList.add("active");
 
+
         window.scrollTo({
+
             top: 0,
+
             behavior: "smooth"
+
         });
 
     }
 
+
+    // Open chat when Public Chat is selected
+
+    if (sectionId === "public-chat") {
+
+        setTimeout(function() {
+
+            openChat();
+
+        }, 50);
+
+    }
+
 }
+
+
+// Make the function available to HTML onclick attributes
+
+window.showSection =
+    showSection;
 
 
 // ========================================
@@ -42,44 +133,61 @@ function showSection(sectionId) {
 const chatLogin =
     document.getElementById("chat-login");
 
+
 const chatRoom =
     document.getElementById("chat-room");
+
 
 const anonymousNameInput =
     document.getElementById("anonymous-name");
 
+
 const enterChatButton =
     document.getElementById("enter-chat-button");
+
 
 const chatLoginError =
     document.getElementById("chat-login-error");
 
+
 const anonymousIDElement =
     document.getElementById("anonymous-id");
+
 
 const chatForm =
     document.getElementById("chat-form");
 
+
 const chatInput =
     document.getElementById("chat-message");
+
 
 const chatMessages =
     document.getElementById("chat-messages");
 
+
 const replyPreview =
     document.getElementById("reply-preview");
+
 
 const replyName =
     document.getElementById("reply-name");
 
+
 const replyText =
     document.getElementById("reply-text");
+
 
 const cancelReplyButton =
     document.getElementById("cancel-reply");
 
+
 const changeChatNameButton =
     document.getElementById("change-chat-name");
+
+
+const emojiButton =
+    document.getElementById("emoji-button");
 
 
 // ========================================
@@ -87,9 +195,13 @@ const changeChatNameButton =
 // ========================================
 
 let currentUserName =
-    localStorage.getItem("bibleStudyAnonymousName");
+    localStorage.getItem(
+        "bibleStudyAnonymousName"
+    );
 
-let replyingTo = null;
+
+let replyingTo =
+    null;
 
 
 // ========================================
@@ -99,61 +211,50 @@ let replyingTo = null;
 function openChat() {
 
     if (!chatLogin || !chatRoom) {
+
         return;
+
     }
 
 
     if (currentUserName) {
 
-        chatLogin.style.display = "none";
+        chatLogin.style.display =
+            "none";
 
-        chatRoom.style.display = "flex";
+
+        chatRoom.style.display =
+            "flex";
+
 
         updateUserDisplay();
 
-        loadLocalMessages();
 
-    } else {
+        startRealtimeMessages();
 
-        chatLogin.style.display = "flex";
+    }
 
-        chatRoom.style.display = "none";
+    else {
+
+        chatLogin.style.display =
+            "flex";
+
+
+        chatRoom.style.display =
+            "none";
+
 
         setTimeout(function() {
 
             if (anonymousNameInput) {
+
                 anonymousNameInput.focus();
+
             }
 
         }, 100);
 
     }
-
-}
-
-
-// ========================================
-// DETECT WHEN CHAT PAGE OPENS
-// ========================================
-
-const publicChatButton =
-    document.querySelector(
-        "[onclick=\"showSection('public-chat')\"]"
-    );
-
-
-if (publicChatButton) {
-
-    publicChatButton.addEventListener(
-        "click",
-        function() {
-
-            setTimeout(function() {
-                openChat();
-            }, 50);
-
-        }
-    );
 
 }
 
@@ -165,25 +266,30 @@ if (publicChatButton) {
 if (enterChatButton) {
 
     enterChatButton.addEventListener(
+
         "click",
+
         function() {
 
             enterPublicChat();
 
         }
+
     );
 
 }
 
 
 // ========================================
-// ENTER CHAT WITH ENTER KEY
+// ENTER WITH ENTER KEY
 // ========================================
 
 if (anonymousNameInput) {
 
     anonymousNameInput.addEventListener(
+
         "keydown",
+
         function(event) {
 
             if (event.key === "Enter") {
@@ -195,19 +301,22 @@ if (anonymousNameInput) {
             }
 
         }
+
     );
 
 }
 
 
 // ========================================
-// CREATE USER NAME
+// ENTER PUBLIC CHAT
 // ========================================
 
 function enterPublicChat() {
 
     if (!anonymousNameInput) {
+
         return;
+
     }
 
 
@@ -253,22 +362,30 @@ function enterPublicChat() {
 
 
     localStorage.setItem(
+
         "bibleStudyAnonymousName",
+
         currentUserName
+
     );
 
 
-    chatLoginError.textContent = "";
+    chatLoginError.textContent =
+        "";
 
 
-    chatLogin.style.display = "none";
+    chatLogin.style.display =
+        "none";
 
-    chatRoom.style.display = "flex";
+
+    chatRoom.style.display =
+        "flex";
 
 
     updateUserDisplay();
 
-    loadLocalMessages();
+
+    startRealtimeMessages();
 
 }
 
@@ -280,7 +397,9 @@ function enterPublicChat() {
 function showChatLoginError(message) {
 
     if (!chatLoginError) {
+
         return;
+
     }
 
 
@@ -291,7 +410,7 @@ function showChatLoginError(message) {
 
 
 // ========================================
-// UPDATE USER NAME
+// UPDATE USER DISPLAY
 // ========================================
 
 function updateUserDisplay() {
@@ -313,18 +432,25 @@ function updateUserDisplay() {
 if (changeChatNameButton) {
 
     changeChatNameButton.addEventListener(
+
         "click",
+
         function() {
 
             const newName =
                 prompt(
+
                     "Choose a new anonymous name:",
+
                     currentUserName || ""
+
                 );
 
 
             if (!newName) {
+
                 return;
+
             }
 
 
@@ -359,102 +485,164 @@ if (changeChatNameButton) {
 
 
             localStorage.setItem(
+
                 "bibleStudyAnonymousName",
+
                 currentUserName
+
             );
 
 
             updateUserDisplay();
 
-            renderMessages();
+
+            renderCurrentMessages();
 
         }
+
     );
 
 }
 
 
 // ========================================
-// LOCAL MESSAGE STORAGE
-//
-// This is temporary.
-// Firebase will replace this later.
+// FIRESTORE CHAT COLLECTION
 // ========================================
 
-function getStoredMessages() {
+const messagesCollection =
+    collection(
 
-    const storedMessages =
-        localStorage.getItem(
-            "bibleStudyChatMessages"
-        );
+        db,
 
+        "publicChatMessages"
 
-    if (!storedMessages) {
-
-        return [];
-
-    }
-
-
-    try {
-
-        return JSON.parse(
-            storedMessages
-        );
-
-    } catch (error) {
-
-        return [];
-
-    }
-
-}
-
-
-// ========================================
-// SAVE MESSAGES
-// ========================================
-
-function saveMessages(messages) {
-
-    localStorage.setItem(
-        "bibleStudyChatMessages",
-        JSON.stringify(messages)
     );
 
+
+// ========================================
+// REAL-TIME MESSAGES
+// ========================================
+
+let unsubscribeMessages =
+    null;
+
+
+let latestMessages =
+    [];
+
+
+function startRealtimeMessages() {
+
+    if (unsubscribeMessages) {
+
+        unsubscribeMessages();
+
+    }
+
+
+    const messagesQuery =
+        query(
+
+            messagesCollection,
+
+            orderBy(
+
+                "timestamp",
+
+                "asc"
+
+            )
+
+        );
+
+
+    unsubscribeMessages =
+        onSnapshot(
+
+            messagesQuery,
+
+            function(snapshot) {
+
+                latestMessages = [];
+
+
+                snapshot.forEach(function(doc) {
+
+                    latestMessages.push({
+
+                        id:
+                            doc.id,
+
+                        ...doc.data()
+
+                    });
+
+                });
+
+
+                renderCurrentMessages();
+
+            },
+
+
+            function(error) {
+
+                console.error(
+                    "Firestore error:",
+                    error
+                );
+
+
+                if (chatMessages) {
+
+                    chatMessages.innerHTML = `
+
+                        <div class="chat-welcome">
+
+                            <div class="chat-welcome-icon">
+                                ⚠️
+                            </div>
+
+                            <h3>
+                                Chat connection problem
+                            </h3>
+
+                            <p>
+                                Please check your Firebase
+                                Firestore setup and rules.
+                            </p>
+
+                        </div>
+
+                    `;
+
+                }
+
+            }
+
+        );
+
 }
 
 
 // ========================================
-// LOAD MESSAGES
+// RENDER CURRENT MESSAGES
 // ========================================
 
-function loadLocalMessages() {
-
-    renderMessages();
-
-}
-
-
-// ========================================
-// RENDER MESSAGES
-// ========================================
-
-function renderMessages() {
+function renderCurrentMessages() {
 
     if (!chatMessages) {
+
         return;
+
     }
 
 
-    const messages =
-        getStoredMessages();
+    chatMessages.innerHTML =
+        "";
 
 
-    chatMessages.innerHTML = "";
-
-
-    if (messages.length === 0) {
+    if (latestMessages.length === 0) {
 
         chatMessages.innerHTML = `
 
@@ -482,11 +670,17 @@ function renderMessages() {
     }
 
 
-    messages.forEach(function(message) {
+    latestMessages.forEach(
 
-        createMessageElement(message);
+        function(message) {
 
-    });
+            createMessageElement(
+                message
+            );
+
+        }
+
+    );
 
 
     scrollChatToBottom();
@@ -495,7 +689,7 @@ function renderMessages() {
 
 
 // ========================================
-// CREATE MESSAGE
+// CREATE MESSAGE ELEMENT
 // ========================================
 
 function createMessageElement(message) {
@@ -510,7 +704,9 @@ function createMessageElement(message) {
 
     messageWrapper.className =
         isMine
+
             ? "message-wrapper mine"
+
             : "message-wrapper other";
 
 
@@ -523,7 +719,7 @@ function createMessageElement(message) {
 
 
     // ====================================
-    // REPLY PREVIEW INSIDE MESSAGE
+    // REPLY PREVIEW
     // ====================================
 
     if (message.replyTo) {
@@ -555,6 +751,7 @@ function createMessageElement(message) {
         originalReply.appendChild(
             replyUser
         );
+
 
         originalReply.appendChild(
             replyMessage
@@ -627,7 +824,9 @@ function createMessageElement(message) {
 
 
     messageTime.textContent =
-        formatTime(message.timestamp);
+        formatTime(
+            message.timestamp
+        );
 
 
     bubble.appendChild(
@@ -656,13 +855,18 @@ function createMessageElement(message) {
 
 
     replyButton.setAttribute(
+
         "aria-label",
+
         "Reply to message"
+
     );
 
 
     replyButton.addEventListener(
+
         "click",
+
         function(event) {
 
             event.stopPropagation();
@@ -670,6 +874,7 @@ function createMessageElement(message) {
             startReply(message);
 
         }
+
     );
 
 
@@ -688,13 +893,12 @@ function createMessageElement(message) {
     );
 
 
-    // ====================================
-    // MOBILE SWIPE SUPPORT
-    // ====================================
-
     enableSwipeReply(
+
         messageWrapper,
+
         message
+
     );
 
 }
@@ -706,16 +910,48 @@ function createMessageElement(message) {
 
 function formatTime(timestamp) {
 
-    const date =
-        new Date(timestamp);
+    if (!timestamp) {
+
+        return "";
+
+    }
+
+
+    let date;
+
+
+    // Firestore Timestamp
+
+    if (
+        timestamp &&
+        typeof timestamp.toDate === "function"
+    ) {
+
+        date =
+            timestamp.toDate();
+
+    }
+
+    else {
+
+        date =
+            new Date(timestamp);
+
+    }
 
 
     return date.toLocaleTimeString(
+
         [],
+
         {
+
             hour: "numeric",
+
             minute: "2-digit"
+
         }
+
     );
 
 }
@@ -728,8 +964,10 @@ function formatTime(timestamp) {
 if (chatForm) {
 
     chatForm.addEventListener(
+
         "submit",
-        function(event) {
+
+        async function(event) {
 
             event.preventDefault();
 
@@ -748,14 +986,13 @@ if (chatForm) {
 
 
             if (!text) {
+
                 return;
+
             }
 
 
             const newMessage = {
-
-                id:
-                    Date.now().toString(),
 
                 user:
                     currentUserName,
@@ -767,46 +1004,64 @@ if (chatForm) {
                     Date.now(),
 
                 replyTo:
+
                     replyingTo
 
-                    ? {
+                        ? {
 
-                        user:
-                            replyingTo.user,
+                            user:
+                                replyingTo.user,
 
-                        text:
-                            replyingTo.text
+                            text:
+                                replyingTo.text
 
-                    }
+                        }
 
-                    : null
+                        : null
 
             };
 
 
-            const messages =
-                getStoredMessages();
+            try {
+
+                await addDoc(
+
+                    messagesCollection,
+
+                    newMessage
+
+                );
 
 
-            messages.push(
-                newMessage
-            );
+                chatInput.value =
+                    "";
 
 
-            saveMessages(
-                messages
-            );
+                cancelReply();
+
+            }
+
+            catch (error) {
+
+                console.error(
+
+                    "Error sending message:",
+
+                    error
+
+                );
 
 
-            chatInput.value = "";
+                alert(
 
+                    "Your message could not be sent. Please check your Firebase Firestore setup."
 
-            cancelReply();
+                );
 
-
-            renderMessages();
+            }
 
         }
+
     );
 
 }
@@ -882,59 +1137,82 @@ function cancelReply() {
 if (cancelReplyButton) {
 
     cancelReplyButton.addEventListener(
+
         "click",
+
         function() {
 
             cancelReply();
 
         }
+
     );
 
 }
 
 
 // ========================================
-// MOBILE SWIPE-LEFT TO REPLY
+// MOBILE SWIPE LEFT TO REPLY
 // ========================================
 
 function enableSwipeReply(
+
     element,
+
     message
+
 ) {
 
-    let startX = 0;
+    let startX =
+        0;
 
-    let currentX = 0;
 
-    let isSwiping = false;
+    let currentX =
+        0;
+
+
+    let isSwiping =
+        false;
 
 
     element.addEventListener(
+
         "touchstart",
+
         function(event) {
 
             startX =
                 event.touches[0].clientX;
 
+
             currentX =
                 startX;
+
 
             isSwiping =
                 true;
 
         },
+
         {
+
             passive: true
+
         }
+
     );
 
 
     element.addEventListener(
+
         "touchmove",
+
         function(event) {
 
             if (!isSwiping) {
+
                 return;
+
             }
 
 
@@ -946,30 +1224,41 @@ function enableSwipeReply(
                 currentX - startX;
 
 
-            // We respond to a left swipe.
             if (distance < -20) {
 
                 element.style.transform =
+
                     `translateX(${Math.max(
+
                         distance,
+
                         -80
+
                     )}px)`;
 
             }
 
         },
+
         {
+
             passive: true
+
         }
+
     );
 
 
     element.addEventListener(
+
         "touchend",
+
         function() {
 
             if (!isSwiping) {
+
                 return;
+
             }
 
 
@@ -992,6 +1281,7 @@ function enableSwipeReply(
                 false;
 
         }
+
     );
 
 }
@@ -1004,16 +1294,24 @@ function enableSwipeReply(
 function scrollChatToBottom() {
 
     if (!chatMessages) {
+
         return;
+
     }
 
 
-    setTimeout(function() {
+    setTimeout(
 
-        chatMessages.scrollTop =
-            chatMessages.scrollHeight;
+        function() {
 
-    }, 50);
+            chatMessages.scrollTop =
+                chatMessages.scrollHeight;
+
+        },
+
+        50
+
+    );
 
 }
 
@@ -1022,40 +1320,55 @@ function scrollChatToBottom() {
 // EMOJI BUTTON
 // ========================================
 
-const emojiButton =
-    document.getElementById("emoji-button");
-
-
 if (emojiButton) {
 
     emojiButton.addEventListener(
+
         "click",
+
         function() {
 
             if (!chatInput) {
+
                 return;
+
             }
 
 
             const emojis = [
+
                 "🙏",
+
                 "❤️",
+
                 "😊",
+
                 "😂",
+
                 "🙌",
+
                 "✝️",
+
                 "✨",
+
                 "😇",
+
                 "💯"
+
             ];
 
 
             const randomEmoji =
+
                 emojis[
+
                     Math.floor(
+
                         Math.random() *
                         emojis.length
+
                     )
+
                 ];
 
 
@@ -1066,18 +1379,16 @@ if (emojiButton) {
             chatInput.focus();
 
         }
+
     );
 
 }
 
 
 // ========================================
-// INITIALISE CHAT
+// INITIALISE
 // ========================================
 
-if (chatLogin && chatRoom) {
-
-    // The login screen remains available
-    // until the user enters an anonymous name.
-
-}
+console.log(
+    "St. Monica LK3C Bible Study Firebase chat initialized."
+);
