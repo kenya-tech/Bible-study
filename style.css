@@ -1,221 +1,227 @@
 /* =========================================================
    ST. MONICA LK3C — BIBLE STUDY
-   Modern Catholic Bible Study UI
+   Clean, spacious, modern Catholic design
    ========================================================= */
 
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
 }
 
-:root {
-  --purple: #5b3a82;
-  --purple-dark: #3f275f;
-  --purple-light: #eee7f6;
-
-  --cream: #fffaf2;
-  --cream-dark: #f5ecdf;
-
-  --gold: #c49a45;
-  --gold-light: #ead9aa;
-
-  --text: #2f2935;
-  --muted: #776f7d;
-
-  --white: #ffffff;
-  --border: #e8deed;
-
-  --shadow: 0 10px 30px rgba(63, 39, 95, 0.10);
-  --shadow-soft: 0 5px 18px rgba(63, 39, 95, 0.08);
-
-  --radius: 18px;
+html {
+    scroll-behavior: smooth;
 }
-
-/* =========================================================
-   BODY
-   ========================================================= */
 
 body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  background:
-    radial-gradient(circle at top left, rgba(196, 154, 69, 0.10), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(91, 58, 130, 0.10), transparent 35%),
-    var(--cream);
-
-  color: var(--text);
-  line-height: 1.6;
-  min-height: 100vh;
+    margin: 0;
+    min-height: 100vh;
+    background: #f7f1e8;
+    color: #29212f;
+    font-family: "Segoe UI", Arial, sans-serif;
+    line-height: 1.6;
 }
 
 /* =========================================================
    MAIN APP
    ========================================================= */
 
-.app {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 30px 18px 60px;
+#app,
+main,
+body {
+    width: 100%;
+}
+
+main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 25px 20px 60px;
 }
 
 /* =========================================================
-   HOME HEADER
+   HEADER
    ========================================================= */
 
 header {
-  text-align: center;
-  padding: 42px 20px 32px;
+    background: linear-gradient(135deg, #382247, #68487d);
+    color: white;
+    text-align: center;
+
+    padding: 42px 20px 34px;
+
+    box-shadow: 0 5px 20px rgba(50, 30, 65, 0.15);
 }
 
 header h1 {
-  font-size: clamp(2rem, 6vw, 3.2rem);
-  color: var(--purple-dark);
-  font-weight: 800;
-  letter-spacing: -1px;
+    margin: 0;
+    font-family: Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
 header p {
-  margin-top: 8px;
-  color: var(--muted);
-  font-size: 1.05rem;
+    margin: 8px 0 0;
+    font-size: 1rem;
+    color: rgba(255,255,255,0.85);
 }
 
 /* =========================================================
-   NAVIGATION / HOME BUTTONS
+   HOME NAVIGATION
    ========================================================= */
 
 nav {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  margin: 15px auto 30px;
-  max-width: 720px;
+    max-width: 850px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    padding: 18px 20px;
+
+    background: rgba(255,255,255,0.96);
+    border-bottom: 1px solid #e6dce9;
 }
 
-nav button,
-.menu-button {
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.85);
-  color: var(--purple-dark);
+nav button {
+    appearance: none;
 
-  padding: 22px 16px;
-  border-radius: var(--radius);
+    border: 1px solid #ddd0e5;
+    background: #fff;
 
-  font-size: 1rem;
-  font-weight: 700;
+    color: #432653;
 
-  cursor: pointer;
+    padding: 11px 17px;
 
-  box-shadow: var(--shadow-soft);
+    border-radius: 12px;
 
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+    font-family: inherit;
+    font-size: 0.94rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
 }
 
-nav button:hover,
-.menu-button:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow);
-  background: var(--white);
+nav button:hover {
+    background: #f1eaf5;
+    border-color: #bca5c9;
+    transform: translateY(-1px);
 }
 
-nav button:active,
-.menu-button:active {
-  transform: scale(0.98);
+nav button:active {
+    transform: scale(0.98);
 }
 
 /* =========================================================
-   PAGE SECTIONS
+   GENERAL SECTIONS
    ========================================================= */
 
 section {
-  animation: fadeIn 0.3s ease;
-}
+    max-width: 850px;
+    margin: 0 auto 25px;
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
+    padding: 30px;
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    background: #fffdf9;
+
+    border: 1px solid #eadfef;
+    border-radius: 20px;
+
+    box-shadow: 0 8px 25px rgba(62, 38, 75, 0.07);
 }
 
 section h2 {
-  color: var(--purple-dark);
-  font-size: 1.8rem;
-  margin-bottom: 20px;
+    margin: 0 0 20px;
+
+    font-family: Georgia, serif;
+    font-size: 2rem;
+
+    color: #40264f;
 }
 
 section h3 {
-  color: var(--purple);
-  font-size: 1.25rem;
-  margin-bottom: 12px;
+    margin: 25px 0 10px;
+
+    font-family: Georgia, serif;
+    color: #58366b;
 }
 
 /* =========================================================
-   CONTENT CARDS
+   BACK BUTTON
    ========================================================= */
 
-.content-card,
-.story-card,
-.questions-card,
-.prayer-card,
-.admin-card {
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 28px;
-  margin-bottom: 18px;
-  box-shadow: var(--shadow-soft);
+section button:first-child {
+    margin-bottom: 20px;
 }
 
-.content-card:hover,
-.story-card:hover,
-.questions-card:hover,
-.prayer-card:hover {
-  box-shadow: var(--shadow);
+button {
+    font-family: inherit;
+}
+
+.back-button {
+    border: 0;
+    background: transparent;
+
+    color: #68487d;
+
+    font-weight: 700;
+
+    padding: 5px 0;
+
+    cursor: pointer;
+}
+
+.back-button:hover {
+    color: #382247;
 }
 
 /* =========================================================
    STORY
    ========================================================= */
 
+#story {
+    padding: 32px;
+}
+
 #story h2 {
-  text-transform: capitalize;
+    margin-bottom: 10px;
+}
+
+#story h3 {
+    font-size: 1.5rem;
+    margin-top: 5px;
+    margin-bottom: 18px;
 }
 
 #storyContent {
-  font-size: 1.04rem;
-  line-height: 1.85;
-  color: #443d49;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: #403943;
 }
 
 #storyContent p {
-  margin-bottom: 18px;
-}
-
-#storyContent p:last-child {
-  margin-bottom: 0;
+    margin: 0 0 18px;
 }
 
 /* =========================================================
    QUESTIONS
    ========================================================= */
 
+#questions {
+    padding: 32px;
+}
+
 #questionsContent {
-  font-size: 1.03rem;
-  line-height: 1.8;
+    font-size: 1.03rem;
+    line-height: 1.8;
+    color: #403943;
 }
 
 #questionsContent p {
-  margin-bottom: 16px;
+    margin-bottom: 16px;
 }
 
 /* =========================================================
@@ -223,544 +229,390 @@ section h3 {
    ========================================================= */
 
 #prayers {
-  max-width: 850px;
-  margin: auto;
-}
-
-#prayers h2 {
-  margin-bottom: 20px;
+    padding: 32px;
 }
 
 #prayers h3 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--gold-light);
+    padding-bottom: 8px;
+    border-bottom: 1px solid #ead9ae;
 }
 
 #prayers p {
-  color: #49424e;
-  line-height: 1.85;
-}
-
-/* =========================================================
-   BACK BUTTON
-   ========================================================= */
-
-.back-button {
-  border: none;
-  background: transparent;
-
-  color: var(--purple);
-  font-size: 0.95rem;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  padding: 10px 0;
-  margin-bottom: 15px;
-
-  transition: color 0.2s ease;
-}
-
-.back-button:hover {
-  color: var(--purple-dark);
+    color: #48404c;
+    line-height: 1.85;
 }
 
 /* =========================================================
    PUBLIC CHAT
    ========================================================= */
 
-.chat-container {
-  background: rgba(255, 255, 255, 0.94);
-  border: 1px solid var(--border);
-  border-radius: 22px;
+#chat {
+    padding: 0;
+    overflow: hidden;
 
-  overflow: hidden;
+    background: #fff;
 
-  box-shadow: var(--shadow);
+    border-radius: 20px;
 }
 
-/* Chat header */
+/* Chat title area */
 
-.chat-header {
-  background: linear-gradient(
-    135deg,
-    var(--purple-dark),
-    var(--purple)
-  );
+#chat h2 {
+    margin: 0;
+    padding: 22px 24px 4px;
 
-  color: white;
-  padding: 20px 22px;
+    color: white;
+
+    background: linear-gradient(135deg, #382247, #68487d);
 }
 
-.chat-header h2 {
-  color: white;
-  margin-bottom: 3px;
-}
+#chat > p {
+    margin: 0;
+    padding: 0 24px 20px;
 
-.chat-header p {
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 0.9rem;
-}
+    color: rgba(255,255,255,0.82);
 
-/* Identity bar */
-
-.chat-identity {
-  background: var(--purple-light);
-  padding: 12px 18px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 10px;
-
-  border-bottom: 1px solid var(--border);
-}
-
-.chat-identity strong {
-  color: var(--purple-dark);
-}
-
-.chat-identity button {
-  border: none;
-  background: transparent;
-  color: var(--purple);
-  font-weight: 700;
-  cursor: pointer;
+    background: linear-gradient(135deg, #382247, #68487d);
 }
 
 /* =========================================================
    CHAT MESSAGES
    ========================================================= */
 
-#chatMessages,
-.messages {
-  min-height: 360px;
-  max-height: 520px;
+#messages,
+#chatMessages {
+    min-height: 380px;
+    max-height: 500px;
 
-  overflow-y: auto;
+    overflow-y: auto;
 
-  padding: 20px;
+    padding: 22px;
 
-  background:
-    radial-gradient(circle at top right, rgba(196, 154, 69, 0.08), transparent 30%),
-    #fffdf9;
+    background: #faf7f2;
 }
 
-/* Individual message */
+/* Generic message styling */
 
 .message {
-  max-width: 78%;
-  margin-bottom: 14px;
+    width: fit-content;
+    max-width: 75%;
 
-  padding: 11px 14px;
+    margin: 0 0 14px;
 
-  border-radius: 16px;
+    padding: 10px 14px;
 
-  background: #f0ebf5;
-  color: var(--text);
+    border-radius: 16px;
 
-  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.04);
+    background: #eee7f3;
 
-  position: relative;
+    color: #302934;
+
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+/* Your messages */
+
+.message.mine,
+.message.own-message {
+    margin-left: auto;
+
+    background: #68487d;
+    color: white;
+
+    border-bottom-right-radius: 5px;
 }
 
 /* Other people's messages */
 
-.message:not(.own-message) {
-  margin-right: auto;
-  border-bottom-left-radius: 5px;
-}
+.message:not(.mine):not(.own-message) {
+    margin-right: auto;
 
-/* Current user's messages */
-
-.message.own-message,
-.message.mine {
-  margin-left: auto;
-  margin-right: 0;
-
-  background: var(--purple);
-  color: white;
-
-  border-bottom-right-radius: 5px;
-}
-
-/* Username */
-
-.message-user {
-  font-size: 0.78rem;
-  font-weight: 800;
-  color: var(--purple);
-  margin-bottom: 3px;
-}
-
-.message.own-message .message-user,
-.message.mine .message-user {
-  color: #ead9ff;
-}
-
-/* Message text */
-
-.message-text {
-  font-size: 0.95rem;
-  word-wrap: break-word;
-}
-
-/* Timestamp */
-
-.message-time {
-  font-size: 0.68rem;
-  opacity: 0.6;
-  margin-top: 5px;
+    border-bottom-left-radius: 5px;
 }
 
 /* =========================================================
-   REPLY DISPLAY
+   CHAT USERNAME / TIME
    ========================================================= */
 
-.reply-preview {
-  background: rgba(196, 154, 69, 0.12);
-
-  border-left: 4px solid var(--gold);
-
-  padding: 8px 10px;
-
-  border-radius: 8px;
-
-  margin-bottom: 7px;
-
-  font-size: 0.8rem;
-  color: #665b48;
+.message strong,
+.message .username,
+.message-user {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #5c3970;
 }
 
-.message.own-message .reply-preview,
-.message.mine .reply-preview {
-  background: rgba(255, 255, 255, 0.14);
-  color: #f4eefa;
-  border-left-color: var(--gold-light);
+.message.mine strong,
+.message.own-message strong,
+.message.mine .username,
+.message.own-message .username,
+.message.mine .message-user,
+.message.own-message .message-user {
+    color: #eadcf0;
+}
+
+.message small,
+.message-time {
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 0.68rem;
+
+    opacity: 0.6;
 }
 
 /* =========================================================
-   REPLY BUTTON
+   REPLY
    ========================================================= */
 
 .reply-button {
-  border: none;
-  background: transparent;
+    border: 0;
+    background: transparent;
 
-  color: var(--purple);
+    color: #68487d;
 
-  font-size: 0.72rem;
-  font-weight: 700;
+    font-size: 0.75rem;
+    font-weight: 700;
 
-  cursor: pointer;
+    padding: 4px 0;
 
-  margin-top: 4px;
+    cursor: pointer;
 }
 
-.message.own-message .reply-button,
-.message.mine .reply-button {
-  color: #ead9ff;
+.mine .reply-button,
+.own-message .reply-button {
+    color: #eadcf0;
+}
+
+.reply-preview {
+    padding: 7px 10px;
+
+    margin-bottom: 7px;
+
+    border-left: 3px solid #c69c4a;
+
+    border-radius: 5px;
+
+    background: rgba(198,156,74,0.10);
+
+    font-size: 0.78rem;
 }
 
 /* =========================================================
-   CHAT COMPOSER
+   CHAT INPUT AREA
    ========================================================= */
 
-.chat-composer {
-  padding: 14px;
+#chat form,
+.chat-composer,
+#messageForm {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 
-  border-top: 1px solid var(--border);
+    padding: 13px;
 
-  background: white;
+    border-top: 1px solid #e8dfea;
 
-  display: flex;
-  gap: 8px;
-  align-items: center;
+    background: white;
 }
 
+#chat input,
 .chat-composer input,
 #messageInput {
-  flex: 1;
+    flex: 1;
 
-  border: 1px solid var(--border);
+    min-width: 0;
 
-  background: #faf7fc;
+    border: 1px solid #dcd0e2;
 
-  padding: 12px 14px;
+    border-radius: 13px;
 
-  border-radius: 14px;
+    padding: 11px 14px;
 
-  outline: none;
+    outline: none;
 
-  font-size: 0.95rem;
+    font-family: inherit;
+    font-size: 0.95rem;
 
-  color: var(--text);
+    background: #faf8fb;
 }
 
+#chat input:focus,
 .chat-composer input:focus,
 #messageInput:focus {
-  border-color: var(--purple);
-  box-shadow: 0 0 0 3px rgba(91, 58, 130, 0.08);
+    border-color: #68487d;
+    box-shadow: 0 0 0 3px rgba(104,72,125,0.10);
 }
 
-.chat-composer button {
-  border: none;
+#chat form button,
+.chat-composer button,
+#messageForm button {
+    border: 0;
 
-  background: var(--purple);
+    min-width: 42px;
+    height: 42px;
 
-  color: white;
+    padding: 0 13px;
 
-  width: 44px;
-  height: 44px;
+    border-radius: 12px;
 
-  border-radius: 50%;
+    background: #68487d;
 
-  cursor: pointer;
+    color: white;
 
-  font-size: 1.1rem;
+    font-weight: 700;
 
-  transition: transform 0.2s ease, background 0.2s ease;
+    cursor: pointer;
 }
 
-.chat-composer button:hover {
-  background: var(--purple-dark);
-  transform: translateY(-2px);
-}
-
-/* =========================================================
-   EMOJI BUTTON
-   ========================================================= */
-
-#emojiButton {
-  background: var(--cream-dark);
-  color: var(--purple-dark);
-}
-
-#emojiButton:hover {
-  background: var(--gold-light);
+#chat form button:hover,
+.chat-composer button:hover,
+#messageForm button:hover {
+    background: #4c315e;
 }
 
 /* =========================================================
-   ADMIN AREA
+   ADMIN
    ========================================================= */
 
 #admin {
-  margin-top: 30px;
+    max-width: 850px;
+    margin: 25px auto;
+
+    padding: 28px;
+
+    border-radius: 20px;
+
+    background: #fffdf9;
+
+    border: 1px solid #ead9ae;
+
+    box-shadow: 0 8px 25px rgba(62,38,75,0.07);
 }
 
-.admin-card {
-  border: 1px solid var(--gold-light);
-  background:
-    linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.97),
-      rgba(250, 245, 235, 0.97)
-    );
+#admin h2 {
+    color: #40264f;
+    font-family: Georgia, serif;
 }
 
-.admin-card > p {
-  color: var(--muted);
-  margin-bottom: 25px;
+#admin input,
+#admin textarea {
+    width: 100%;
+
+    padding: 12px 14px;
+
+    margin: 6px 0 14px;
+
+    border: 1px solid #ddd1e4;
+
+    border-radius: 10px;
+
+    font-family: inherit;
+
+    outline: none;
 }
 
-.admin-editor {
-  margin-top: 20px;
+#admin textarea {
+    min-height: 220px;
+    resize: vertical;
 }
 
-.admin-editor label {
-  display: block;
-
-  color: var(--purple-dark);
-
-  font-weight: 700;
-
-  margin: 14px 0 7px;
+#admin input:focus,
+#admin textarea:focus {
+    border-color: #68487d;
 }
 
-.admin-editor input,
-.admin-editor textarea {
-  width: 100%;
+#admin button {
+    border: 0;
 
-  border: 1px solid var(--border);
+    padding: 11px 17px;
 
-  background: white;
+    border-radius: 10px;
 
-  padding: 12px 14px;
+    background: #68487d;
 
-  border-radius: 12px;
+    color: white;
 
-  outline: none;
+    font-weight: 700;
 
-  font-family: inherit;
-  font-size: 0.95rem;
-}
-
-.admin-editor textarea {
-  min-height: 220px;
-  resize: vertical;
-  line-height: 1.6;
-}
-
-.admin-editor input:focus,
-.admin-editor textarea:focus {
-  border-color: var(--purple);
-
-  box-shadow:
-    0 0 0 3px rgba(91, 58, 130, 0.08);
-}
-
-.admin-editor button {
-  margin-top: 12px;
-
-  border: none;
-
-  background: var(--purple);
-
-  color: white;
-
-  padding: 11px 18px;
-
-  border-radius: 10px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.admin-editor button:hover {
-  background: var(--purple-dark);
-  transform: translateY(-1px);
-}
-
-/* =========================================================
-   ADMIN LOCK NOTICE
-   ========================================================= */
-
-.admin-lock {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  padding: 13px 15px;
-
-  border-radius: 12px;
-
-  background: #f5f0f8;
-
-  color: var(--purple-dark);
-
-  font-size: 0.9rem;
-}
-
-/* =========================================================
-   SCROLLBAR
-   ========================================================= */
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f5efe8;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #cdbed9;
-  border-radius: 20px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--purple);
+    cursor: pointer;
 }
 
 /* =========================================================
    MOBILE
    ========================================================= */
 
-@media (max-width: 600px) {
+@media (max-width: 650px) {
 
-  .app {
-    padding: 15px 12px 40px;
-  }
+    header {
+        padding: 32px 15px 25px;
+    }
 
-  header {
-    padding: 30px 10px 22px;
-  }
+    header h1 {
+        font-size: 2rem;
+    }
 
-  header h1 {
-    font-size: 2rem;
-  }
+    nav {
+        padding: 12px;
+        gap: 7px;
+    }
 
-  header p {
-    font-size: 0.95rem;
-  }
+    nav button {
+        flex: 1 1 calc(50% - 7px);
+        padding: 10px 8px;
+        font-size: 0.82rem;
+    }
 
-  nav {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
+    main {
+        padding: 15px 10px 40px;
+    }
 
-  nav button,
-  .menu-button {
-    padding: 17px 10px;
-    font-size: 0.88rem;
-  }
+    section {
+        padding: 22px 18px;
+        border-radius: 16px;
+    }
 
-  .content-card,
-  .story-card,
-  .questions-card,
-  .prayer-card,
-  .admin-card {
-    padding: 20px 17px;
-  }
+    section h2 {
+        font-size: 1.55rem;
+    }
 
-  section h2 {
-    font-size: 1.5rem;
-  }
+    #storyContent {
+        font-size: 1rem;
+    }
 
-  #chatMessages,
-  .messages {
-    min-height: 380px;
-    max-height: 55vh;
-    padding: 14px;
-  }
+    #chat {
+        margin-left: 0;
+        margin-right: 0;
+    }
 
-  .message {
-    max-width: 88%;
-  }
+    #messages,
+    #chatMessages {
+        min-height: 400px;
+        max-height: 55vh;
+        padding: 15px 12px;
+    }
 
-  .chat-composer {
-    padding: 10px;
-  }
-
-  .chat-composer input,
-  #messageInput {
-    min-width: 0;
-  }
+    .message {
+        max-width: 86%;
+    }
 }
 
 /* =========================================================
-   VERY SMALL PHONES
+   SMALL PHONES
    ========================================================= */
 
-@media (max-width: 380px) {
+@media (max-width: 400px) {
 
-  nav {
-    grid-template-columns: 1fr;
-  }
+    nav button {
+        flex: 1 1 100%;
+    }
 
-  .message {
-    max-width: 92%;
-  }
+    header h1 {
+        font-size: 1.75rem;
+    }
 
-  header h1 {
-    font-size: 1.75rem;
-  }
+    section {
+        padding: 20px 15px;
+    }
 }
