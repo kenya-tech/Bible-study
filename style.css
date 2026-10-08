@@ -1,6 +1,12 @@
-/* =========================
+/* ========================================
+   ST. MONICA LK3C — BIBLE STUDY APP
+   COMPLETE DESIGN
+======================================== */
+
+
+/* ========================================
    RESET
-========================= */
+======================================== */
 
 * {
     box-sizing: border-box;
@@ -8,51 +14,54 @@
     padding: 0;
 }
 
-
 html {
     scroll-behavior: smooth;
 }
 
-
 body {
-    font-family: Arial, sans-serif;
-
-    background: #f6f3f8;
-
-    color: #29242f;
-
-    line-height: 1.7;
+    font-family: Georgia, "Times New Roman", serif;
+    background: #f3eee7;
+    color: #332d35;
+    line-height: 1.8;
 }
 
 
-/* =========================
-   SCREENS
-========================= */
+/* ========================================
+   APP SCREENS
+======================================== */
 
 .screen {
     display: none;
-
     min-height: 100vh;
-
     padding: 25px 20px;
 }
-
 
 .screen.active {
     display: block;
 }
 
 
-/* =========================
-   HOME
-========================= */
+/* ========================================
+   HOME SCREEN
+======================================== */
 
 #home {
     background:
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(255,255,255,0.12),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 85% 90%,
+            rgba(255,255,255,0.08),
+            transparent 30%
+        ),
         linear-gradient(
             145deg,
-            #342044,
-            #684b83
+            #24152f,
+            #4d3062,
+            #725181
         );
 
     color: white;
@@ -63,23 +72,19 @@ body {
     justify-content: center;
 }
 
-
 #home.active {
     display: flex;
 }
 
-
 .welcome-content {
     width: 100%;
     max-width: 600px;
-
     text-align: center;
 }
 
-
 .logo-placeholder {
-    width: 75px;
-    height: 75px;
+    width: 82px;
+    height: 82px;
 
     margin: 0 auto 20px;
 
@@ -87,24 +92,31 @@ body {
     align-items: center;
     justify-content: center;
 
-    border: 2px solid rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.45);
 
     border-radius: 50%;
 
     font-size: 2rem;
+
+    background: rgba(255,255,255,0.08);
+
+    backdrop-filter: blur(10px);
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,0.15);
 }
 
-
 .community-name {
-    font-size: 0.9rem;
+    font-family: Arial, sans-serif;
 
-    letter-spacing: 3px;
+    font-size: 0.82rem;
 
-    opacity: 0.85;
+    letter-spacing: 4px;
+
+    opacity: 0.8;
 
     margin-bottom: 5px;
 }
-
 
 .welcome-content h1 {
     font-size: 3rem;
@@ -112,17 +124,16 @@ body {
     margin-bottom: 8px;
 }
 
-
 .welcome-text {
-    opacity: 0.85;
+    opacity: 0.8;
 
     margin-bottom: 35px;
 }
 
 
-/* =========================
-   MENU
-========================= */
+/* ========================================
+   HOME MENU BUTTONS
+======================================== */
 
 .menu {
     display: flex;
@@ -132,8 +143,8 @@ body {
     gap: 14px;
 }
 
-
 .menu-button {
+
     width: 100%;
 
     display: flex;
@@ -146,191 +157,406 @@ body {
 
     padding: 18px;
 
-    border: 1px solid rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.16);
 
-    border-radius: 16px;
+    border-radius: 18px;
 
-    background: rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.10);
 
     color: white;
 
     cursor: pointer;
 
-    transition: 0.2s;
-}
+    transition: all 0.25s ease;
 
+    backdrop-filter: blur(10px);
+}
 
 .menu-button:hover {
-    background: rgba(255,255,255,0.2);
 
-    transform: translateY(-2px);
+    background: rgba(255,255,255,0.19);
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,0.12);
 }
 
-
 .icon {
+
     font-size: 1.8rem;
 
-    width: 40px;
+    width: 42px;
 
     text-align: center;
 }
 
-
 .menu-button strong {
+
     display: block;
+
+    font-family: Arial, sans-serif;
 
     font-size: 1.05rem;
 }
 
-
 .menu-button small {
+
     display: block;
 
     margin-top: 2px;
 
-    opacity: 0.75;
+    opacity: 0.7;
 
-    font-size: 0.85rem;
+    font-family: Arial, sans-serif;
+
+    font-size: 0.82rem;
 }
 
 
-/* =========================
-   PAGES
-========================= */
+/* ========================================
+   GENERAL INSIDE PAGES
+======================================== */
+
+#story,
+#questions,
+#prayers,
+#public-chat {
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(174,143,190,0.16),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at bottom right,
+            rgba(210,180,150,0.13),
+            transparent 35%
+        ),
+        #f3eee7;
+}
 
 .page {
+
     max-width: 850px;
 
     margin: auto;
 
-    padding: 10px 0 40px;
+    padding: 10px 0 55px;
 }
-
 
 .page h2 {
-    color: #43295c;
 
-    font-size: 2rem;
+    color: #392047;
 
-    margin: 25px 0;
+    font-size: 2.35rem;
+
+    margin: 28px 0 8px;
 }
-
 
 .section-intro {
-    color: #777;
 
-    margin-bottom: 25px;
+    color: #766b76;
+
+    margin-bottom: 28px;
 }
 
 
-/* =========================
+/* ========================================
    BACK BUTTON
-========================= */
+======================================== */
 
 .back-button {
+
     border: none;
 
-    background: transparent;
+    background: rgba(57,32,71,0.08);
 
-    color: #43295c;
+    color: #392047;
 
-    font-size: 1rem;
+    font-family: Arial, sans-serif;
+
+    font-size: 0.9rem;
 
     cursor: pointer;
 
-    padding: 8px 0;
+    padding: 9px 17px;
+
+    border-radius: 30px;
+
+    transition: all 0.2s ease;
+}
+
+.back-button:hover {
+
+    background: rgba(57,32,71,0.16);
+
+    transform: translateX(-2px);
 }
 
 
-/* =========================
+/* ========================================
    STORY
-========================= */
+======================================== */
+
+#story .page h2 {
+
+    text-align: center;
+
+    font-size: 2.7rem;
+
+    margin-top: 35px;
+}
+
+#story .page h2::after {
+
+    content: "";
+
+    display: block;
+
+    width: 55px;
+
+    height: 3px;
+
+    margin: 14px auto 28px;
+
+    background: #9670a5;
+
+    border-radius: 10px;
+}
 
 .story-content {
-    background: white;
 
-    padding: 30px;
+    position: relative;
 
-    border-radius: 18px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,0.96),
+            rgba(249,243,235,0.96)
+        );
 
-    box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    padding: 45px 48px;
+
+    border-radius: 24px;
+
+    border: 1px solid rgba(91,65,100,0.12);
+
+    box-shadow:
+        0 20px 50px rgba(49,31,57,0.09),
+        0 3px 10px rgba(49,31,57,0.04);
+
+    overflow: hidden;
 }
 
+.story-content::before {
+
+    content: "✦";
+
+    position: absolute;
+
+    top: 18px;
+
+    right: 25px;
+
+    font-size: 1.5rem;
+
+    color: #9670a5;
+
+    opacity: 0.5;
+}
 
 .story-content p {
-    margin-bottom: 18px;
+
+    margin-bottom: 22px;
+
+    font-size: 1.06rem;
+
+    color: #403943;
 }
 
+.story-content p:first-child::first-letter {
+
+    float: left;
+
+    font-size: 4rem;
+
+    line-height: 0.8;
+
+    padding-right: 8px;
+
+    color: #6b477b;
+}
 
 .story-content p:last-child {
+
     margin-bottom: 0;
+
+    padding-top: 15px;
+
+    border-top: 1px solid rgba(90,70,95,0.12);
+
+    color: #5d4b63;
+
+    font-style: italic;
 }
 
 
-/* =========================
+/* ========================================
    QUESTIONS
-========================= */
+======================================== */
+
+#questions .page h2 {
+
+    text-align: center;
+}
+
+#questions .section-intro {
+
+    text-align: center;
+}
 
 #questions ol {
-    background: white;
 
-    padding: 30px 30px 30px 55px;
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #faf6fb
+        );
 
-    border-radius: 18px;
+    padding: 30px 35px 30px 58px;
 
-    box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    border-radius: 22px;
+
+    border: 1px solid rgba(80,50,90,0.08);
+
+    box-shadow:
+        0 15px 40px rgba(50,35,55,0.08);
+
+    counter-reset: questions;
 }
-
 
 #questions li {
-    margin-bottom: 20px;
+
+    margin-bottom: 16px;
+
+    padding: 17px 18px;
+
+    border-radius: 14px;
+
+    background: rgba(244,237,247,0.45);
+
+    transition: all 0.2s ease;
 }
 
+#questions li:hover {
+
+    background: #f1e8f4;
+
+    transform: translateX(3px);
+}
 
 #questions li:last-child {
+
     margin-bottom: 0;
 }
 
 
-/* =========================
+/* ========================================
    PRAYERS
-========================= */
+======================================== */
+
+#prayers .page h2 {
+
+    text-align: center;
+
+    margin-bottom: 28px;
+}
 
 .prayer {
-    background: white;
 
-    padding: 25px;
+    position: relative;
 
-    margin-bottom: 18px;
+    background:
+        linear-gradient(
+            135deg,
+            #fffdfb,
+            #f8f1f8
+        );
 
-    border-radius: 18px;
+    padding: 32px;
 
-    box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    margin-bottom: 20px;
+
+    border-radius: 22px;
+
+    border: 1px solid rgba(85,55,95,0.08);
+
+    box-shadow:
+        0 12px 35px rgba(55,35,65,0.08);
+
+    overflow: hidden;
 }
 
+.prayer::after {
+
+    content: "✦";
+
+    position: absolute;
+
+    top: 18px;
+
+    right: 23px;
+
+    color: #a283ad;
+
+    opacity: 0.45;
+
+    font-size: 1.2rem;
+}
 
 .prayer h3 {
-    color: #43295c;
 
-    margin-bottom: 12px;
+    color: #482653;
+
+    margin-bottom: 15px;
+
+    font-size: 1.4rem;
 }
-
 
 .prayer p {
-    margin-bottom: 12px;
+
+    margin-bottom: 14px;
+
+    color: #443b45;
 }
 
-
 .prayer p:last-child {
+
     margin-bottom: 0;
 }
 
 
-/* =========================
-   CHAT
-========================= */
+/* ========================================
+   PUBLIC CHAT
+======================================== */
+
+#public-chat .page h2 {
+
+    text-align: center;
+
+    margin-bottom: 8px;
+}
+
+#public-chat .section-intro {
+
+    text-align: center;
+}
 
 .anonymous-user {
+
     display: flex;
 
     justify-content: space-between;
@@ -339,164 +565,244 @@ body {
 
     gap: 15px;
 
-    background: #eee8f3;
+    background:
+        linear-gradient(
+            135deg,
+            #eee5f2,
+            #f7f0f8
+        );
 
-    padding: 15px 18px;
+    padding: 16px 20px;
 
-    border-radius: 12px;
+    border-radius: 16px;
 
-    margin-bottom: 15px;
+    margin-bottom: 18px;
+
+    border: 1px solid rgba(85,55,95,0.08);
+
+    box-shadow:
+        0 8px 20px rgba(55,35,65,0.04);
 }
-
 
 .anonymous-user span {
-    color: #777;
-}
 
+    color: #756a76;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 0.9rem;
+}
 
 .anonymous-user strong {
-    color: #43295c;
+
+    color: #482653;
+
+    font-family: Arial, sans-serif;
 }
 
-
 #chat-messages {
+
     min-height: 350px;
 
-    background: white;
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #faf7fb
+        );
 
     padding: 20px;
 
-    border-radius: 18px;
+    border-radius: 20px;
 
-    box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    border: 1px solid rgba(80,50,90,0.07);
+
+    box-shadow:
+        0 15px 40px rgba(50,35,55,0.08);
 
     margin-bottom: 15px;
 
     overflow-y: auto;
 }
 
-
 .empty-chat {
+
     color: #999;
 
     text-align: center;
 
     padding-top: 130px;
-}
 
+    font-family: Arial, sans-serif;
+}
 
 .chat-message {
-    padding: 12px 15px;
 
-    background: #f2eef5;
+    padding: 13px 16px;
 
-    border-radius: 12px;
+    background: #f1eaf4;
+
+    border-radius: 14px;
 
     margin-bottom: 10px;
-}
 
+    border-left: 3px solid #80608e;
+}
 
 .chat-message strong {
-    color: #43295c;
 
-    font-size: 0.85rem;
+    color: #482653;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 0.82rem;
 }
-
 
 .chat-message p {
+
     margin-top: 3px;
+
+    font-family: Arial, sans-serif;
 }
 
-
 #chat-form {
+
     display: flex;
 
     gap: 10px;
 }
 
-
 #chat-message {
+
     flex: 1;
 
     padding: 15px;
 
     border: 1px solid #ddd;
 
-    border-radius: 12px;
+    border-radius: 14px;
 
     outline: none;
 
-    font-size: 1rem;
-}
+    font-family: Arial, sans-serif;
 
+    font-size: 1rem;
+
+    background: white;
+
+    transition: 0.2s;
+}
 
 #chat-message:focus {
-    border-color: #70558f;
+
+    border-color: #80608e;
+
+    box-shadow:
+        0 0 0 3px rgba(128,96,142,0.10);
 }
 
-
 #chat-form button {
-    padding: 15px 22px;
+
+    padding: 15px 24px;
 
     border: none;
 
-    border-radius: 12px;
+    border-radius: 14px;
 
-    background: #43295c;
+    background: #482653;
 
     color: white;
+
+    font-family: Arial, sans-serif;
 
     font-weight: bold;
 
     cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+#chat-form button:hover {
+
+    background: #34203e;
+
+    transform: translateY(-1px);
 }
 
 
-/* =========================
+/* ========================================
    MOBILE
-========================= */
+======================================== */
 
 @media (max-width: 600px) {
 
     .screen {
-        padding: 20px 15px;
+
+        padding: 18px 14px;
     }
 
-
     .welcome-content h1 {
+
         font-size: 2.3rem;
     }
 
-
     .menu-button {
+
         padding: 16px;
     }
 
+    .page h2 {
+
+        font-size: 2rem;
+    }
+
+    #story .page h2 {
+
+        font-size: 2.25rem;
+    }
 
     .story-content {
-        padding: 22px;
+
+        padding: 30px 24px;
+
+        border-radius: 20px;
     }
 
+    .story-content p {
+
+        font-size: 1rem;
+    }
 
     #questions ol {
-        padding: 22px 22px 22px 45px;
+
+        padding: 22px 20px 22px 45px;
     }
 
+    #questions li {
+
+        padding: 14px;
+    }
+
+    .prayer {
+
+        padding: 25px 22px;
+    }
 
     .anonymous-user {
+
         flex-direction: column;
 
         align-items: flex-start;
     }
 
-
     #chat-form {
+
         flex-direction: column;
     }
 
-
     #chat-form button {
+
         width: 100%;
     }
 
-}
+}  
