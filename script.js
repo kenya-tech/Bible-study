@@ -1,12 +1,12 @@
-// ========================================
+// ============================================================
 // ST. MONICA LK3C BIBLE STUDY
 // FIREBASE CHAT + ANONYMOUS AUTHENTICATION
-// ========================================
+// ============================================================
 
 
-// ========================================
+// ============================================================
 // FIREBASE IMPORTS
-// ========================================
+// ============================================================
 
 import {
     initializeApp
@@ -27,9 +27,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
 
 
-// ========================================
+// ============================================================
 // FIREBASE CONFIGURATION
-// ========================================
+// ============================================================
 
 const firebaseConfig = {
 
@@ -56,9 +56,9 @@ const firebaseConfig = {
 };
 
 
-// ========================================
+// ============================================================
 // INITIALIZE FIREBASE
-// ========================================
+// ============================================================
 
 const app = initializeApp(firebaseConfig);
 
@@ -67,46 +67,59 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 
-// ========================================
+// ============================================================
 // SECTION NAVIGATION
-// ========================================
+// ============================================================
 
 function showSection(sectionId) {
 
-    const screens = document.querySelectorAll(".screen");
+    const screens =
+        document.querySelectorAll(".screen");
 
     screens.forEach(function(screen) {
+
         screen.classList.remove("active");
+
     });
+
 
     const selectedSection =
         document.getElementById(sectionId);
+
 
     if (!selectedSection) {
         return;
     }
 
+
     selectedSection.classList.add("active");
+
 
     window.scrollTo({
         top: 0,
         behavior: "smooth"
     });
 
+
+    // --------------------------------------------
+    // PUBLIC CHAT
+    // --------------------------------------------
+
     if (sectionId === "public-chat") {
 
-        setTimeout(function() {
-            openChat();
-        }, 50);
+        openChat();
+
     }
 }
 
+
+// Make showSection available to HTML onclick=""
 window.showSection = showSection;
 
 
-// ========================================
+// ============================================================
 // CHAT ELEMENTS
-// ========================================
+// ============================================================
 
 const chatLogin =
     document.getElementById("chat-login");
@@ -118,48 +131,56 @@ const anonymousNameInput =
     document.getElementById("anonymous-name");
 
 const enterChatButton =
-    document.getElementById("enter-chat-button");
+    document.getElementById("enter-chat-btn");
 
-const chatLoginError =
-    document.getElementById("chat-login-error");
-
-const anonymousIDElement =
-    document.getElementById("anonymous-id");
-
-const chatForm =
-    document.getElementById("chat-form");
-
-const chatInput =
-    document.getElementById("chat-message");
+const chatLoginMessage =
+    document.getElementById("chat-login-message");
 
 const chatMessages =
     document.getElementById("chat-messages");
 
+const chatForm =
+    document.getElementById("chat-form");
+
+const messageInput =
+    document.getElementById("message-input");
+
+const sendMessageButton =
+    document.getElementById("send-message-btn");
+
+const currentUserNameElement =
+    document.getElementById("current-user-name");
+
+const changeNameButton =
+    document.getElementById("change-name-btn");
+
+const changeNameBottomButton =
+    document.getElementById("change-name-bottom-btn");
+
 const replyPreview =
     document.getElementById("reply-preview");
 
-const replyName =
-    document.getElementById("reply-name");
+const replyPreviewUser =
+    document.getElementById("reply-preview-user");
 
-const replyText =
-    document.getElementById("reply-text");
+const replyPreviewText =
+    document.getElementById("reply-preview-text");
 
 const cancelReplyButton =
-    document.getElementById("cancel-reply");
-
-const changeChatNameButton =
-    document.getElementById("change-chat-name");
+    document.getElementById("cancel-reply-btn");
 
 const emojiButton =
-    document.getElementById("emoji-button");
+    document.getElementById("emoji-btn");
 
 
-// ========================================
+// ============================================================
 // CHAT STATE
-// ========================================
+// ============================================================
 
 let currentUserName =
-    localStorage.getItem("bibleStudyAnonymousName");
+    localStorage.getItem(
+        "bibleStudyAnonymousName"
+    ) || "";
 
 let replyingTo = null;
 
@@ -167,26 +188,73 @@ let unsubscribeMessages = null;
 
 let latestMessages = [];
 
+let isEnteringChat = false;
 
-// ========================================
-// FIREBASE ANONYMOUS LOGIN
-// ========================================
+
+// ============================================================
+// SHOW LOGIN MESSAGE
+// ============================================================
+
+function showChatLoginMessage(
+    message,
+    type = "error"
+) {
+
+    if (!chatLoginMessage) {
+        return;
+    }
+
+
+    chatLoginMessage.textContent =
+        message;
+
+
+    chatLoginMessage.className =
+        "chat-login-message";
+
+
+    if (type === "success") {
+
+        chatLoginMessage.classList.add(
+            "success"
+        );
+
+    } else {
+
+        chatLoginMessage.classList.add(
+            "error"
+        );
+    }
+}
+
+
+// ============================================================
+// FIREBASE ANONYMOUS AUTHENTICATION
+// ============================================================
 
 async function authenticateUser() {
 
-    try {
+    // If the user is already authenticated,
+    // don't create another anonymous account.
 
-        if (auth.currentUser) {
-            return auth.currentUser;
-        }
+    if (auth.currentUser) {
+
+        return auth.currentUser;
+
+    }
+
+
+    try {
 
         const result =
             await signInAnonymously(auth);
+
 
         console.log(
             "Anonymous Firebase user signed in:",
             result.user.uid
         );
+
 
         return result.user;
 
@@ -197,18 +265,15 @@ async function authenticateUser() {
             error
         );
 
-        showChatLoginError(
-            "Unable to connect to the chat. Please try again."
-        );
 
         throw error;
     }
 }
 
 
-// ========================================
+// ============================================================
 // OPEN CHAT
-// ========================================
+// ============================================================
 
 async function openChat() {
 
@@ -216,19 +281,31 @@ async function openChat() {
         return;
     }
 
+
+    // --------------------------------------------
+    // USER ALREADY HAS A SAVED NAME
+    // --------------------------------------------
+
     if (currentUserName) {
 
         try {
 
             await authenticateUser();
 
-            chatLogin.style.display = "none";
 
-            chatRoom.style.display = "flex";
+            chatLogin.style.display =
+                "none";
+
+
+            chatRoom.style.display =
+                "flex";
+
 
             updateUserDisplay();
 
+
             startRealtimeMessages();
+
 
         } catch (error) {
 
@@ -236,43 +313,69 @@ async function openChat() {
                 "Could not open chat:",
                 error
             );
+
+
+            chatLogin.style.display =
+                "block";
+
+
+            chatRoom.style.display =
+                "none";
+
+
+            showChatLoginMessage(
+                "Unable to connect to the chat. Please try again."
+            );
         }
 
-    } else {
 
-        chatLogin.style.display = "flex";
+        return;
+    }
 
-        chatRoom.style.display = "none";
+
+    // --------------------------------------------
+    // NO NAME YET
+    // --------------------------------------------
+
+    chatLogin.style.display =
+        "block";
+
+
+    chatRoom.style.display =
+        "none";
+
+
+    if (anonymousNameInput) {
 
         setTimeout(function() {
 
-            if (anonymousNameInput) {
-                anonymousNameInput.focus();
-            }
+            anonymousNameInput.focus();
 
         }, 100);
     }
 }
 
 
-// ========================================
+// ============================================================
 // ENTER CHAT BUTTON
-// ========================================
+// ============================================================
 
 if (enterChatButton) {
 
     enterChatButton.addEventListener(
         "click",
         function() {
+
             enterPublicChat();
+
         }
     );
 }
 
 
-// ========================================
-// ENTER WITH ENTER KEY
-// ========================================
+// ============================================================
+// ENTER CHAT USING ENTER KEY
+// ============================================================
 
 if (anonymousNameInput) {
 
@@ -285,76 +388,181 @@ if (anonymousNameInput) {
                 event.preventDefault();
 
                 enterPublicChat();
+
             }
+
         }
     );
 }
 
 
-// ========================================
+// ============================================================
 // ENTER PUBLIC CHAT
-// ========================================
+// ============================================================
 
 async function enterPublicChat() {
 
-    if (!anonymousNameInput) {
+    // Prevent double clicks.
+
+    if (isEnteringChat) {
         return;
     }
 
+
+    isEnteringChat = true;
+
+
+    // --------------------------------------------
+    // GET NAME
+    // --------------------------------------------
+
     const enteredName =
-        anonymousNameInput.value.trim();
+        anonymousNameInput
+            ? anonymousNameInput.value.trim()
+            : "";
+
+
+    // --------------------------------------------
+    // CHECK EMPTY NAME
+    // --------------------------------------------
 
     if (!enteredName) {
 
-        showChatLoginError(
+        showChatLoginMessage(
             "Please choose an anonymous name."
         );
 
+
+        if (anonymousNameInput) {
+            anonymousNameInput.focus();
+        }
+
+
+        isEnteringChat = false;
+
         return;
     }
+
+
+    // --------------------------------------------
+    // CHECK MINIMUM LENGTH
+    // --------------------------------------------
 
     if (enteredName.length < 2) {
 
-        showChatLoginError(
-            "Your anonymous name should have at least 2 characters."
+        showChatLoginMessage(
+            "Your name should have at least 2 characters."
         );
+
+
+        anonymousNameInput.focus();
+
+
+        isEnteringChat = false;
 
         return;
     }
+
+
+    // --------------------------------------------
+    // CHECK MAXIMUM LENGTH
+    // --------------------------------------------
 
     if (enteredName.length > 25) {
 
-        showChatLoginError(
-            "Your anonymous name is too long."
+        showChatLoginMessage(
+            "Your name must be 25 characters or less."
         );
+
+
+        isEnteringChat = false;
 
         return;
     }
 
+
+    // --------------------------------------------
+    // LOADING STATE
+    // --------------------------------------------
+
+    if (enterChatButton) {
+
+        enterChatButton.disabled =
+            true;
+
+        enterChatButton.innerHTML =
+            `Connecting... <span>⏳</span>`;
+    }
+
+
+    showChatLoginMessage(
+        "Connecting to the public chat...",
+        "success"
+    );
+
+
     try {
 
-        enterChatButton.disabled = true;
-
-        enterChatButton.textContent = "Connecting...";
+        // ----------------------------------------
+        // FIREBASE AUTHENTICATION
+        // ----------------------------------------
 
         await authenticateUser();
 
-        currentUserName = enteredName;
+
+        // ----------------------------------------
+        // SAVE NAME
+        // ----------------------------------------
+
+        currentUserName =
+            enteredName;
+
 
         localStorage.setItem(
             "bibleStudyAnonymousName",
             currentUserName
         );
 
-        chatLoginError.textContent = "";
 
-        chatLogin.style.display = "none";
-
-        chatRoom.style.display = "flex";
+        // ----------------------------------------
+        // UPDATE DISPLAY
+        // ----------------------------------------
 
         updateUserDisplay();
 
+
+        // ----------------------------------------
+        // HIDE LOGIN
+        // SHOW CHAT
+        // ----------------------------------------
+
+        chatLogin.style.display =
+            "none";
+
+
+        chatRoom.style.display =
+            "flex";
+
+
+        // ----------------------------------------
+        // START REAL-TIME CHAT
+        // ----------------------------------------
+
         startRealtimeMessages();
+
+
+        // ----------------------------------------
+        // FOCUS MESSAGE INPUT
+        // ----------------------------------------
+
+        setTimeout(function() {
+
+            if (messageInput) {
+                messageInput.focus();
+            }
+
+        }, 300);
+
 
     } catch (error) {
 
@@ -363,107 +571,85 @@ async function enterPublicChat() {
             error
         );
 
-        showChatLoginError(
-            "Could not connect to the chat. Please try again."
+
+        let errorMessage =
+            "Could not connect to the chat. Please try again.";
+
+
+        // Firebase-specific errors
+
+        if (
+            error &&
+            error.code ===
+            "auth/operation-not-allowed"
+        ) {
+
+            errorMessage =
+                "Anonymous sign-in is not enabled in Firebase Authentication.";
+
+        }
+
+
+        if (
+            error &&
+            error.code ===
+            "auth/network-request-failed"
+        ) {
+
+            errorMessage =
+                "Network connection failed. Please check your internet connection.";
+
+        }
+
+
+        showChatLoginMessage(
+            errorMessage
         );
+
+
+        chatLogin.style.display =
+            "block";
+
+
+        chatRoom.style.display =
+            "none";
+
 
     } finally {
 
-        enterChatButton.disabled = false;
+        isEnteringChat = false;
 
-        enterChatButton.textContent =
-            "Enter Public Chat";
+
+        if (enterChatButton) {
+
+            enterChatButton.disabled =
+                false;
+
+            enterChatButton.innerHTML =
+                `Enter Public Chat <span>→</span>`;
+        }
     }
 }
 
 
-// ========================================
-// LOGIN ERROR
-// ========================================
-
-function showChatLoginError(message) {
-
-    if (!chatLoginError) {
-        return;
-    }
-
-    chatLoginError.textContent = message;
-}
-
-
-// ========================================
-// UPDATE USER DISPLAY
-// ========================================
+// ============================================================
+// UPDATE CURRENT USER DISPLAY
+// ============================================================
 
 function updateUserDisplay() {
 
-    if (anonymousIDElement) {
+    if (currentUserNameElement) {
 
-        anonymousIDElement.textContent =
+        currentUserNameElement.textContent =
             currentUserName || "Anonymous";
+
     }
 }
 
 
-// ========================================
-// CHANGE ANONYMOUS NAME
-// ========================================
-
-if (changeChatNameButton) {
-
-    changeChatNameButton.addEventListener(
-        "click",
-        function() {
-
-            const newName =
-                prompt(
-                    "Choose a new anonymous name:",
-                    currentUserName || ""
-                );
-
-            if (!newName) {
-                return;
-            }
-
-            const cleanedName =
-                newName.trim();
-
-            if (cleanedName.length < 2) {
-
-                alert(
-                    "Your anonymous name should have at least 2 characters."
-                );
-
-                return;
-            }
-
-            if (cleanedName.length > 25) {
-
-                alert(
-                    "Your anonymous name is too long."
-                );
-
-                return;
-            }
-
-            currentUserName = cleanedName;
-
-            localStorage.setItem(
-                "bibleStudyAnonymousName",
-                currentUserName
-            );
-
-            updateUserDisplay();
-
-            renderCurrentMessages();
-        }
-    );
-}
-
-
-// ========================================
+// ============================================================
 // FIRESTORE COLLECTION
-// ========================================
+// ============================================================
 
 const messagesCollection =
     collection(
@@ -472,16 +658,22 @@ const messagesCollection =
     );
 
 
-// ========================================
-// REAL-TIME MESSAGES
-// ========================================
+// ============================================================
+// START REAL-TIME MESSAGES
+// ============================================================
 
 function startRealtimeMessages() {
 
+    // Stop an old listener before creating
+    // a new one.
+
     if (unsubscribeMessages) {
+
         unsubscribeMessages();
+
         unsubscribeMessages = null;
     }
+
 
     const messagesQuery =
         query(
@@ -492,25 +684,37 @@ function startRealtimeMessages() {
             )
         );
 
+
     unsubscribeMessages =
         onSnapshot(
+
             messagesQuery,
 
             function(snapshot) {
 
                 latestMessages = [];
 
-                snapshot.forEach(function(doc) {
 
-                    latestMessages.push({
-                        id: doc.id,
-                        ...doc.data()
-                    });
+                snapshot.forEach(
+                    function(documentSnapshot) {
 
-                });
+                        latestMessages.push({
+
+                            id:
+                                documentSnapshot.id,
+
+                            ...documentSnapshot.data()
+
+                        });
+
+                    }
+                );
+
 
                 renderCurrentMessages();
+
             },
+
 
             function(error) {
 
@@ -519,37 +723,69 @@ function startRealtimeMessages() {
                     error
                 );
 
-                if (chatMessages) {
 
-                    chatMessages.innerHTML = `
-
-                        <div class="chat-welcome">
-
-                            <div class="chat-welcome-icon">
-                                ⚠️
-                            </div>
-
-                            <h3>
-                                Chat connection problem
-                            </h3>
-
-                            <p>
-                                Please check your Firebase
-                                configuration and security rules.
-                            </p>
-
-                        </div>
-
-                    `;
+                if (!chatMessages) {
+                    return;
                 }
+
+
+                chatMessages.innerHTML = "";
+
+
+                const errorCard =
+                    document.createElement("div");
+
+
+                errorCard.className =
+                    "chat-welcome-card";
+
+
+                const icon =
+                    document.createElement("div");
+
+
+                icon.className =
+                    "welcome-icon";
+
+
+                icon.textContent =
+                    "⚠️";
+
+
+                const title =
+                    document.createElement("h3");
+
+
+                title.textContent =
+                    "Chat connection problem";
+
+
+                const text =
+                    document.createElement("p");
+
+
+                text.textContent =
+                    "We could not load the messages. Please refresh and try again.";
+
+
+                errorCard.appendChild(icon);
+
+                errorCard.appendChild(title);
+
+                errorCard.appendChild(text);
+
+
+                chatMessages.appendChild(
+                    errorCard
+                );
             }
         );
 }
 
 
-// ========================================
-// RENDER MESSAGES
-// ========================================
+// ============================================================
+// RENDER ALL MESSAGES
+// ============================================================
 
 function renderCurrentMessages() {
 
@@ -557,171 +793,258 @@ function renderCurrentMessages() {
         return;
     }
 
-    chatMessages.innerHTML = "";
+
+    chatMessages.innerHTML =
+        "";
+
+
+    // --------------------------------------------
+    // NO MESSAGES
+    // --------------------------------------------
 
     if (latestMessages.length === 0) {
 
-        chatMessages.innerHTML = `
+        const welcomeCard =
+            document.createElement("div");
 
-            <div class="chat-welcome">
 
-                <div class="chat-welcome-icon">
-                    ✝
-                </div>
+        welcomeCard.className =
+            "chat-welcome-card";
 
-                <h3>
-                    Welcome to the discussion
-                </h3>
 
-                <p>
-                    Share your thoughts about the Bible study
-                    and listen to what others have to say.
-                </p>
+        const icon =
+            document.createElement("div");
 
-            </div>
 
-        `;
+        icon.className =
+            "welcome-icon";
+
+
+        icon.textContent =
+            "👋";
+
+
+        const title =
+            document.createElement("h3");
+
+
+        title.textContent =
+            "Welcome to the discussion!";
+
+
+        const paragraph =
+            document.createElement("p");
+
+
+        paragraph.textContent =
+            "Share your thoughts, reflections and questions about today's Bible study.";
+
+
+        welcomeCard.appendChild(icon);
+
+        welcomeCard.appendChild(title);
+
+        welcomeCard.appendChild(paragraph);
+
+
+        chatMessages.appendChild(
+            welcomeCard
+        );
+
 
         return;
     }
 
-    latestMessages.forEach(function(message) {
 
-        createMessageElement(message);
+    // --------------------------------------------
+    // DISPLAY MESSAGES
+    // --------------------------------------------
 
-    });
+    latestMessages.forEach(
+        function(message) {
+
+            createMessageElement(
+                message
+            );
+
+        }
+    );
+
 
     scrollChatToBottom();
 }
 
 
-// ========================================
-// CREATE MESSAGE
-// ========================================
+// ============================================================
+// CREATE MESSAGE ELEMENT
+// ============================================================
 
 function createMessageElement(message) {
 
     const messageWrapper =
         document.createElement("div");
 
+
     const isMine =
-        message.uid === auth.currentUser?.uid;
+        auth.currentUser &&
+        message.uid ===
+        auth.currentUser.uid;
+
 
     messageWrapper.className =
         isMine
             ? "message-wrapper mine"
             : "message-wrapper other";
 
+
     const bubble =
         document.createElement("div");
+
 
     bubble.className =
         "message-bubble";
 
 
-    // ====================================
+    // --------------------------------------------
     // REPLY
-    // ====================================
+    // --------------------------------------------
 
     if (message.replyTo) {
 
         const originalReply =
             document.createElement("div");
 
+
         originalReply.className =
             "message-reply";
 
-        const replyUser =
+
+        const repliedUser =
             document.createElement("strong");
 
-        replyUser.textContent =
-            message.replyTo.user || "Anonymous";
 
-        const replyMessage =
+        repliedUser.textContent =
+            message.replyTo.user ||
+            "Anonymous";
+
+
+        const repliedText =
             document.createElement("p");
 
-        replyMessage.textContent =
-            message.replyTo.text || "";
 
-        originalReply.appendChild(replyUser);
+        repliedText.textContent =
+            message.replyTo.text ||
+            "";
 
-        originalReply.appendChild(replyMessage);
 
-        bubble.appendChild(originalReply);
+        originalReply.appendChild(
+            repliedUser
+        );
+
+
+        originalReply.appendChild(
+            repliedText
+        );
+
+
+        bubble.appendChild(
+            originalReply
+        );
     }
 
 
-    // ====================================
+    // --------------------------------------------
     // USER NAME
-    // ====================================
+    // --------------------------------------------
 
-    if (!isMine) {
-
-        const username =
-            document.createElement("strong");
-
-        username.className =
-            "message-username";
-
-        username.textContent =
-            message.user || "Anonymous";
-
-        bubble.appendChild(username);
-    }
+    const username =
+        document.createElement("div");
 
 
-    // ====================================
+    username.className =
+        "message-user";
+
+
+    username.textContent =
+        message.user ||
+        "Anonymous";
+
+
+    bubble.appendChild(
+        username
+    );
+
+
+    // --------------------------------------------
     // MESSAGE TEXT
-    // ====================================
+    // --------------------------------------------
 
     const messageText =
-        document.createElement("p");
+        document.createElement("div");
+
 
     messageText.className =
         "message-text";
 
+
     messageText.textContent =
-        message.text || "";
+        message.text ||
+        "";
 
-    bubble.appendChild(messageText);
+
+    bubble.appendChild(
+        messageText
+    );
 
 
-    // ====================================
+    // --------------------------------------------
     // TIME
-    // ====================================
+    // --------------------------------------------
 
     const messageTime =
-        document.createElement("span");
+        document.createElement("div");
+
 
     messageTime.className =
         "message-time";
 
+
     messageTime.textContent =
-        formatTime(message.timestamp);
+        formatTime(
+            message.timestamp
+        );
 
-    bubble.appendChild(messageTime);
+
+    bubble.appendChild(
+        messageTime
+    );
 
 
-    // ====================================
+    // --------------------------------------------
     // REPLY BUTTON
-    // ====================================
+    // --------------------------------------------
 
     const replyButton =
         document.createElement("button");
 
-    replyButton.className =
-        "message-reply-button";
 
     replyButton.type =
         "button";
 
+
+    replyButton.className =
+        "reply-message-button";
+
+
     replyButton.textContent =
-        "↩";
+        "↩ Reply";
+
 
     replyButton.setAttribute(
         "aria-label",
         "Reply to message"
     );
+
 
     replyButton.addEventListener(
         "click",
@@ -729,15 +1052,32 @@ function createMessageElement(message) {
 
             event.stopPropagation();
 
-            startReply(message);
+
+            startReply(
+                message
+            );
         }
     );
 
-    bubble.appendChild(replyButton);
 
-    messageWrapper.appendChild(bubble);
+    bubble.appendChild(
+        replyButton
+    );
 
-    chatMessages.appendChild(messageWrapper);
+
+    messageWrapper.appendChild(
+        bubble
+    );
+
+
+    chatMessages.appendChild(
+        messageWrapper
+    );
+
+
+    // --------------------------------------------
+    // MOBILE SWIPE TO REPLY
+    // --------------------------------------------
 
     enableSwipeReply(
         messageWrapper,
@@ -746,9 +1086,9 @@ function createMessageElement(message) {
 }
 
 
-// ========================================
-// FORMAT TIME
-// ========================================
+// ============================================================
+// FORMAT MESSAGE TIME
+// ============================================================
 
 function formatTime(timestamp) {
 
@@ -756,23 +1096,35 @@ function formatTime(timestamp) {
         return "";
     }
 
+
     let date;
+
 
     if (
         timestamp &&
-        typeof timestamp.toDate === "function"
+        typeof timestamp.toDate ===
+        "function"
     ) {
 
-        date = timestamp.toDate();
+        date =
+            timestamp.toDate();
 
     } else {
 
-        date = new Date(timestamp);
+        date =
+            new Date(timestamp);
     }
 
-    if (Number.isNaN(date.getTime())) {
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
         return "";
     }
+
 
     return date.toLocaleTimeString(
         [],
@@ -784,9 +1136,9 @@ function formatTime(timestamp) {
 }
 
 
-// ========================================
+// ============================================================
 // SEND MESSAGE
-// ========================================
+// ============================================================
 
 if (chatForm) {
 
@@ -796,12 +1148,22 @@ if (chatForm) {
 
             event.preventDefault();
 
+
+            // ----------------------------------------
+            // CHECK NAME
+            // ----------------------------------------
+
             if (!currentUserName) {
 
                 openChat();
 
                 return;
             }
+
+
+            // ----------------------------------------
+            // CHECK AUTHENTICATION
+            // ----------------------------------------
 
             if (!auth.currentUser) {
 
@@ -815,16 +1177,28 @@ if (chatForm) {
                 }
             }
 
-            if (!chatInput) {
+
+            // ----------------------------------------
+            // GET MESSAGE
+            // ----------------------------------------
+
+            if (!messageInput) {
                 return;
             }
 
+
             const text =
-                chatInput.value.trim();
+                messageInput.value.trim();
+
 
             if (!text) {
                 return;
             }
+
+
+            // ----------------------------------------
+            // CHECK LENGTH
+            // ----------------------------------------
 
             if (text.length > 500) {
 
@@ -834,6 +1208,22 @@ if (chatForm) {
 
                 return;
             }
+
+
+            // ----------------------------------------
+            // DISABLE SEND BUTTON
+            // ----------------------------------------
+
+            if (sendMessageButton) {
+
+                sendMessageButton.disabled =
+                    true;
+            }
+
+
+            // ----------------------------------------
+            // CREATE MESSAGE
+            // ----------------------------------------
 
             const newMessage = {
 
@@ -847,18 +1237,28 @@ if (chatForm) {
                     text,
 
                 timestamp:
-                    Date.now(),
-
-                replyTo:
-                    replyingTo
-                        ? {
-                            user:
-                                replyingTo.user,
-                            text:
-                                replyingTo.text
-                        }
-                        : null
+                    Date.now()
             };
+
+
+            // ----------------------------------------
+            // ADD REPLY IF NECESSARY
+            // ----------------------------------------
+
+            if (replyingTo) {
+
+                newMessage.replyTo = {
+
+                    user:
+                        replyingTo.user ||
+                        "Anonymous",
+
+                    text:
+                        replyingTo.text ||
+                        ""
+                };
+            }
+
 
             try {
 
@@ -867,9 +1267,17 @@ if (chatForm) {
                     newMessage
                 );
 
-                chatInput.value = "";
+
+                // Clear input
+
+                messageInput.value =
+                    "";
+
+
+                // Clear reply
 
                 cancelReply();
+
 
             } catch (error) {
 
@@ -878,22 +1286,49 @@ if (chatForm) {
                     error
                 );
 
+
                 alert(
                     "Your message could not be sent. Please try again."
                 );
+
+
+            } finally {
+
+                if (sendMessageButton) {
+
+                    sendMessageButton.disabled =
+                        false;
+                }
+
+
+                messageInput.focus();
             }
         }
     );
 }
 
 
-// ========================================
+// ============================================================
 // START REPLY
-// ========================================
+// ============================================================
 
 function startReply(message) {
 
-    replyingTo = message;
+    replyingTo = {
+
+        user:
+            message.user ||
+            "Anonymous",
+
+        text:
+            message.text ||
+            ""
+    };
+
+
+    // --------------------------------------------
+    // SHOW REPLY PREVIEW
+    // --------------------------------------------
 
     if (replyPreview) {
 
@@ -901,43 +1336,80 @@ function startReply(message) {
             "flex";
     }
 
-    if (replyName) {
 
-        replyName.textContent =
-            message.user || "Anonymous";
+    if (replyPreviewUser) {
+
+        replyPreviewUser.textContent =
+            replyingTo.user;
     }
 
-    if (replyText) {
 
-        replyText.textContent =
-            message.text || "";
+    if (replyPreviewText) {
+
+        let preview =
+            replyingTo.text;
+
+
+        if (preview.length > 100) {
+
+            preview =
+                preview.substring(
+                    0,
+                    100
+                ) + "...";
+        }
+
+
+        replyPreviewText.textContent =
+            preview;
     }
 
-    if (chatInput) {
-        chatInput.focus();
+
+    // --------------------------------------------
+    // FOCUS MESSAGE INPUT
+    // --------------------------------------------
+
+    if (messageInput) {
+
+        messageInput.focus();
     }
 }
 
 
-// ========================================
+// ============================================================
 // CANCEL REPLY
-// ========================================
+// ============================================================
 
 function cancelReply() {
 
     replyingTo = null;
+
 
     if (replyPreview) {
 
         replyPreview.style.display =
             "none";
     }
+
+
+    if (replyPreviewUser) {
+
+        replyPreviewUser.textContent =
+            "";
+    }
+
+
+    if (replyPreviewText) {
+
+        replyPreviewText.textContent =
+            "";
+    }
 }
 
 
-// ========================================
+// ============================================================
 // CANCEL REPLY BUTTON
-// ========================================
+// ============================================================
 
 if (cancelReplyButton) {
 
@@ -952,9 +1424,189 @@ if (cancelReplyButton) {
 }
 
 
-// ========================================
-// MOBILE SWIPE LEFT TO REPLY
-// ========================================
+// ============================================================
+// CHANGE CHAT NAME
+// ============================================================
+
+function changeChatName() {
+
+    const newName =
+        prompt(
+            "Choose a new anonymous name:",
+            currentUserName || ""
+        );
+
+
+    if (newName === null) {
+        return;
+    }
+
+
+    const cleanedName =
+        newName.trim();
+
+
+    if (cleanedName.length < 2) {
+
+        alert(
+            "Your anonymous name should have at least 2 characters."
+        );
+
+        return;
+    }
+
+
+    if (cleanedName.length > 25) {
+
+        alert(
+            "Your anonymous name must be 25 characters or less."
+        );
+
+        return;
+    }
+
+
+    currentUserName =
+        cleanedName;
+
+
+    localStorage.setItem(
+        "bibleStudyAnonymousName",
+        currentUserName
+    );
+
+
+    updateUserDisplay();
+
+
+    // Re-render so the updated name is
+    // reflected in the interface.
+
+    renderCurrentMessages();
+}
+
+
+// Top change-name button
+
+if (changeNameButton) {
+
+    changeNameButton.addEventListener(
+        "click",
+        function() {
+
+            changeChatName();
+
+        }
+    );
+}
+
+
+// Bottom change-name button
+
+if (changeNameBottomButton) {
+
+    changeNameBottomButton.addEventListener(
+        "click",
+        function() {
+
+            changeChatName();
+
+        }
+    );
+}
+
+
+// ============================================================
+// EMOJI BUTTON
+// ============================================================
+
+if (emojiButton) {
+
+    emojiButton.addEventListener(
+        "click",
+        function() {
+
+            if (!messageInput) {
+                return;
+            }
+
+
+            const emojis = [
+
+                "😊",
+                "😂",
+                "❤️",
+                "🙏",
+                "🔥",
+                "👏",
+                "😅",
+                "😍",
+                "😭",
+                "🙌",
+                "💯",
+                "✨",
+                "😇",
+                "🤔",
+                "👍",
+                "✝️"
+
+            ];
+
+
+            const randomEmoji =
+                emojis[
+                    Math.floor(
+                        Math.random() *
+                        emojis.length
+                    )
+                ];
+
+
+            const start =
+                messageInput.selectionStart;
+
+
+            const end =
+                messageInput.selectionEnd;
+
+
+            const currentValue =
+                messageInput.value;
+
+
+            messageInput.value =
+                currentValue.substring(
+                    0,
+                    start
+                ) +
+                randomEmoji +
+                currentValue.substring(
+                    end
+                );
+
+
+            messageInput.focus();
+
+
+            const cursorPosition =
+                start +
+                randomEmoji.length;
+
+
+            messageInput.selectionStart =
+                cursorPosition;
+
+
+            messageInput.selectionEnd =
+                cursorPosition;
+        }
+    );
+}
+
+
+// ============================================================
+// MOBILE SWIPE TO REPLY
+// ============================================================
 
 function enableSwipeReply(
     element,
@@ -968,6 +1620,10 @@ function enableSwipeReply(
     let isSwiping = false;
 
 
+    // --------------------------------------------
+    // TOUCH START
+    // --------------------------------------------
+
     element.addEventListener(
         "touchstart",
         function(event) {
@@ -976,13 +1632,17 @@ function enableSwipeReply(
                 return;
             }
 
+
             startX =
                 event.touches[0].clientX;
+
 
             currentX =
                 startX;
 
-            isSwiping = true;
+
+            isSwiping =
+                true;
 
         },
         {
@@ -991,19 +1651,31 @@ function enableSwipeReply(
     );
 
 
+    // --------------------------------------------
+    // TOUCH MOVE
+    // --------------------------------------------
+
     element.addEventListener(
         "touchmove",
         function(event) {
 
-            if (!isSwiping || !event.touches.length) {
+            if (
+                !isSwiping ||
+                !event.touches.length
+            ) {
+
                 return;
             }
+
 
             currentX =
                 event.touches[0].clientX;
 
+
             const distance =
-                currentX - startX;
+                currentX -
+                startX;
+
 
             if (distance < -20) {
 
@@ -1021,6 +1693,10 @@ function enableSwipeReply(
     );
 
 
+    // --------------------------------------------
+    // TOUCH END
+    // --------------------------------------------
+
     element.addEventListener(
         "touchend",
         function() {
@@ -1029,32 +1705,42 @@ function enableSwipeReply(
                 return;
             }
 
-            const distance =
-                currentX - startX;
 
-            element.style.transform = "";
+            const distance =
+                currentX -
+                startX;
+
+
+            element.style.transform =
+                "";
+
 
             if (distance < -55) {
 
-                startReply(message);
+                startReply(
+                    message
+                );
             }
 
-            isSwiping = false;
+
+            isSwiping =
+                false;
 
         }
     );
 }
 
 
-// ========================================
-// SCROLL TO BOTTOM
-// ========================================
+// ============================================================
+// SCROLL CHAT TO BOTTOM
+// ============================================================
 
 function scrollChatToBottom() {
 
     if (!chatMessages) {
         return;
     }
+
 
     setTimeout(
         function() {
@@ -1068,52 +1754,21 @@ function scrollChatToBottom() {
 }
 
 
-// ========================================
-// EMOJI BUTTON
-// ========================================
-
-if (emojiButton) {
-
-    emojiButton.addEventListener(
-        "click",
-        function() {
-
-            if (!chatInput) {
-                return;
-            }
-
-            const emojis = [
-                "🙏",
-                "❤️",
-                "😊",
-                "😂",
-                "🙌",
-                "✝️",
-                "✨",
-                "😇",
-                "💯"
-            ];
-
-            const randomEmoji =
-                emojis[
-                    Math.floor(
-                        Math.random() *
-                        emojis.length
-                    )
-                ];
-
-            chatInput.value += randomEmoji;
-
-            chatInput.focus();
-        }
-    );
-}
-
-
-// ========================================
+// ============================================================
 // INITIALISE
-// ========================================
+// ============================================================
+
+updateUserDisplay();
+
+
+// Don't automatically open Firebase authentication
+// until the user actually enters the public chat.
 
 console.log(
-    "St. Monica LK3C Bible Study initialized."
+    "St. Monica LK3C Bible Study initialized successfully."
+);
+
+console.log(
+    "Firebase project:",
+    firebaseConfig.projectId
 );
