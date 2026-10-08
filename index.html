@@ -10,16 +10,18 @@
         name="description"
         content="An interactive Bible study space for St. Monica LK3C."
     >
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- =========================
-         WELCOME SECTION
-    ========================== -->
+    <!-- WELCOME SCREEN -->
 
-    <header>
+    <header id="welcome">
+
         <h1>St. Monica LK3C</h1>
+
         <h2>Bible Study</h2>
 
         <p>
@@ -31,19 +33,20 @@
             explore the prayers, and join the conversation.
         </p>
 
-        <button type="button">
-            Enter Bible Study
-        </button>
+        <a href="#story">
+            <button type="button">
+                Enter Bible Study
+            </button>
+        </a>
+
     </header>
 
 
-    <!-- =========================
-         MAIN CONTENT
-    ========================== -->
+    <!-- MAIN CONTENT -->
 
     <main>
 
-        <!-- STORY SECTION -->
+        <!-- STORY -->
 
         <section id="story">
 
@@ -84,15 +87,14 @@
         </section>
 
 
-        <!-- =========================
-             REFLECTION QUESTIONS
-        ========================== -->
+        <!-- QUESTIONS -->
 
         <section id="questions">
 
             <h2>Reflection Questions</h2>
 
             <ol>
+
                 <li>
                     What do you think was the main problem in Daniel's
                     relationship with Michelle?
@@ -118,14 +120,13 @@
                     How can we make better decisions when facing
                     difficult situations?
                 </li>
+
             </ol>
 
         </section>
 
 
-        <!-- =========================
-             CATHOLIC PRAYERS
-        ========================== -->
+        <!-- PRAYERS -->
 
         <section id="prayers">
 
@@ -194,9 +195,7 @@
         </section>
 
 
-        <!-- =========================
-             PUBLIC CHAT
-        ========================== -->
+        <!-- PUBLIC CHAT -->
 
         <section id="public-chat">
 
@@ -210,15 +209,16 @@
                 You can participate using an anonymous identity.
             </p>
 
-            <!-- Temporary ID display.
-                 Firebase will handle real anonymous
-                 identities later. -->
+
+            <!-- USER ID -->
 
             <div id="anonymous-user">
+
                 <p>
                     Your anonymous ID:
                     <strong>Not connected yet</strong>
                 </p>
+
             </div>
 
 
@@ -233,7 +233,7 @@
             </div>
 
 
-            <!-- CHAT INPUT -->
+            <!-- CHAT FORM -->
 
             <form id="chat-form">
 
@@ -246,6 +246,7 @@
                     id="chat-message"
                     name="chat-message"
                     placeholder="Write your message..."
+                    autocomplete="off"
                 >
 
                 <button type="submit">
@@ -259,22 +260,15 @@
     </main>
 
 
-    <!-- =========================
-         FOOTER
-    ========================== -->
+    <!-- FOOTER -->
 
     <footer>
 
-        <p>
-            St. Monica LK3C
-        </p>
+        <p>St. Monica LK3C</p>
 
-        <p>
-            Bible Study
-        </p>
+        <p>Bible Study</p>
 
     </footer>
-
 
 </body>
 </html>
