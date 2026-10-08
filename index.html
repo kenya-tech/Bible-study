@@ -6,11 +6,12 @@
 
     <title>St. Monica LK3C Bible Study</title>
 
+    <link rel="stylesheet" href="style.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -18,23 +19,20 @@
     <!-- =========================
          NAVIGATION
     ========================== -->
-    <header class="top-header">
-        <div class="header-inner">
+    <header class="site-header">
+        <div class="nav-container">
 
-            <div class="brand" onclick="showSection('home')">
-                <div class="brand-icon">✝</div>
-                <div>
-                    <h1>St. Monica LK3C</h1>
-                    <span>Bible Study</span>
-                </div>
-            </div>
+            <a href="#" class="logo" onclick="showSection('home'); return false;">
+                <span class="logo-cross">✝</span>
+                <span>St. Monica LK3C</span>
+            </a>
 
             <nav class="main-nav">
-                <button onclick="showSection('home')">Home</button>
-                <button onclick="showSection('story')">Story</button>
-                <button onclick="showSection('questions')">Questions</button>
-                <button onclick="showSection('prayers')">Prayers</button>
-                <button onclick="showSection('public-chat')">Public Chat</button>
+                <a href="#home" onclick="showSection('home')">Home</a>
+                <a href="#story" onclick="showSection('story')">Story</a>
+                <a href="#questions" onclick="showSection('questions')">Questions</a>
+                <a href="#prayers" onclick="showSection('prayers')">Prayers</a>
+                <a href="#public-chat" onclick="showSection('public-chat')">Public Chat</a>
             </nav>
 
         </div>
@@ -42,71 +40,41 @@
 
 
     <!-- =========================
-         HOME
+         MAIN CONTENT
     ========================== -->
     <main>
 
+        <!-- =========================
+             HOME
+        ========================== -->
         <section id="home" class="page-section active-section">
 
-            <div class="hero-section">
+            <div class="home-content">
 
-                <div class="hero-content">
-
-                    <div class="hero-badge">
-                        ✦ BIBLE STUDY SESSION
-                    </div>
-
-                    <h2>
-                        Faith.<br>
-                        Reflection.<br>
-                        <span>Community.</span>
-                    </h2>
-
-                    <p>
-                        Welcome to the St. Monica LK3C Bible Study.
-                        Take time to reflect, discuss and grow together in faith.
-                    </p>
-
-                    <div class="hero-buttons">
-                        <button class="primary-button" onclick="showSection('story')">
-                            Begin Study →
-                        </button>
-
-                        <button class="secondary-button" onclick="showSection('public-chat')">
-                            Join Public Chat
-                        </button>
-                    </div>
-
+                <div class="home-badge">
+                    ST. MONICA LK3C
                 </div>
 
-                <div class="hero-decoration">
-                    <div class="cross-decoration">✝</div>
-                </div>
+                <h1>Bible Study</h1>
 
-            </div>
+                <p class="home-subtitle">
+                    Faith. Reflection. Conversation.
+                </p>
 
+                <p class="home-description">
+                    Welcome to our Bible Study space — a place to reflect on
+                    God's Word, discuss real-life experiences and grow together
+                    in faith.
+                </p>
 
-            <div class="home-cards">
+                <div class="home-actions">
+                    <button class="primary-button" onclick="showSection('story')">
+                        Read This Week's Story
+                    </button>
 
-                <div class="home-card" onclick="showSection('story')">
-                    <div class="card-icon">📖</div>
-                    <h3>Read the Story</h3>
-                    <p>Reflect on this week's story and the choices faced by its characters.</p>
-                    <span>Read story →</span>
-                </div>
-
-                <div class="home-card" onclick="showSection('questions')">
-                    <div class="card-icon">💭</div>
-                    <h3>Reflect Together</h3>
-                    <p>Explore meaningful questions and share your perspective.</p>
-                    <span>View questions →</span>
-                </div>
-
-                <div class="home-card" onclick="showSection('prayers')">
-                    <div class="card-icon">🙏</div>
-                    <h3>Pray</h3>
-                    <p>End your reflection with prayer and spiritual encouragement.</p>
-                    <span>View prayers →</span>
+                    <button class="secondary-button" onclick="showSection('public-chat')">
+                        Join Public Chat
+                    </button>
                 </div>
 
             </div>
@@ -119,95 +87,166 @@
         ========================== -->
         <section id="story" class="page-section">
 
-            <div class="section-heading">
+            <div class="section-container">
 
-                <div class="section-label">
-                    <span>01</span>
-                    THE STORY
+                <div class="section-heading">
+                    <span class="section-label">THIS WEEK'S BIBLE STUDY</span>
+
+                    <h2>LIFE AFTER CAMPUS</h2>
+
+                    <p>
+                        A story about faith, pressure, success and the choices
+                        we make after graduation.
+                    </p>
                 </div>
 
-                <h2>Life After Campus</h2>
 
-                <p>
-                    A story about success, pressure, values and the choices we make after graduation.
-                </p>
+                <article class="story-card">
 
-            </div>
-
-
-            <article class="story-card">
-
-                <h3>LIFE AFTER CAMPUS</h3>
-
-                <p>
-                    After graduation, <strong>Vincent and Annastacia</strong> entered the job market with the same dream: to build successful lives. Months passed, but neither could find a stable job. Vincent survived through small jobs while Annastacia struggled with rent, family pressure, and constant rejection.
-                </p>
-
-                <p>
-                    Every morning, Vincent would wake up early, dress for interviews, and send applications. Most days ended with no response. He started taking temporary jobs just to put food on the table. His friends seemed to be moving ahead, and every graduation photo or new-job announcement on social media made him question whether he was falling behind.
-                </p>
-
-                <p>
-                    Annastacia's situation became even more difficult. Her rent was overdue, her family needed her support, and she was constantly being asked when she would finally get a “real job.” Eventually, she got an opportunity at a big company. For the first time in months, she felt that her life was finally changing.
-                </p>
-
-                <p>
-                    However, her boss soon made it clear that her career would move faster if she was willing to give him <strong>more than her work</strong>. At first, Annastacia refused and tried to prove herself through hard work. But as the pressure increased, she began wondering whether her principles could survive in a world where people seemed willing to do anything to get ahead.
-                </p>
-
-                <p>
-                    Eventually, Annastacia made choices that helped her climb the corporate ladder, even though they conflicted with her values. Her salary increased, her lifestyle changed, and people began admiring her success. From the outside, she appeared to have everything. But privately, she struggled with the weight of the decisions she had made to get there.
-                </p>
-
-                <p>
-                    Vincent, meanwhile, remained at the bottom. He watched former classmates get better jobs while he continued taking small opportunities. There were moments when he wanted to give up and wondered whether honesty, patience, and prayer were actually enough. Yet he continued learning new skills, taking whatever honest opportunities came his way, and trusting that his journey did not have to look like everyone else's.
-                </p>
-
-                <p>
-                    Years later, Vincent and Annastacia met again. They talked about their lives and realized that neither had experienced the future they had imagined on graduation day. Annastacia had money and a powerful position, but carried regrets she rarely spoke about. Vincent had taken longer to build his career, but he was proud that he had not completely lost himself along the way.
-                </p>
-
-                <p>
-                    They both learned that <strong>life after campus is not simply about finding a job or becoming successful. It is about facing pressure, making difficult choices, dealing with failure, and deciding what you are willing to sacrifice to become the person you want to be.</strong>
-                </p>
-
-            </article>
-
-
-            <!-- Bible Verses - UNCHANGED -->
-
-            <div class="verses-section">
-
-                <div class="verse-card">
-                    <div class="verse-icon">✦</div>
                     <p>
-                        “Better is a little with righteousness than great revenues with injustice.”
+                        After graduation, <strong>Vincent and Annastacia</strong>
+                        entered the job market with the same dream: to build
+                        successful lives. Months passed, but neither could find
+                        a stable job. Vincent survived through small jobs while
+                        Annastacia struggled with rent, family pressure, and
+                        constant rejection.
                     </p>
-                    <span>Proverbs 16:8</span>
-                </div>
 
-                <div class="verse-card">
-                    <div class="verse-icon">✦</div>
                     <p>
-                        “For what will it profit a man if he gains the whole world and forfeits his soul?”
+                        Every morning, Vincent would wake up early, dress for
+                        interviews, and send applications. Most days ended with
+                        no response. He started taking temporary jobs just to
+                        put food on the table. His friends seemed to be moving
+                        ahead, and every graduation photo or new-job announcement
+                        on social media made him question whether he was falling
+                        behind.
                     </p>
-                    <span>Matthew 16:26</span>
-                </div>
 
-                <div class="verse-card">
-                    <div class="verse-icon">✦</div>
                     <p>
-                        “Be still before the Lord and wait patiently for him.”
+                        Annastacia's situation became even more difficult. Her
+                        rent was overdue, her family needed her support, and she
+                        was constantly being asked when she would finally get a
+                        “real job.” Eventually, she got an opportunity at a big
+                        company. For the first time in months, she felt that her
+                        life was finally changing.
                     </p>
-                    <span>Psalm 37:7</span>
-                </div>
 
-                <div class="verse-card">
-                    <div class="verse-icon">✦</div>
                     <p>
-                        “Trust in the Lord with all your heart and lean not on your own understanding.”
+                        However, her boss soon made it clear that her career
+                        would move faster if she was willing to give him
+                        <strong>more than her work</strong>. At first, Annastacia
+                        refused and tried to prove herself through hard work.
+                        But as the pressure increased, she began wondering
+                        whether her principles could survive in a world where
+                        people seemed willing to do anything to get ahead.
                     </p>
-                    <span>Proverbs 3:5–6</span>
+
+                    <p>
+                        Eventually, Annastacia made choices that helped her climb
+                        the corporate ladder, even though they conflicted with
+                        her values. Her salary increased, her lifestyle changed,
+                        and people began admiring her success. From the outside,
+                        she appeared to have everything. But privately, she
+                        struggled with the weight of the decisions she had made
+                        to get there.
+                    </p>
+
+                    <p>
+                        Vincent, meanwhile, remained at the bottom. He watched
+                        former classmates get better jobs while he continued
+                        taking small opportunities. There were moments when he
+                        wanted to give up and wondered whether honesty, patience,
+                        and prayer were actually enough. Yet he continued
+                        learning new skills, taking whatever honest opportunities
+                        came his way, and trusting that his journey did not have
+                        to look like everyone else's.
+                    </p>
+
+                    <p>
+                        Years later, Vincent and Annastacia met again. They
+                        talked about their lives and realized that neither had
+                        experienced the future they had imagined on graduation
+                        day. Annastacia had money and a powerful position, but
+                        carried regrets she rarely spoke about. Vincent had taken
+                        longer to build his career, but he was proud that he had
+                        not completely lost himself along the way.
+                    </p>
+
+                    <p>
+                        They both learned that
+                        <strong>
+                            life after campus is not simply about finding a job
+                            or becoming successful. It is about facing pressure,
+                            making difficult choices, dealing with failure, and
+                            deciding what you are willing to sacrifice to become
+                            the person you want to be.
+                        </strong>
+                    </p>
+
+                </article>
+
+
+                <!-- =========================
+                     BIBLE VERSES
+                ========================== -->
+                <div class="verses-section">
+
+                    <div class="section-heading small-heading">
+                        <span class="section-label">SCRIPTURE FOR REFLECTION</span>
+                        <h3>God's Word</h3>
+                    </div>
+
+                    <div class="verse-grid">
+
+                        <div class="verse-card">
+                            <span class="verse-reference">
+                                Proverbs 16:8
+                            </span>
+
+                            <p>
+                                “Better is a little with righteousness than
+                                great revenues with injustice.”
+                            </p>
+                        </div>
+
+
+                        <div class="verse-card">
+                            <span class="verse-reference">
+                                Matthew 16:26
+                            </span>
+
+                            <p>
+                                “For what will it profit a man if he gains the
+                                whole world and forfeits his soul?”
+                            </p>
+                        </div>
+
+
+                        <div class="verse-card">
+                            <span class="verse-reference">
+                                Psalm 37:7
+                            </span>
+
+                            <p>
+                                “Be still before the Lord and wait patiently
+                                for him.”
+                            </p>
+                        </div>
+
+
+                        <div class="verse-card">
+                            <span class="verse-reference">
+                                Proverbs 3:5–6
+                            </span>
+
+                            <p>
+                                “Trust in the Lord with all your heart and lean
+                                not on your own understanding.”
+                            </p>
+                        </div>
+
+                    </div>
+
                 </div>
 
             </div>
@@ -220,57 +259,103 @@
         ========================== -->
         <section id="questions" class="page-section">
 
-            <div class="section-heading">
+            <div class="section-container">
 
-                <div class="section-label">
-                    <span>02</span>
-                    REFLECTION
-                </div>
+                <div class="section-heading">
+                    <span class="section-label">DISCUSSION</span>
 
-                <h2>Discussion Questions</h2>
+                    <h2>Reflection Questions</h2>
 
-                <p>
-                    Take time to think deeply and share honestly.
-                </p>
-
-            </div>
-
-
-            <div class="questions-container">
-
-                <div class="question-card">
-                    <span class="question-number">01</span>
                     <p>
-                        Was Annastacia completely wrong for the choices she made considering the financial and social pressure she faced? Where is the line between understanding someone's circumstances and excusing their actions?
+                        Take time to think deeply about the story before
+                        discussing the questions together.
                     </p>
                 </div>
 
-                <div class="question-card">
-                    <span class="question-number">02</span>
-                    <p>
-                        Vincent questioned whether honesty and patience were actually enough. Have you ever felt that doing the right thing puts you at a disadvantage while others succeed through shortcuts?
-                    </p>
-                </div>
 
-                <div class="question-card">
-                    <span class="question-number">03</span>
-                    <p>
-                        What does success mean to a Christian after campus? Is it wealth, career, status, helping family, happiness, faith, or a combination of these?
-                    </p>
-                </div>
+                <div class="questions-list">
 
-                <div class="question-card">
-                    <span class="question-number">04</span>
-                    <p>
-                        If you were in Vincent's position and an opportunity required you to compromise your values, what factors would influence your decision? Is compromise ever justified?
-                    </p>
-                </div>
+                    <div class="question-card">
+                        <span class="question-number">01</span>
 
-                <div class="question-card">
-                    <span class="question-number">05</span>
-                    <p>
-                        Considering Matthew 16:26 and the modern competitive job market, what are young graduates most likely to sacrifice in the pursuit of success? How can we protect our faith, values and identity?
-                    </p>
+                        <div>
+                            <h3>Understanding Annastacia's Choices</h3>
+
+                            <p>
+                                Was Annastacia completely wrong for the choices
+                                she made considering the financial and social
+                                pressure she was under? Where is the line
+                                between understanding someone's circumstances
+                                and excusing their actions?
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="question-card">
+                        <span class="question-number">02</span>
+
+                        <div>
+                            <h3>When Doing Right Feels Like Losing</h3>
+
+                            <p>
+                                Vincent questioned whether honesty and patience
+                                were actually enough. Have you ever felt that
+                                doing the right thing puts you at a disadvantage
+                                while others seem to succeed through shortcuts?
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="question-card">
+                        <span class="question-number">03</span>
+
+                        <div>
+                            <h3>What Does Success Really Mean?</h3>
+
+                            <p>
+                                What should success mean to a Christian after
+                                campus? Is it wealth, career, status, helping
+                                family, happiness, faith, or a combination of
+                                these?
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="question-card">
+                        <span class="question-number">04</span>
+
+                        <div>
+                            <h3>How Much Should We Compromise?</h3>
+
+                            <p>
+                                If you were in Vincent's position and an
+                                opportunity required you to compromise your
+                                values, what factors would influence your
+                                decision? Is compromise ever justified?
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="question-card">
+                        <span class="question-number">05</span>
+
+                        <div>
+                            <h3>Protecting Your Identity</h3>
+
+                            <p>
+                                Matthew 16:26 asks what it profits someone to
+                                gain the whole world but lose their soul. In
+                                today's competitive job market, what are young
+                                graduates most likely to sacrifice, and how can
+                                they protect their faith, values and identity?
+                            </p>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
@@ -283,48 +368,94 @@
         ========================== -->
         <section id="prayers" class="page-section">
 
-            <div class="section-heading">
+            <div class="section-container">
 
-                <div class="section-label">
-                    <span>03</span>
-                    PRAYER
-                </div>
+                <div class="section-heading">
+                    <span class="section-label">PRAYER</span>
 
-                <h2>Catholic Prayers</h2>
-
-                <p>
-                    Let us bring our reflections before God.
-                </p>
-
-            </div>
-
-
-            <div class="prayers-grid">
-
-                <div class="prayer-card">
-                    <h3>Prayer for Guidance</h3>
+                    <h2>Catholic Prayers</h2>
 
                     <p>
-                        Lord, guide our decisions and give us wisdom when we face difficult choices. Help us remain faithful to You even when the world pressures us to compromise our values. Give us courage to choose what is right and patience to trust Your timing. Amen.
+                        Let us place our studies, decisions, hopes and future
+                        in God's hands.
                     </p>
                 </div>
 
 
-                <div class="prayer-card">
-                    <h3>Prayer for Young People</h3>
+                <div class="prayers-grid">
 
-                    <p>
-                        Heavenly Father, bless young people as they begin their careers and adult lives. Open doors that lead to honest opportunities and give them strength when those doors remain closed. May they never lose themselves while pursuing success. Amen.
-                    </p>
-                </div>
+                    <article class="prayer-card">
+
+                        <span class="prayer-icon">✝</span>
+
+                        <h3>Prayer for Guidance</h3>
+
+                        <p>
+                            Lord, guide us as we make decisions about our future.
+                            Give us wisdom when opportunities come our way and
+                            courage to choose what is right even when the easier
+                            path is tempting.
+                        </p>
+
+                        <p>
+                            Help us to trust Your timing and to remember that
+                            our worth is not determined by our careers, income
+                            or achievements. May our choices always bring us
+                            closer to You.
+                        </p>
+
+                        <strong>Amen.</strong>
+
+                    </article>
 
 
-                <div class="prayer-card">
-                    <h3>Prayer for Trust</h3>
+                    <article class="prayer-card">
 
-                    <p>
-                        Lord, teach us to trust You even when our lives do not look the way we expected. Help us remember that our worth is not measured by our jobs, salaries or achievements, but by the love You have for us. Amen.
-                    </p>
+                        <span class="prayer-icon">🙏</span>
+
+                        <h3>Prayer for Young Graduates</h3>
+
+                        <p>
+                            Heavenly Father, be with every young person entering
+                            the world after campus. Open doors that are meant
+                            for us and give us patience when those doors seem
+                            slow to open.
+                        </p>
+
+                        <p>
+                            Protect us from desperation, dishonesty and
+                            temptation. Help us to work hard, remain faithful
+                            and trust that You have a purpose for every season
+                            of our lives.
+                        </p>
+
+                        <strong>Amen.</strong>
+
+                    </article>
+
+
+                    <article class="prayer-card">
+
+                        <span class="prayer-icon">🕊</span>
+
+                        <h3>Prayer for Strength</h3>
+
+                        <p>
+                            Lord Jesus, when we feel behind, rejected or
+                            discouraged, remind us that our journey is different
+                            from everyone else's.
+                        </p>
+
+                        <p>
+                            Give us strength to keep going, humility to learn,
+                            courage to begin again and faith to believe that
+                            You are working even when we cannot see the outcome.
+                        </p>
+
+                        <strong>Amen.</strong>
+
+                    </article>
+
                 </div>
 
             </div>
@@ -337,155 +468,176 @@
         ========================== -->
         <section id="public-chat" class="page-section">
 
-            <div class="section-heading">
+            <div class="section-container">
 
-                <div class="section-label">
-                    <span>04</span>
-                    COMMUNITY
-                </div>
+                <div class="section-heading">
 
-                <h2>Public Chat</h2>
+                    <span class="section-label">COMMUNITY</span>
 
-                <p>
-                    Share your thoughts and continue the discussion with the community.
-                </p>
+                    <h2>Public Chat</h2>
 
-            </div>
-
-
-            <!-- CHAT LOGIN -->
-
-            <div id="chat-login" class="chat-login-card">
-
-                <div class="chat-login-icon">
-                    💬
-                </div>
-
-                <h3>Join the Discussion</h3>
-
-                <p>
-                    Choose a name to enter the public Bible study discussion.
-                    No account is required.
-                </p>
-
-                <input
-                    type="text"
-                    id="anonymous-name"
-                    placeholder="Enter your name"
-                    maxlength="25"
-                    autocomplete="off"
-                >
-
-                <button
-                    id="enter-chat-btn"
-                    class="enter-chat-button"
-                >
-                    Enter Public Chat
-                </button>
-
-                <div id="chat-login-message"></div>
-
-            </div>
-
-
-            <!-- CHAT ROOM -->
-
-            <div
-                id="chat-room"
-                class="chat-room"
-                style="display: none;"
-            >
-
-                <div class="chat-header">
-
-                    <div>
-                        <h3>Public Discussion</h3>
-                        <span>St. Monica LK3C Bible Study</span>
-                    </div>
-
-                    <button id="change-name-btn" class="change-name-button">
-                        Change Name
-                    </button>
-
-                </div>
-
-
-                <div class="chat-notice">
-                    <span>💬</span>
                     <p>
-                        Keep the discussion respectful, constructive and Christ-centered.
+                        Share your thoughts, reflections and questions with the
+                        St. Monica LK3C Bible Study community.
                     </p>
+
                 </div>
 
 
-                <div
-                    id="chat-messages"
-                    class="chat-messages"
-                ></div>
+                <!-- CHAT LOGIN -->
+                <div id="chat-login" class="chat-login-card">
 
-
-                <!-- REPLY PREVIEW -->
-
-                <div
-                    id="reply-preview"
-                    class="reply-preview"
-                    style="display: none;"
-                >
-
-                    <div>
-                        <strong id="reply-preview-user"></strong>
-
-                        <p id="reply-preview-text"></p>
+                    <div class="chat-login-icon">
+                        💬
                     </div>
 
-                    <button id="cancel-reply-btn">
-                        ×
-                    </button>
+                    <h3>Join the Discussion</h3>
 
-                </div>
-
-
-                <!-- CHAT FORM -->
-
-                <form id="chat-form" class="chat-form">
-
-                    <button
-                        type="button"
-                        id="emoji-btn"
-                        class="emoji-button"
-                    >
-                        😊
-                    </button>
+                    <p>
+                        Choose a name to use in the public chat.
+                        No account is required.
+                    </p>
 
                     <input
                         type="text"
-                        id="message-input"
-                        placeholder="Write a message..."
-                        maxlength="500"
+                        id="anonymous-name"
+                        placeholder="Enter your name"
+                        maxlength="25"
                         autocomplete="off"
                     >
 
                     <button
-                        type="submit"
-                        id="send-message-btn"
-                        class="send-message-button"
+                        id="enter-chat-btn"
+                        class="enter-chat-button"
+                        type="button"
                     >
-                        ➤
+                        Enter Public Chat
                     </button>
 
-                </form>
+                    <p
+                        id="chat-login-message"
+                        class="chat-login-message"
+                    ></p>
+
+                </div>
 
 
-                <div class="current-user-bar">
+                <!-- CHAT ROOM -->
+                <div
+                    id="chat-room"
+                    class="chat-room"
+                    style="display: none;"
+                >
 
-                    <span>
-                        Chatting as
-                        <strong id="current-user-name"></strong>
-                    </span>
+                    <div class="chat-header">
 
-                    <button id="change-name-bottom-btn">
-                        Change name
-                    </button>
+                        <div>
+                            <h3>Public Bible Study Chat</h3>
+
+                            <p>
+                                Share respectfully. Build one another up.
+                            </p>
+                        </div>
+
+                        <button
+                            id="change-name-btn"
+                            class="change-name-button"
+                            type="button"
+                        >
+                            Change Name
+                        </button>
+
+                    </div>
+
+
+                    <div class="chat-notice">
+                        <span>✝</span>
+
+                        <p>
+                            Please keep the conversation respectful,
+                            constructive and Christ-centered.
+                        </p>
+                    </div>
+
+
+                    <div
+                        id="chat-messages"
+                        class="chat-messages"
+                    ></div>
+
+
+                    <!-- REPLY PREVIEW -->
+                    <div
+                        id="reply-preview"
+                        class="reply-preview"
+                        style="display: none;"
+                    >
+
+                        <div>
+                            <strong id="reply-preview-user"></strong>
+
+                            <p id="reply-preview-text"></p>
+                        </div>
+
+                        <button
+                            id="cancel-reply-btn"
+                            type="button"
+                        >
+                            ×
+                        </button>
+
+                    </div>
+
+
+                    <!-- CHAT FORM -->
+                    <form
+                        id="chat-form"
+                        class="chat-form"
+                    >
+
+                        <button
+                            type="button"
+                            id="emoji-btn"
+                            class="emoji-button"
+                            title="Add emoji"
+                        >
+                            😊
+                        </button>
+
+                        <input
+                            type="text"
+                            id="message-input"
+                            placeholder="Write a message..."
+                            maxlength="500"
+                            autocomplete="off"
+                        >
+
+                        <button
+                            type="submit"
+                            id="send-message-btn"
+                            class="send-message-button"
+                        >
+                            ➤
+                        </button>
+
+                    </form>
+
+
+                    <div class="current-user-bar">
+
+                        <span>
+                            Chatting as
+                            <strong id="current-user-name"></strong>
+                        </span>
+
+                        <button
+                            type="button"
+                            id="change-name-bottom-btn"
+                        >
+                            Change name
+                        </button>
+
+                    </div>
 
                 </div>
 
@@ -499,30 +651,30 @@
     <!-- =========================
          FOOTER
     ========================== -->
-
     <footer class="site-footer">
 
-        <div class="footer-cross">
-            ✝
+        <div class="footer-content">
+
+            <div class="footer-cross">✝</div>
+
+            <h3>St. Monica LK3C</h3>
+
+            <p>
+                Lower Kabete Campus Catholic Community
+            </p>
+
+            <p class="footer-small">
+                Bible Study • Faith • Community
+            </p>
+
         </div>
-
-        <h3>St. Monica LK3C</h3>
-
-        <p>
-            Lower Kabete Campus Catholic Community
-        </p>
-
-        <span>
-            Faith • Community • Growth
-        </span>
 
     </footer>
 
 
     <!-- =========================
-         JAVASCRIPT
+         FIREBASE / JAVASCRIPT
     ========================== -->
-
     <script type="module" src="script.js"></script>
 
 </body>
