@@ -1,6 +1,6 @@
 // ========================================
 // ST. MONICA LK3C BIBLE STUDY
-// FIREBASE FIRESTORE CHAT + NAVIGATION
+// FIREBASE CHAT + ANONYMOUS AUTHENTICATION
 // ========================================
 
 
@@ -11,6 +11,11 @@
 import {
     initializeApp
 } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+
+import {
+    getAuth,
+    signInAnonymously
+} from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
 
 import {
     getFirestore,
@@ -61,6 +66,14 @@ const app =
 
 
 // ========================================
+// INITIALIZE AUTHENTICATION
+// ========================================
+
+const auth =
+    getAuth(app);
+
+
+// ========================================
 // INITIALIZE FIRESTORE
 // ========================================
 
@@ -105,8 +118,6 @@ function showSection(sectionId) {
     }
 
 
-    // Open chat when Public Chat is selected
-
     if (sectionId === "public-chat") {
 
         setTimeout(function() {
@@ -120,8 +131,6 @@ function showSection(sectionId) {
 }
 
 
-// Make the function available to HTML onclick attributes
-
 window.showSection =
     showSection;
 
@@ -133,58 +142,44 @@ window.showSection =
 const chatLogin =
     document.getElementById("chat-login");
 
-
 const chatRoom =
     document.getElementById("chat-room");
-
 
 const anonymousNameInput =
     document.getElementById("anonymous-name");
 
-
 const enterChatButton =
     document.getElementById("enter-chat-button");
-
 
 const chatLoginError =
     document.getElementById("chat-login-error");
 
-
 const anonymousIDElement =
     document.getElementById("anonymous-id");
-
 
 const chatForm =
     document.getElementById("chat-form");
 
-
 const chatInput =
     document.getElementById("chat-message");
-
 
 const chatMessages =
     document.getElementById("chat-messages");
 
-
 const replyPreview =
     document.getElementById("reply-preview");
-
 
 const replyName =
     document.getElementById("reply-name");
 
-
 const replyText =
     document.getElementById("reply-text");
-
 
 const cancelReplyButton =
     document.getElementById("cancel-reply");
 
-
 const changeChatNameButton =
     document.getElementById("change-chat-name");
-
 
 const emojiButton =
     document.getElementById("emoji-button");
@@ -204,11 +199,68 @@ let replyingTo =
     null;
 
 
+let unsubscribeMessages =
+    null;
+
+
+let latestMessages =
+    [];
+
+
+// ========================================
+// FIREBASE ANONYMOUS LOGIN
+// ========================================
+
+async function authenticateUser() {
+
+    try {
+
+        if (auth.currentUser) {
+
+            return auth.currentUser;
+
+        }
+
+
+        const result =
+            await signInAnonymously(auth);
+
+
+        console.log(
+            "Anonymous Firebase user signed in:",
+            result.user.uid
+        );
+
+
+        return result.user;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Anonymous authentication failed:",
+            error
+        );
+
+
+        showChatLoginError(
+            "Unable to connect to the chat. Please try again."
+        );
+
+
+        throw error;
+
+    }
+
+}
+
+
 // ========================================
 // OPEN CHAT
 // ========================================
 
-function openChat() {
+async function openChat() {
 
     if (!chatLogin || !chatRoom) {
 
@@ -219,18 +271,31 @@ function openChat() {
 
     if (currentUserName) {
 
-        chatLogin.style.display =
-            "none";
+        try {
+
+            await authenticateUser();
 
 
-        chatRoom.style.display =
-            "flex";
+            chatLogin.style.display =
+                "none";
 
 
-        updateUserDisplay();
+            chatRoom.style.display =
+                "flex";
 
 
-        startRealtimeMessages();
+            updateUserDisplay();
+
+
+            startRealtimeMessages();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+        }
 
     }
 
@@ -260,7 +325,7 @@ function openChat() {
 
 
 // ========================================
-// ENTER CHAT
+// ENTER CHAT BUTTON
 // ========================================
 
 if (enterChatButton) {
@@ -311,7 +376,7 @@ if (anonymousNameInput) {
 // ENTER PUBLIC CHAT
 // ========================================
 
-function enterPublicChat() {
+async function enterPublicChat() {
 
     if (!anonymousNameInput) {
 
@@ -357,35 +422,74 @@ function enterPublicChat() {
     }
 
 
-    currentUserName =
-        enteredName;
+    try {
+
+        enterChatButton.disabled =
+            true;
 
 
-    localStorage.setItem(
-
-        "bibleStudyAnonymousName",
-
-        currentUserName
-
-    );
+        enterChatButton.textContent =
+            "Connecting...";
 
 
-    chatLoginError.textContent =
-        "";
+        await authenticateUser();
 
 
-    chatLogin.style.display =
-        "none";
+        currentUserName =
+            enteredName;
 
 
-    chatRoom.style.display =
-        "flex";
+        localStorage.setItem(
+
+            "bibleStudyAnonymousName",
+
+            currentUserName
+
+        );
 
 
-    updateUserDisplay();
+        chatLoginError.textContent =
+            "";
 
 
-    startRealtimeMessages();
+        chatLogin.style.display =
+            "none";
+
+
+        chatRoom.style.display =
+            "flex";
+
+
+        updateUserDisplay();
+
+
+        startRealtimeMessages();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+
+        showChatLoginError(
+
+            "Could not connect to the chat. Please try again."
+
+        );
+
+    }
+
+    finally {
+
+        enterChatButton.disabled =
+            false;
+
+
+        enterChatButton.textContent =
+            "Enter Public Chat";
+
+    }
 
 }
 
@@ -506,7 +610,7 @@ if (changeChatNameButton) {
 
 
 // ========================================
-// FIRESTORE CHAT COLLECTION
+// FIRESTORE COLLECTION
 // ========================================
 
 const messagesCollection =
@@ -522,14 +626,6 @@ const messagesCollection =
 // ========================================
 // REAL-TIME MESSAGES
 // ========================================
-
-let unsubscribeMessages =
-    null;
-
-
-let latestMessages =
-    [];
-
 
 function startRealtimeMessages() {
 
@@ -609,7 +705,7 @@ function startRealtimeMessages() {
 
                             <p>
                                 Please check your Firebase
-                                Firestore setup and rules.
+                                configuration and security rules.
                             </p>
 
                         </div>
@@ -626,7 +722,7 @@ function startRealtimeMessages() {
 
 
 // ========================================
-// RENDER CURRENT MESSAGES
+// RENDER MESSAGES
 // ========================================
 
 function renderCurrentMessages() {
@@ -689,7 +785,7 @@ function renderCurrentMessages() {
 
 
 // ========================================
-// CREATE MESSAGE ELEMENT
+// CREATE MESSAGE
 // ========================================
 
 function createMessageElement(message) {
@@ -699,7 +795,7 @@ function createMessageElement(message) {
 
 
     const isMine =
-        message.user === currentUserName;
+        message.uid === auth.currentUser?.uid;
 
 
     messageWrapper.className =
@@ -719,7 +815,7 @@ function createMessageElement(message) {
 
 
     // ====================================
-    // REPLY PREVIEW
+    // REPLY
     // ====================================
 
     if (message.replyTo) {
@@ -920,8 +1016,6 @@ function formatTime(timestamp) {
     let date;
 
 
-    // Firestore Timestamp
-
     if (
         timestamp &&
         typeof timestamp.toDate === "function"
@@ -981,6 +1075,23 @@ if (chatForm) {
             }
 
 
+            if (!auth.currentUser) {
+
+                try {
+
+                    await authenticateUser();
+
+                }
+
+                catch (error) {
+
+                    return;
+
+                }
+
+            }
+
+
             const text =
                 chatInput.value.trim();
 
@@ -993,6 +1104,9 @@ if (chatForm) {
 
 
             const newMessage = {
+
+                uid:
+                    auth.currentUser.uid,
 
                 user:
                     currentUserName,
@@ -1054,7 +1168,7 @@ if (chatForm) {
 
                 alert(
 
-                    "Your message could not be sent. Please check your Firebase Firestore setup."
+                    "Your message could not be sent. Please try again."
 
                 );
 
@@ -1288,7 +1402,7 @@ function enableSwipeReply(
 
 
 // ========================================
-// SCROLL CHAT TO BOTTOM
+// SCROLL TO BOTTOM
 // ========================================
 
 function scrollChatToBottom() {
@@ -1338,21 +1452,13 @@ if (emojiButton) {
             const emojis = [
 
                 "🙏",
-
                 "❤️",
-
                 "😊",
-
                 "😂",
-
                 "🙌",
-
                 "✝️",
-
                 "✨",
-
                 "😇",
-
                 "💯"
 
             ];
@@ -1390,5 +1496,5 @@ if (emojiButton) {
 // ========================================
 
 console.log(
-    "St. Monica LK3C Bible Study Firebase chat initialized."
+    "St. Monica LK3C Bible Study chat initialized."
 );
