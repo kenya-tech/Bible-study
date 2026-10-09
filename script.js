@@ -247,6 +247,7 @@ function showSection(sectionId) {
         prepareChat();
     }
 }
+window.showSection = showSection;
 
 // The HTML has inline onclick handlers.
 // These listeners support navigation links without inline handlers too.
