@@ -1,34 +1,30 @@
 
-/* =========================================================
-   ST. MONICA LK3C — BIBLE STUDY
-   Firebase Authentication + Membership + Public Chat
-========================================================= */
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
 
 import {
     getAuth,
-    signInAnonymously,
-    onAuthStateChanged,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
+    onAuthStateChanged,
     signOut
 } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
 
 import {
     getFirestore,
-    collection,
-    addDoc,
-    query,
-    orderBy,
-    onSnapshot,
     doc,
     getDoc,
     setDoc,
-    writeBatch,
-    serverTimestamp
+    collection,
+    addDoc,
+    onSnapshot,
+    query,
+    orderBy,
+    limit,
+    serverTimestamp,
+    writeBatch
 } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
-
 
 // =========================================================
 // FIREBASE CONFIGURATION
@@ -44,535 +40,308 @@ const firebaseConfig = {
     measurementId: "G-D5D1178QMV"
 };
 
-
-// =========================================================
-// INITIALIZE FIREBASE
-// =========================================================
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-
 // =========================================================
-// MEMBERSHIP GROUPS
+// BIBLE STUDY GROUPS
 // =========================================================
 
 const GROUPS = {
     "charles-lwanga": {
         name: "St. Charles Lwanga",
-        countElement: "count-charles-lwanga"
+        countId: "count-charles-lwanga"
     },
     "st-williams": {
         name: "St. Williams",
-        countElement: "count-st-williams"
+        countId: "count-st-williams"
     },
     "st-camillas": {
         name: "St. Camillas",
-        countElement: "count-st-camillas"
+        countId: "count-st-camillas"
     },
     "mathias-mulumba": {
         name: "St. Mathias Mulumba",
-        countElement: "count-mathias-mulumba"
+        countId: "count-mathias-mulumba"
     },
     "st-vincent": {
         name: "St. Vincent",
-        countElement: "count-st-vincent"
+        countId: "count-st-vincent"
     }
 };
 
-
 // =========================================================
-// ELEMENTS — MEMBERSHIP
-// =========================================================
-
-const membershipForm =
-    document.getElementById("membership-form");
-
-const membershipLoginForm =
-    document.getElementById("membership-login-form");
-
-const memberFullName =
-    document.getElementById("member-full-name");
-
-const memberPhone =
-    document.getElementById("member-phone");
-
-const memberPassword =
-    document.getElementById("member-password");
-
-const memberGroup =
-    document.getElementById("member-group");
-
-const membershipSubmit =
-    document.getElementById("membership-submit");
-
-const membershipMessage =
-    document.getElementById("membership-message");
-
-const loginMemberPhone =
-    document.getElementById("login-member-phone");
-
-const loginMemberPassword =
-    document.getElementById("login-member-password");
-
-const membershipLoginSubmit =
-    document.getElementById("membership-login-submit");
-
-const membershipLoginMessage =
-    document.getElementById("membership-login-message");
-
-const membershipStatus =
-    document.getElementById("membership-status");
-
-const membershipForms =
-    document.getElementById("membership-forms");
-
-
-// =========================================================
-// ELEMENTS — PUBLIC CHAT
+// ELEMENTS
 // =========================================================
 
-const chatLogin =
-    document.getElementById("chat-login");
+const membershipForm = document.getElementById("membership-form");
+const membershipForms = document.getElementById("membership-forms");
+const membershipStatus = document.getElementById("membership-status");
+const membershipMessage = document.getElementById("membership-message");
+const membershipSubmit = document.getElementById("membership-submit");
 
-const chatRoom =
-    document.getElementById("chat-room");
+const loginForm = document.getElementById("membership-login-form");
+const loginMessage = document.getElementById("membership-login-message");
+const loginSubmit = document.getElementById("membership-login-submit");
 
-const anonymousNameInput =
-    document.getElementById("anonymous-name");
+const fullNameInput = document.getElementById("member-full-name");
+const phoneInput = document.getElementById("member-phone");
+const passwordInput = document.getElementById("member-password");
+const groupInput = document.getElementById("member-group");
 
-const enterChatBtn =
-    document.getElementById("enter-chat-btn");
-
-const chatLoginMessage =
-    document.getElementById("chat-login-message");
-
-const chatMessages =
-    document.getElementById("chat-messages");
-
-const chatForm =
-    document.getElementById("chat-form");
-
-const messageInput =
-    document.getElementById("message-input");
-
-const sendMessageBtn =
-    document.getElementById("send-message-btn");
-
-const currentUserName =
-    document.getElementById("current-user-name");
-
-const changeNameBtn =
-    document.getElementById("change-name-btn");
-
-const changeNameBottomBtn =
-    document.getElementById("change-name-bottom-btn");
-
-const emojiBtn =
-    document.getElementById("emoji-btn");
-
-const replyPreview =
-    document.getElementById("reply-preview");
-
-const replyPreviewUser =
-    document.getElementById("reply-preview-user");
-
-const replyPreviewText =
-    document.getElementById("reply-preview-text");
-
-const cancelReplyBtn =
-    document.getElementById("cancel-reply-btn");
-
-
-// =========================================================
-// GLOBAL VARIABLES
-// =========================================================
+const loginPhoneInput = document.getElementById("login-member-phone");
+const loginPasswordInput = document.getElementById("login-member-password");
 
 let currentUser = null;
-let currentAnonymousName = "";
-let selectedReply = null;
-let unsubscribeMessages = null;
+let unsubscribeChat = null;
 let unsubscribeGroupCounts = null;
+let replyToMessage = null;
 
-const NAME_STORAGE_KEY = "bibleStudyAnonymousName";
+// =========================================================
+// GENERAL HELPERS
+// =========================================================
 
+function showMessage(element, message, type = "info") {
+    if (!element) return;
+
+    element.textContent = message;
+    element.dataset.type = type;
+    element.setAttribute("role", "status");
+}
+
+function setButtonLoading(button, loading, loadingText = "Please wait...") {
+    if (!button) return;
+
+    if (loading) {
+        button.dataset.originalText = button.textContent;
+        button.disabled = true;
+        button.textContent = loadingText;
+    } else {
+        button.disabled = false;
+
+        if (button.dataset.originalText) {
+            button.textContent = button.dataset.originalText;
+            delete button.dataset.originalText;
+        }
+    }
+}
+
+function normalizePhoneNumber(value) {
+    let digits = String(value || "").replace(/\D/g, "");
+
+    if (digits.startsWith("0")) {
+        digits = "254" + digits.substring(1);
+    } else if (digits.startsWith("7") || digits.startsWith("1")) {
+        digits = "254" + digits;
+    }
+
+    if (!/^254[17]\d{8}$/.test(digits)) {
+        return null;
+    }
+
+    return digits;
+}
+
+function phoneToEmail(phoneDigits) {
+    return `${phoneDigits}@members.stmonicalk3c.invalid`;
+}
+
+function translateAuthError(error) {
+    const messages = {
+        "auth/email-already-in-use":
+            "An account already exists with this phone number. Please log in.",
+        "auth/invalid-email":
+            "The phone number or account details are invalid.",
+        "auth/weak-password":
+            "Your password is too weak. Use at least 6 characters.",
+        "auth/invalid-credential":
+            "Incorrect phone number or password.",
+        "auth/user-not-found":
+            "No account was found. Please register first.",
+        "auth/wrong-password":
+            "Incorrect phone number or password.",
+        "auth/too-many-requests":
+            "Too many attempts. Please wait and try again.",
+        "auth/network-request-failed":
+            "Network error. Check your internet connection.",
+        "auth/operation-not-allowed":
+            "Email/password login is not enabled in Firebase."
+    };
+
+    return messages[error.code] ||
+        error.message ||
+        "Something went wrong. Please try again.";
+}
 
 // =========================================================
 // PAGE NAVIGATION
 // =========================================================
 
 function showSection(sectionId) {
-    const sections = document.querySelectorAll(".page-section");
-
-    sections.forEach(section => {
-        section.classList.remove("active-section");
-    });
+    // Do not allow signed-out visitors to access other sections.
+    if (!currentUser || currentUser.isAnonymous) {
+        sectionId = "membership";
+    }
 
     const target = document.getElementById(sectionId);
 
     if (!target) {
-        console.warn("Section not found:", sectionId);
-        return;
+        sectionId = "home";
     }
 
-    target.classList.add("active-section");
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
+    document.querySelectorAll(".page-section").forEach(section => {
+        section.classList.remove("active-section");
     });
 
-    try {
-        history.replaceState(null, "", "#" + sectionId);
-    } catch (error) {
-        console.warn("Could not update URL:", error);
+    const activeSection = document.getElementById(sectionId);
+
+    if (activeSection) {
+        activeSection.classList.add("active-section");
     }
 
-    if (sectionId === "public-chat") {
+    if (currentUser && !currentUser.isAnonymous) {
+        document.body.classList.remove("auth-locked");
+    } else {
+        document.body.classList.add("auth-locked");
+        sectionId = "membership";
+    }
+
+    if (window.location.hash !== `#${sectionId}`) {
+        history.replaceState(null, "", `#${sectionId}`);
+    }
+
+    if (sectionId === "public-chat" && currentUser && !currentUser.isAnonymous) {
         prepareChat();
     }
 }
 
-window.showSection = showSection;
+document.querySelectorAll("[data-section]").forEach(element => {
+    element.addEventListener("click", event => {
+        event.preventDefault();
+        showSection(element.dataset.section);
+    });
+});
 
-
-// =========================================================
-// NAVIGATION LINKS
-// =========================================================
-
-document.querySelectorAll(".main-nav a").forEach(link => {
+// Support navigation links that use href="#section-id".
+document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener("click", event => {
-        const href = link.getAttribute("href");
+        const sectionId = link.getAttribute("href").slice(1);
 
-        if (!href || !href.startsWith("#")) {
-            return;
-        }
-
-        event.preventDefault();
-        showSection(href.substring(1));
-    });
-});
-
-
-// =========================================================
-// HOME BUTTONS
-// =========================================================
-
-document.querySelectorAll(".primary-button").forEach(button => {
-    button.addEventListener("click", event => {
-        event.preventDefault();
-        showSection("story");
-    });
-});
-
-document.querySelectorAll(".secondary-button").forEach(button => {
-    button.addEventListener("click", event => {
-        event.preventDefault();
-
-        const onclickCode = button.getAttribute("onclick") || "";
-
-        if (onclickCode.includes("'membership'") ||
-            onclickCode.includes('"membership"')) {
-            showSection("membership");
-        } else {
-            showSection("public-chat");
+        if (document.getElementById(sectionId)) {
+            event.preventDefault();
+            showSection(sectionId);
         }
     });
 });
 
-
 // =========================================================
-// LOAD SECTION FROM URL HASH
-// =========================================================
-
-function loadInitialSection() {
-    const hash = window.location.hash.replace("#", "");
-
-    const validSections = [
-        "home",
-        "story",
-        "questions",
-        "membership",
-        "prayers",
-        "public-chat"
-    ];
-
-    if (validSections.includes(hash)) {
-        showSection(hash);
-    } else {
-        showSection("home");
-    }
-}
-
-
-// =========================================================
-// PHONE NUMBER HELPERS
-// =========================================================
-
-function normalizePhoneNumber(value) {
-    let digits = value.replace(/\D/g, "");
-
-    // Convert Kenyan local format, e.g. 0712345678,
-    // into 254712345678.
-    if (digits.startsWith("0") && digits.length === 10) {
-        digits = "254" + digits.substring(1);
-    } else if (
-        (digits.startsWith("7") || digits.startsWith("1")) &&
-        digits.length === 9
-    ) {
-        digits = "254" + digits;
-    }
-
-    // Accept the international Kenyan format.
-    if (!digits.startsWith("254") || digits.length !== 12) {
-        throw new Error(
-            "Enter a valid Kenyan phone number, such as 0712345678 or +254712345678."
-        );
-    }
-
-    return digits;
-}
-
-
-// Firebase Email/Password authentication requires an email.
-// This creates a consistent login identifier from the phone number.
-// It does NOT verify ownership of that phone number.
-function phoneToEmail(phoneDigits) {
-    return `${phoneDigits}@members.stmonicalk3c.invalid`;
-}
-
-
-// =========================================================
-// MEMBERSHIP MESSAGE HELPERS
-// =========================================================
-
-function setMembershipMessage(message, isError = false) {
-    if (!membershipMessage) return;
-
-    membershipMessage.textContent = message;
-    membershipMessage.classList.toggle("error", isError);
-}
-
-function setLoginMessage(message, isError = false) {
-    if (!membershipLoginMessage) return;
-
-    membershipLoginMessage.textContent = message;
-    membershipLoginMessage.classList.toggle("error", isError);
-}
-
-function friendlyAuthError(error) {
-    const code = error?.code || "";
-
-    const messages = {
-        "auth/email-already-in-use":
-            "An account already exists for this phone number. Please sign in instead.",
-        "auth/invalid-credential":
-            "The phone number or password is incorrect.",
-        "auth/invalid-email":
-            "The login identifier was rejected by Firebase. Please check the authentication configuration.",
-        "auth/weak-password":
-            "Please choose a stronger password with at least 6 characters.",
-        "auth/too-many-requests":
-            "Too many attempts. Please wait a while and try again.",
-        "auth/network-request-failed":
-            "Network error. Check your internet connection and try again.",
-        "auth/operation-not-allowed":
-            "Email/Password sign-in is not enabled in Firebase Authentication."
-    };
-
-    return messages[code] ||
-        error?.message ||
-        "Something went wrong. Please try again.";
-}
-
-
-// =========================================================
-// GROUP MEMBERSHIP COUNTS — REAL TIME
-// =========================================================
-
-function startGroupCountListener() {
-    if (unsubscribeGroupCounts) {
-        unsubscribeGroupCounts();
-        unsubscribeGroupCounts = null;
-    }
-
-    const membershipsRef = collection(db, "groupMemberships");
-
-    unsubscribeGroupCounts = onSnapshot(
-        membershipsRef,
-        snapshot => {
-            const counts = {};
-
-            Object.keys(GROUPS).forEach(groupId => {
-                counts[groupId] = 0;
-            });
-
-            snapshot.forEach(documentSnapshot => {
-                const data = documentSnapshot.data();
-
-                if (
-                    data.groupId &&
-                    Object.prototype.hasOwnProperty.call(
-                        counts,
-                        data.groupId
-                    )
-                ) {
-                    counts[data.groupId]++;
-                }
-            });
-
-            Object.entries(GROUPS).forEach(([groupId, group]) => {
-                const element = document.getElementById(
-                    group.countElement
-                );
-
-                if (element) {
-                    element.textContent =
-                        `Members: ${counts[groupId]}`;
-                }
-            });
-        },
-        error => {
-            console.error("Group count listener error:", error);
-
-            Object.values(GROUPS).forEach(group => {
-                const element = document.getElementById(
-                    group.countElement
-                );
-
-                if (element) {
-                    element.textContent = "Counts unavailable";
-                }
-            });
-        }
-    );
-}
-
-
-// =========================================================
-// REGISTER A MEMBER
+// MEMBERSHIP REGISTRATION
 // =========================================================
 
 async function registerMember(event) {
     event.preventDefault();
 
-    if (!membershipForm) return;
-
-    const fullName = memberFullName.value.trim();
-    const rawPhone = memberPhone.value.trim();
-    const password = memberPassword.value;
-    const groupId = memberGroup.value;
-
-    if (fullName.length < 2 || fullName.length > 80) {
-        setMembershipMessage(
-            "Enter a name between 2 and 80 characters.",
-            true
+    if (!fullNameInput || !phoneInput || !passwordInput || !groupInput) {
+        showMessage(
+            membershipMessage,
+            "The registration form is missing a required field.",
+            "error"
         );
         return;
     }
 
-    if (!Object.prototype.hasOwnProperty.call(GROUPS, groupId)) {
-        setMembershipMessage(
-            "Please select a valid Bible study group.",
-            true
+    const fullName = fullNameInput.value.trim();
+    const phoneNumber = normalizePhoneNumber(phoneInput.value);
+    const password = passwordInput.value;
+    const groupId = groupInput.value;
+
+    if (fullName.length < 2) {
+        showMessage(membershipMessage, "Enter your full name.", "error");
+        return;
+    }
+
+    if (!phoneNumber) {
+        showMessage(
+            membershipMessage,
+            "Enter a valid Kenyan phone number, e.g. 0712345678.",
+            "error"
         );
         return;
     }
 
     if (password.length < 6) {
-        setMembershipMessage(
+        showMessage(
+            membershipMessage,
             "Your password must contain at least 6 characters.",
-            true
+            "error"
         );
         return;
     }
 
-    let phoneDigits;
-
-    try {
-        phoneDigits = normalizePhoneNumber(rawPhone);
-    } catch (error) {
-        setMembershipMessage(error.message, true);
+    if (!GROUPS[groupId]) {
+        showMessage(
+            membershipMessage,
+            "Please select a valid Bible study group.",
+            "error"
+        );
         return;
     }
 
-    membershipSubmit.disabled = true;
-    setMembershipMessage("Creating your membership...");
-
-    let createdUser = null;
+    setButtonLoading(membershipSubmit, true, "Creating account...");
+    showMessage(membershipMessage, "Creating your account...");
 
     try {
-        // Firebase securely manages the password.
         const credential = await createUserWithEmailAndPassword(
             auth,
-            phoneToEmail(phoneDigits),
+            phoneToEmail(phoneNumber),
             password
         );
 
-        createdUser = credential.user;
+        const user = credential.user;
 
-        // Store private member details separately from public counts.
-        // The public membership record contains no name or phone number.
         const batch = writeBatch(db);
 
-        const privateMemberRef = doc(
-            db,
-            "members",
-            createdUser.uid
-        );
-
-        const publicMembershipRef = doc(
-            db,
-            "groupMemberships",
-            createdUser.uid
-        );
-
-        batch.set(privateMemberRef, {
-            fullName: fullName,
-            phoneNumber: phoneDigits,
-            groupId: groupId,
+        batch.set(doc(db, "members", user.uid), {
+            fullName,
+            phoneNumber,
+            groupId,
             createdAt: serverTimestamp()
         });
 
-        batch.set(publicMembershipRef, {
-            groupId: groupId,
+        batch.set(doc(db, "groupMemberships", user.uid), {
+            groupId,
             joinedAt: serverTimestamp()
         });
 
         await batch.commit();
 
-        membershipForm.reset();
+        passwordInput.value = "";
 
-        setMembershipMessage(
-            `Welcome, ${fullName}! You have joined ${GROUPS[groupId].name}.`
+        showMessage(
+            membershipMessage,
+            "Registration successful! Welcome to St. Monica LK3C.",
+            "success"
         );
 
-        await showSignedInMember(createdUser);
+        await showSignedInMember(user);
 
     } catch (error) {
-        console.error("Membership registration failed:", error);
+        console.error("Registration error:", error);
 
-        if (createdUser && error.code !== "auth/email-already-in-use") {
-            setMembershipMessage(
-                "Your Firebase account may have been created, but the membership records could not be saved. Do not register repeatedly. Check your Firestore rules and try signing in again after the issue is fixed.",
-                true
-            );
-        } else {
-            setMembershipMessage(
-                friendlyAuthError(error),
-                true
-            );
-        }
+        showMessage(
+            membershipMessage,
+            translateAuthError(error),
+            "error"
+        );
     } finally {
-        membershipSubmit.disabled = false;
+        setButtonLoading(membershipSubmit, false);
     }
 }
 
 if (membershipForm) {
     membershipForm.addEventListener("submit", registerMember);
 }
-
 
 // =========================================================
 // MEMBER LOGIN
@@ -581,60 +350,80 @@ if (membershipForm) {
 async function loginMember(event) {
     event.preventDefault();
 
-    const rawPhone = loginMemberPhone.value.trim();
-    const password = loginMemberPassword.value;
+    const phoneNumber = normalizePhoneNumber(
+        loginPhoneInput ? loginPhoneInput.value : ""
+    );
 
-    let phoneDigits;
+    const password = loginPasswordInput
+        ? loginPasswordInput.value
+        : "";
 
-    try {
-        phoneDigits = normalizePhoneNumber(rawPhone);
-    } catch (error) {
-        setLoginMessage(error.message, true);
+    if (!phoneNumber) {
+        showMessage(
+            loginMessage,
+            "Enter the Kenyan phone number you used to register.",
+            "error"
+        );
         return;
     }
 
-    membershipLoginSubmit.disabled = true;
-    setLoginMessage("Signing in...");
+    if (!password) {
+        showMessage(loginMessage, "Enter your password.", "error");
+        return;
+    }
+
+    setButtonLoading(loginSubmit, true, "Logging in...");
+    showMessage(loginMessage, "Checking your account...");
 
     try {
         const credential = await signInWithEmailAndPassword(
             auth,
-            phoneToEmail(phoneDigits),
+            phoneToEmail(phoneNumber),
             password
         );
 
-        const memberSnapshot = await getDoc(
+        const profile = await getDoc(
             doc(db, "members", credential.user.uid)
         );
 
-        if (!memberSnapshot.exists()) {
-            setLoginMessage(
-                "Your account exists, but its membership profile was not found. Please contact the Bible Study administrator.",
-                true
+        if (!profile.exists()) {
+            await signOut(auth);
+
+            showMessage(
+                loginMessage,
+                "Your member profile could not be found. Please contact the Bible study leadership.",
+                "error"
             );
+
             return;
         }
 
-        loginMemberPassword.value = "";
-        setLoginMessage("");
+        if (loginPasswordInput) {
+            loginPasswordInput.value = "";
+        }
 
+        showMessage(loginMessage, "Login successful!", "success");
         await showSignedInMember(credential.user);
 
     } catch (error) {
-        console.error("Member login failed:", error);
-        setLoginMessage(friendlyAuthError(error), true);
+        console.error("Login error:", error);
+
+        showMessage(
+            loginMessage,
+            translateAuthError(error),
+            "error"
+        );
     } finally {
-        membershipLoginSubmit.disabled = false;
+        setButtonLoading(loginSubmit, false);
     }
 }
 
-if (membershipLoginForm) {
-    membershipLoginForm.addEventListener("submit", loginMember);
+if (loginForm) {
+    loginForm.addEventListener("submit", loginMember);
 }
 
-
 // =========================================================
-// SHOW SIGNED-IN MEMBER STATUS
+// AUTHENTICATED MEMBER SCREEN
 // =========================================================
 
 async function showSignedInMember(user) {
@@ -657,16 +446,13 @@ async function showSignedInMember(user) {
         membershipStatus.replaceChildren();
 
         const greeting = document.createElement("h3");
-        greeting.textContent = `Welcome, ${member.fullName || "Member"}!`;
+        greeting.textContent =
+            `Welcome, ${member.fullName || "Member"}!`;
 
         const groupText = document.createElement("p");
         groupText.textContent = group
             ? `Your Bible study group: ${group.name}`
             : "Your membership is active.";
-
-        const chatText = document.createElement("p");
-        chatText.textContent =
-            "You can read the same Bible study materials and join the public chat.";
 
         const logoutButton = document.createElement("button");
         logoutButton.type = "button";
@@ -676,548 +462,384 @@ async function showSignedInMember(user) {
         logoutButton.addEventListener("click", async () => {
             try {
                 await signOut(auth);
-
-                membershipStatus.hidden = true;
-
-                if (membershipForms) {
-                    membershipForms.hidden = false;
-                }
-
-                setMembershipMessage("You have signed out.");
             } catch (error) {
-                console.error("Sign out failed:", error);
+                console.error("Sign out error:", error);
                 alert("Unable to sign out. Please try again.");
             }
         });
 
-        membershipStatus.append(
-            greeting,
-            groupText,
-            chatText,
-            logoutButton
-        );
-
+        membershipStatus.append(greeting, groupText, logoutButton);
         membershipStatus.hidden = false;
 
-        // Keep forms available for the moment, so the member can
-        // sign out or another person can use the same device.
+        if (membershipForms) {
+            membershipForms.hidden = true;
+        }
+
+        document.body.classList.remove("auth-locked");
+        showSection("home");
+
     } catch (error) {
         console.error("Could not load member profile:", error);
     }
 }
 
-
 // =========================================================
-// AUTH STATE
+// AUTH STATE — LOGIN-FIRST WEBSITE
 // =========================================================
 
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, async user => {
     currentUser = user;
 
-    console.log(
-        "Firebase auth state:",
-        user ? (user.isAnonymous ? "Anonymous" : "Member") : "Signed out"
-    );
-
     if (user && !user.isAnonymous) {
-        showSignedInMember(user);
+        try {
+            const profile = await getDoc(
+                doc(db, "members", user.uid)
+            );
+
+            if (profile.exists()) {
+                await showSignedInMember(user);
+                return;
+            }
+
+            // An authenticated account without a member profile
+            // must not unlock the website.
+            await signOut(auth);
+
+        } catch (error) {
+            console.error("Could not verify member:", error);
+        }
     }
+
+    document.body.classList.add("auth-locked");
+
+    if (membershipForms) {
+        membershipForms.hidden = false;
+    }
+
+    if (membershipStatus) {
+        membershipStatus.hidden = true;
+    }
+
+    showSection("membership");
 });
 
-
 // =========================================================
-// CHAT NAME HELPERS
+// LIVE BIBLE STUDY GROUP COUNTS
 // =========================================================
 
-function getSavedName() {
-    return localStorage.getItem(NAME_STORAGE_KEY) || "";
-}
-
-function saveName(name) {
-    localStorage.setItem(NAME_STORAGE_KEY, name);
-}
-
-function clearSavedName() {
-    localStorage.removeItem(NAME_STORAGE_KEY);
-}
-
-function validateName(name) {
-    const cleanedName = name.trim();
-
-    if (cleanedName.length < 2) {
-        return "Please enter a name with at least 2 characters.";
+function startGroupCountListener() {
+    if (unsubscribeGroupCounts) {
+        unsubscribeGroupCounts();
     }
 
-    if (cleanedName.length > 25) {
-        return "Your name must be 25 characters or less.";
-    }
+    const membershipsRef = collection(db, "groupMemberships");
 
-    return "";
-}
-
-
-// =========================================================
-// PREPARE CHAT
-// =========================================================
-
-function prepareChat() {
-    const savedName = getSavedName();
-
-    if (savedName && anonymousNameInput) {
-        anonymousNameInput.value = savedName;
-    }
-}
-
-
-// =========================================================
-// FIREBASE AUTH FOR PUBLIC CHAT
-// =========================================================
-
-async function ensureChatAuth() {
-    if (auth.currentUser) {
-        currentUser = auth.currentUser;
-        return currentUser;
-    }
-
-    const result = await signInAnonymously(auth);
-    currentUser = result.user;
-
-    return currentUser;
-}
-
-
-// =========================================================
-// ENTER PUBLIC CHAT
-// =========================================================
-
-async function enterPublicChat() {
-    const name = anonymousNameInput.value.trim();
-    const validationError = validateName(name);
-
-    if (validationError) {
-        chatLoginMessage.textContent = validationError;
-        return;
-    }
-
-    chatLoginMessage.textContent = "Joining chat...";
-    enterChatBtn.disabled = true;
-
-    try {
-        const user = await ensureChatAuth();
-
-        currentUser = user;
-        currentAnonymousName = name;
-
-        saveName(name);
-
-        if (currentUserName) {
-            currentUserName.textContent = name;
-        }
-
-        chatLogin.style.display = "none";
-        chatRoom.style.display = "block";
-        chatLoginMessage.textContent = "";
-
-        startMessageListener();
-
-        setTimeout(() => {
-            if (messageInput) messageInput.focus();
-        }, 150);
-
-    } catch (error) {
-        console.error("Could not enter chat:", error);
-
-        chatLoginMessage.textContent =
-            "Unable to enter the chat. Please try again.";
-    } finally {
-        enterChatBtn.disabled = false;
-    }
-}
-
-if (enterChatBtn) {
-    enterChatBtn.addEventListener("click", enterPublicChat);
-}
-
-if (anonymousNameInput) {
-    anonymousNameInput.addEventListener("keydown", event => {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            enterPublicChat();
-        }
-    });
-}
-
-
-// =========================================================
-// PUBLIC CHAT — REAL-TIME LISTENER
-// =========================================================
-
-function startMessageListener() {
-    if (unsubscribeMessages) {
-        unsubscribeMessages();
-        unsubscribeMessages = null;
-    }
-
-    const messagesRef = collection(db, "publicChatMessages");
-    const messagesQuery = query(
-        messagesRef,
-        orderBy("timestamp", "asc")
-    );
-
-    unsubscribeMessages = onSnapshot(
-        messagesQuery,
+    unsubscribeGroupCounts = onSnapshot(
+        membershipsRef,
         snapshot => {
-            chatMessages.innerHTML = "";
+            const counts = {};
 
-            snapshot.forEach(docSnapshot => {
-                const message = {
-                    id: docSnapshot.id,
-                    ...docSnapshot.data()
-                };
-
-                renderMessage(message);
+            Object.keys(GROUPS).forEach(groupId => {
+                counts[groupId] = 0;
             });
 
-            scrollChatToBottom();
+            snapshot.forEach(memberDoc => {
+                const data = memberDoc.data();
+
+                if (Object.prototype.hasOwnProperty.call(
+                    counts,
+                    data.groupId
+                )) {
+                    counts[data.groupId]++;
+                }
+            });
+
+            Object.entries(GROUPS).forEach(([groupId, group]) => {
+                const countElement = document.getElementById(group.countId);
+
+                if (countElement) {
+                    countElement.textContent = counts[groupId];
+                }
+            });
         },
         error => {
-            console.error("Chat listener error:", error);
-
-            chatMessages.textContent =
-                "Unable to load messages right now.";
+            console.error("Group counts error:", error);
         }
     );
 }
 
+startGroupCountListener();
 
 // =========================================================
-// FORMAT TIME
+// PUBLIC CHAT
 // =========================================================
 
-function formatMessageTime(timestamp) {
-    if (!timestamp) return "";
+const chatLogin = document.getElementById("chat-login");
+const anonymousNameInput = document.getElementById("anonymous-name");
+const enterChatButton = document.getElementById("enter-chat-btn");
+const chatRoom = document.getElementById("chat-room");
+const chatMessages = document.getElementById("chat-messages");
+const chatForm = document.getElementById("chat-form");
+const chatInput = document.getElementById("chat-input");
+const chatNameDisplay = document.getElementById("chat-name-display");
+const chatMessageInput = document.getElementById("chat-message");
+const chatReplyPreview = document.getElementById("chat-reply-preview");
+const cancelReplyButton = document.getElementById("cancel-reply");
+const changeNameButton = document.getElementById("change-chat-name");
 
-    const date = new Date(timestamp);
-
-    if (Number.isNaN(date.getTime())) return "";
-
-    return date.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit"
-    });
+function getChatName() {
+    return localStorage.getItem("stMonicaChatName") || "";
 }
 
-
-// =========================================================
-// RENDER MESSAGE
-// =========================================================
-
-function renderMessage(message) {
-    if (!chatMessages) return;
-
-    const isMine =
-        currentUser && message.uid === currentUser.uid;
-
-    const wrapper = document.createElement("div");
-    wrapper.className = `message-wrapper ${isMine ? "mine" : "other"}`;
-
-    const bubble = document.createElement("div");
-    bubble.className = "message-bubble";
-
-    const userElement = document.createElement("div");
-    userElement.className = "message-user";
-    userElement.textContent = message.user || "Anonymous";
-
-    bubble.appendChild(userElement);
-
-    if (message.replyTo) {
-        const replyBox = document.createElement("div");
-
-        replyBox.style.marginBottom = "8px";
-        replyBox.style.padding = "7px 9px";
-        replyBox.style.borderLeft = "3px solid currentColor";
-        replyBox.style.borderRadius = "6px";
-        replyBox.style.opacity = "0.8";
-        replyBox.style.fontSize = "11px";
-
-        const replyUser = document.createElement("strong");
-        replyUser.textContent = message.replyTo.user || "Anonymous";
-
-        const replyText = document.createElement("div");
-        replyText.textContent = message.replyTo.text || "";
-
-        replyBox.append(replyUser, replyText);
-        bubble.appendChild(replyBox);
-    }
-
-    const textElement = document.createElement("div");
-    textElement.className = "message-text";
-    textElement.textContent = message.text || "";
-
-    bubble.appendChild(textElement);
-
-    const timeElement = document.createElement("span");
-    timeElement.className = "message-time";
-    timeElement.textContent = formatMessageTime(message.timestamp);
-
-    bubble.appendChild(timeElement);
-
-    const replyButton = document.createElement("button");
-    replyButton.type = "button";
-    replyButton.className = "reply-message-button";
-    replyButton.textContent = "Reply";
-
-    replyButton.addEventListener("click", () => {
-        selectMessageForReply(message);
-    });
-
-    bubble.appendChild(replyButton);
-    wrapper.appendChild(bubble);
-    chatMessages.appendChild(wrapper);
+function saveChatName(name) {
+    localStorage.setItem("stMonicaChatName", name);
 }
 
-
-// =========================================================
-// SELECT MESSAGE FOR REPLY
-// =========================================================
-
-function selectMessageForReply(message) {
-    selectedReply = {
-        id: message.id,
-        user: message.user || "Anonymous",
-        text: message.text || ""
-    };
-
-    replyPreviewUser.textContent =
-        `Replying to ${selectedReply.user}`;
-
-    replyPreviewText.textContent = selectedReply.text;
-    replyPreview.style.display = "flex";
-    messageInput.focus();
-}
-
-
-// =========================================================
-// CANCEL REPLY
-// =========================================================
-
-function cancelReply() {
-    selectedReply = null;
-
-    if (replyPreview) replyPreview.style.display = "none";
-    if (replyPreviewUser) replyPreviewUser.textContent = "";
-    if (replyPreviewText) replyPreviewText.textContent = "";
-}
-
-if (cancelReplyBtn) {
-    cancelReplyBtn.addEventListener("click", cancelReply);
-}
-
-
-// =========================================================
-// SEND MESSAGE
-// =========================================================
-
-async function sendMessage(event) {
-    event.preventDefault();
-
-    const text = messageInput.value.trim();
-
-    if (!text) return;
-
-    if (text.length > 500) {
-        alert("Your message is too long.");
+function prepareChat() {
+    if (!currentUser || currentUser.isAnonymous) {
+        if (chatLogin) chatLogin.hidden = false;
+        if (chatRoom) chatRoom.hidden = true;
         return;
     }
 
-    try {
-        const user = await ensureChatAuth();
+    if (chatLogin) chatLogin.hidden = true;
+    if (chatRoom) chatRoom.hidden = false;
 
-        if (!currentAnonymousName) {
-            currentAnonymousName = getSavedName();
-        }
+    const savedName = getChatName();
 
-        if (!currentAnonymousName) {
-            showSection("public-chat");
+    if (chatNameDisplay) {
+        chatNameDisplay.textContent = savedName || "St. Monica Member";
+    }
+
+    listenForChatMessages();
+}
+
+if (enterChatButton) {
+    enterChatButton.addEventListener("click", () => {
+        if (!currentUser || currentUser.isAnonymous) {
+            alert("Please log in to your St. Monica account first.");
+            showSection("membership");
             return;
         }
 
-        sendMessageBtn.disabled = true;
+        const name = anonymousNameInput
+            ? anonymousNameInput.value.trim()
+            : "";
 
-        const messageData = {
-            uid: user.uid,
-            user: currentAnonymousName,
-            text: text,
-            timestamp: Date.now()
-        };
-
-        if (selectedReply) {
-            messageData.replyTo = {
-                id: selectedReply.id,
-                user: selectedReply.user,
-                text: selectedReply.text
-            };
+        if (name.length < 2 || name.length > 25) {
+            alert("Enter a chat name between 2 and 25 characters.");
+            return;
         }
 
-        await addDoc(
-            collection(db, "publicChatMessages"),
-            messageData
-        );
-
-        messageInput.value = "";
-        cancelReply();
-        messageInput.focus();
-
-    } catch (error) {
-        console.error("Could not send message:", error);
-
-        alert("Your message could not be sent. Please try again.");
-    } finally {
-        sendMessageBtn.disabled = false;
-    }
+        saveChatName(name);
+        prepareChat();
+    });
 }
 
-if (chatForm) {
-    chatForm.addEventListener("submit", sendMessage);
-}
-
-
-// =========================================================
-// CHANGE CHAT NAME
-// =========================================================
-
-function changeName() {
-    const newName = prompt(
-        "Enter the name you want to use in the chat:",
-        currentAnonymousName || getSavedName()
-    );
-
-    if (newName === null) return;
-
-    const cleanedName = newName.trim();
-    const validationError = validateName(cleanedName);
-
-    if (validationError) {
-        alert(validationError);
+function listenForChatMessages() {
+    if (!chatMessages || !currentUser || currentUser.isAnonymous) {
         return;
     }
 
-    currentAnonymousName = cleanedName;
-    saveName(cleanedName);
-
-    if (currentUserName) {
-        currentUserName.textContent = cleanedName;
+    if (unsubscribeChat) {
+        unsubscribeChat();
+        unsubscribeChat = null;
     }
 
-    if (anonymousNameInput) {
-        anonymousNameInput.value = cleanedName;
-    }
-}
+    const messagesQuery = query(
+        collection(db, "publicChatMessages"),
+        orderBy("timestamp", "asc"),
+        limit(100)
+    );
 
-if (changeNameBtn) {
-    changeNameBtn.addEventListener("click", changeName);
-}
+    unsubscribeChat = onSnapshot(
+        messagesQuery,
+        snapshot => {
+            chatMessages.replaceChildren();
 
-if (changeNameBottomBtn) {
-    changeNameBottomBtn.addEventListener("click", changeName);
-}
+            snapshot.forEach(messageDoc => {
+                renderChatMessage(messageDoc.id, messageDoc.data());
+            });
 
-
-// =========================================================
-// EMOJI BUTTON
-// =========================================================
-
-if (emojiBtn) {
-    emojiBtn.addEventListener("click", () => {
-        const emojis = [
-            "😊", "🙏", "❤️", "😂", "🙌", "✝️",
-            "🔥", "😅", "👏", "💯", "🕊️", "😢"
-        ];
-
-        const randomEmoji =
-            emojis[Math.floor(Math.random() * emojis.length)];
-
-        messageInput.value += randomEmoji;
-        messageInput.focus();
-    });
-}
-
-
-// =========================================================
-// MOBILE SWIPE-TO-REPLY
-// =========================================================
-
-let touchStartX = 0;
-let touchStartY = 0;
-
-if (chatMessages) {
-    chatMessages.addEventListener("touchstart", event => {
-        const touch = event.touches[0];
-
-        touchStartX = touch.clientX;
-        touchStartY = touch.clientY;
-    }, { passive: true });
-
-    chatMessages.addEventListener("touchend", event => {
-        const touch = event.changedTouches[0];
-
-        const distanceX = touch.clientX - touchStartX;
-        const distanceY = touch.clientY - touchStartY;
-
-        if (
-            Math.abs(distanceX) > 70 &&
-            Math.abs(distanceX) > Math.abs(distanceY)
-        ) {
-            const bubble = event.target.closest(".message-bubble");
-            if (!bubble) return;
-
-            const replyButton =
-                bubble.querySelector(".reply-message-button");
-
-            if (replyButton) {
-                replyButton.click();
-            }
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        },
+        error => {
+            console.error("Chat listener error:", error);
+            showMessage(
+                document.getElementById("chat-status"),
+                "Unable to load chat messages. Please try again later.",
+                "error"
+            );
         }
-    }, { passive: true });
+    );
 }
 
-
-// =========================================================
-// SCROLL CHAT
-// =========================================================
-
-function scrollChatToBottom() {
+function renderChatMessage(messageId, message) {
     if (!chatMessages) return;
 
-    setTimeout(() => {
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 50);
+    const wrapper = document.createElement("div");
+    wrapper.className = "chat-message";
+    wrapper.dataset.messageId = messageId;
+
+    const name = document.createElement("strong");
+    name.className = "chat-message-user";
+    name.textContent = message.user || "Member";
+
+    const text = document.createElement("p");
+    text.className = "chat-message-text";
+    text.textContent = message.text || "";
+
+    wrapper.append(name, text);
+
+    if (message.replyText) {
+        const quoted = document.createElement("blockquote");
+        quoted.className = "chat-message-reply";
+        quoted.textContent =
+            `${message.replyUser || "Member"}: ${message.replyText}`;
+        wrapper.insertBefore(quoted, text);
+    }
+
+    const replyButton = document.createElement("button");
+    replyButton.type = "button";
+    replyButton.className = "chat-reply-button";
+    replyButton.textContent = "Reply";
+
+    replyButton.addEventListener("click", () => {
+        replyToMessage = {
+            id: messageId,
+            user: message.user || "Member",
+            text: message.text || ""
+        };
+
+        if (chatReplyPreview) {
+            chatReplyPreview.hidden = false;
+            chatReplyPreview.textContent =
+                `Replying to ${replyToMessage.user}: ${replyToMessage.text}`;
+        }
+
+        if (chatMessageInput) {
+            chatMessageInput.focus();
+        }
+    });
+
+    wrapper.append(replyButton);
+    chatMessages.appendChild(wrapper);
 }
 
+if (cancelReplyButton) {
+    cancelReplyButton.addEventListener("click", () => {
+        replyToMessage = null;
 
-// =========================================================
-// ENTER KEY SENDS CHAT MESSAGE
-// =========================================================
-
-if (messageInput) {
-    messageInput.addEventListener("keydown", event => {
-        if (event.key === "Enter" && !event.shiftKey) {
-            event.preventDefault();
-
-            if (chatForm) {
-                chatForm.requestSubmit();
-            }
+        if (chatReplyPreview) {
+            chatReplyPreview.hidden = true;
+            chatReplyPreview.textContent = "";
         }
     });
 }
 
+if (changeNameButton) {
+    changeNameButton.addEventListener("click", () => {
+        const currentName = getChatName();
+        const newName = prompt(
+            "Choose your chat display name:",
+            currentName
+        );
+
+        if (newName === null) return;
+
+        const trimmedName = newName.trim();
+
+        if (trimmedName.length < 2 || trimmedName.length > 25) {
+            alert("Your name must be between 2 and 25 characters.");
+            return;
+        }
+
+        saveChatName(trimmedName);
+
+        if (chatNameDisplay) {
+            chatNameDisplay.textContent = trimmedName;
+        }
+    });
+}
+
+if (chatForm) {
+    chatForm.addEventListener("submit", async event => {
+        event.preventDefault();
+
+        if (!currentUser || currentUser.isAnonymous) {
+            alert("Please log in before sending a message.");
+            showSection("membership");
+            return;
+        }
+
+        const messageInput = chatMessageInput || chatInput;
+
+        if (!messageInput) {
+            console.error("Chat message input was not found.");
+            return;
+        }
+
+        const text = messageInput.value.trim();
+
+        if (!text) return;
+
+        if (text.length > 500) {
+            alert("Messages cannot exceed 500 characters.");
+            return;
+        }
+
+        const user = getChatName() || "St. Monica Member";
+
+        const sendButton = chatForm.querySelector(
+            'button[type="submit"], input[type="submit"]'
+        );
+
+        setButtonLoading(sendButton, true, "Sending...");
+
+        try {
+            const messageData = {
+                user,
+                text,
+                timestamp: Date.now()
+            };
+
+            if (replyToMessage) {
+                messageData.replyTo = replyToMessage.id;
+                messageData.replyUser = replyToMessage.user;
+                messageData.replyText = replyToMessage.text;
+            }
+
+            await addDoc(
+                collection(db, "publicChatMessages"),
+                messageData
+            );
+
+            messageInput.value = "";
+            replyToMessage = null;
+
+            if (chatReplyPreview) {
+                chatReplyPreview.hidden = true;
+                chatReplyPreview.textContent = "";
+            }
+
+        } catch (error) {
+            console.error("Could not send chat message:", error);
+            alert(
+                "Your message could not be sent. Please check your connection and try again."
+            );
+        } finally {
+            setButtonLoading(sendButton, false);
+        }
+    });
+}
 
 // =========================================================
-// INITIALIZE
+// INITIAL PAGE
 // =========================================================
 
-prepareChat();
-loadInitialSection();
-startGroupCountListener();
-
-console.log("St. Monica LK3C Bible Study initialized.");
+document.addEventListener("DOMContentLoaded", () => {
+    if (!currentUser || currentUser.isAnonymous) {
+        document.body.classList.add("auth-locked");
+        showSection("membership");
+    }
+});
