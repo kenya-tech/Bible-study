@@ -42,7 +42,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // =========================================================
-// GROUPS
+// BIBLE STUDY GROUPS
 // =========================================================
 
 const GROUPS = {
@@ -69,8 +69,12 @@ const GROUPS = {
 };
 
 // =========================================================
-// DOM ELEMENTS
+// HTML ELEMENTS
 // =========================================================
+
+const membershipChoice = document.getElementById("membership-choice");
+const showRegisterButton = document.getElementById("show-register-btn");
+const showLoginButton = document.getElementById("show-login-btn");
 
 const membershipForm = document.getElementById("membership-form");
 const membershipForms = document.getElementById("membership-forms");
@@ -99,6 +103,7 @@ const chatRoom = document.getElementById("chat-room");
 const chatMessages = document.getElementById("chat-messages");
 const chatForm = document.getElementById("chat-form");
 const messageInput = document.getElementById("message-input");
+const sendMessageButton = document.getElementById("send-message-btn");
 const currentUserName = document.getElementById("current-user-name");
 
 const replyPreview = document.getElementById("reply-preview");
@@ -122,7 +127,6 @@ let unsubscribeGroupCounts = null;
 
 let replyToMessage = null;
 let registrationInProgress = false;
-let authCheckInProgress = false;
 let profileLoadVersion = 0;
 
 // =========================================================
@@ -175,11 +179,11 @@ function phoneToEmail(phoneDigits) {
 function translateAuthError(error) {
     const messages = {
         "auth/email-already-in-use":
-            "An account already exists with this phone number. Please sign in.",
+            "An account already exists with this phone number. Please log in.",
         "auth/invalid-email":
-            "The phone number or account details are invalid.",
+            "The account details are invalid.",
         "auth/weak-password":
-            "Use a password containing at least 6 characters.",
+            "Your password must contain at least 6 characters.",
         "auth/invalid-credential":
             "Incorrect phone number or password.",
         "auth/user-not-found":
@@ -195,31 +199,77 @@ function translateAuthError(error) {
     };
 
     return messages[error.code] ||
-        error.message ||
-        "Something went wrong. Please try again.";
+        "Something went wrong. Please check your connection and try again.";
 }
 
-function showMembershipScreen() {
-    document.body.classList.add("auth-locked");
-
-    if (membershipForms) membershipForms.hidden = false;
-    if (membershipStatus) membershipStatus.hidden = true;
-
-    showSection("membership");
+function hideElement(element) {
+    if (element) element.hidden = true;
 }
+
+function showElement(element) {
+    if (element) element.hidden = false;
+}
+
+// =========================================================
+// MEMBERSHIP WELCOME SCREEN
+// =========================================================
+
+function showMembershipChoice() {
+    showElement(membershipChoice);
+    hideElement(membershipForms);
+    hideElement(membershipStatus);
+
+    if (membershipForm) membershipForm.hidden = true;
+    if (loginForm) loginForm.hidden = true;
+
+    showMessage(membershipMessage, "");
+    showMessage(loginMessage, "");
+}
+
+function showRegistrationForm() {
+    hideElement(membershipChoice);
+    showElement(membershipForms);
+
+    if (membershipForm) membershipForm.hidden = false;
+    if (loginForm) loginForm.hidden = true;
+
+    hideElement(membershipStatus);
+    showMessage(membershipMessage, "");
+}
+
+function showLoginForm() {
+    hideElement(membershipChoice);
+    showElement(membershipForms);
+
+    if (membershipForm) membershipForm.hidden = true;
+    if (loginForm) loginForm.hidden = false;
+
+    hideElement(membershipStatus);
+    showMessage(loginMessage, "");
+}
+
+showRegisterButton?.addEventListener("click", showRegistrationForm);
+showLoginButton?.addEventListener("click", showLoginForm);
+
+document.querySelectorAll(".back-to-choice").forEach(button => {
+    button.addEventListener("click", showMembershipChoice);
+});
 
 // =========================================================
 // PAGE NAVIGATION
 // =========================================================
 
 function showSection(sectionId) {
-    const requestedSection = document.getElementById(sectionId);
-
-    if (!requestedSection) {
+    if (!document.getElementById(sectionId)) {
         sectionId = "home";
     }
 
-    if (!currentUser || currentUser.isAnonymous || !currentMember) {
+    const authenticated =
+        currentUser &&
+        !currentUser.isAnonymous &&
+        currentMember;
+
+    if (!authenticated) {
         sectionId = "membership";
     }
 
@@ -227,13 +277,13 @@ function showSection(sectionId) {
         section.classList.remove("active-section");
     });
 
-    const activeSection = document.getElementById(sectionId);
+    const section = document.getElementById(sectionId);
 
-    if (activeSection) {
-        activeSection.classList.add("active-section");
+    if (section) {
+        section.classList.add("active-section");
     }
 
-    if (currentUser && !currentUser.isAnonymous && currentMember) {
+    if (authenticated) {
         document.body.classList.remove("auth-locked");
     } else {
         document.body.classList.add("auth-locked");
@@ -247,10 +297,11 @@ function showSection(sectionId) {
         prepareChat();
     }
 }
+
+// Make showSection available to HTML onclick attributes.
 window.showSection = showSection;
 
-// The HTML has inline onclick handlers.
-// These listeners support navigation links without inline handlers too.
+// Support navigation elements that use data-section.
 document.querySelectorAll("[data-section]").forEach(element => {
     element.addEventListener("click", event => {
         event.preventDefault();
@@ -258,8 +309,21 @@ document.querySelectorAll("[data-section]").forEach(element => {
     });
 });
 
+function showMembershipScreen() {
+    document.body.classList.add("auth-locked");
+
+    showMembershipChoice();
+
+    if (membershipStatus) {
+        membershipStatus.replaceChildren();
+        hideElement(membershipStatus);
+    }
+
+    showSection("membership");
+}
+
 // =========================================================
-// REGISTRATION
+// REGISTER A MEMBER
 // =========================================================
 
 async function registerMember(event) {
@@ -271,7 +335,11 @@ async function registerMember(event) {
     const groupId = groupInput?.value || "";
 
     if (fullName.length < 2 || fullName.length > 80) {
-        showMessage(membershipMessage, "Enter your full name.", "error");
+        showMessage(
+            membershipMessage,
+            "Enter your full name.",
+            "error"
+        );
         return;
     }
 
@@ -303,6 +371,7 @@ async function registerMember(event) {
     }
 
     registrationInProgress = true;
+
     setButtonLoading(membershipSubmit, true, "Creating account...");
     showMessage(membershipMessage, "Creating your account...");
 
@@ -358,8 +427,8 @@ async function registerMember(event) {
             "error"
         );
 
-        // If account creation succeeded but saving the profile failed,
-        // do not leave the new account signed in without a usable profile.
+        // If Auth succeeded but the profile failed to save,
+        // sign out so the incomplete account does not unlock the site.
         if (createdUser && currentUser?.uid === createdUser.uid) {
             try {
                 await signOut(auth);
@@ -376,7 +445,7 @@ async function registerMember(event) {
 membershipForm?.addEventListener("submit", registerMember);
 
 // =========================================================
-// MEMBER LOGIN
+// LOG IN A MEMBER
 // =========================================================
 
 async function loginMember(event) {
@@ -429,13 +498,15 @@ async function loginMember(event) {
 
         if (loginPasswordInput) loginPasswordInput.value = "";
 
-        showMessage(loginMessage, "Login successful!", "success");
-
         await displayMemberScreen(currentUser, currentMember);
     } catch (error) {
         console.error("Login error:", error);
 
-        showMessage(loginMessage, translateAuthError(error), "error");
+        showMessage(
+            loginMessage,
+            translateAuthError(error),
+            "error"
+        );
     } finally {
         setButtonLoading(loginSubmit, false);
     }
@@ -484,10 +555,11 @@ async function displayMemberScreen(user, member) {
         });
 
         membershipStatus.append(heading, groupText, signOutButton);
-        membershipStatus.hidden = false;
+        showElement(membershipStatus);
     }
 
-    if (membershipForms) membershipForms.hidden = true;
+    hideElement(membershipChoice);
+    hideElement(membershipForms);
 
     document.body.classList.remove("auth-locked");
 
@@ -500,11 +572,11 @@ async function displayMemberScreen(user, member) {
 
 onAuthStateChanged(auth, async user => {
     currentUser = user;
+
     const thisCheck = ++profileLoadVersion;
 
     if (!user || user.isAnonymous) {
         currentMember = null;
-        authCheckInProgress = false;
 
         if (unsubscribeChat) {
             unsubscribeChat();
@@ -518,13 +590,9 @@ onAuthStateChanged(auth, async user => {
         return;
     }
 
-    // Registration creates the Auth account before writing its profile.
-    // Let the registration function finish rather than signing out too early.
-    if (registrationInProgress) {
-        return;
-    }
-
-    authCheckInProgress = true;
+    // Registration saves the member profile immediately after
+    // Firebase Authentication creates the account.
+    if (registrationInProgress) return;
 
     try {
         const profileSnapshot = await getDoc(
@@ -540,6 +608,7 @@ onAuthStateChanged(auth, async user => {
         }
 
         currentMember = profileSnapshot.data();
+
         await displayMemberScreen(user, currentMember);
     } catch (error) {
         console.error("Member verification error:", error);
@@ -547,25 +616,24 @@ onAuthStateChanged(auth, async user => {
         if (thisCheck === profileLoadVersion) {
             currentMember = null;
             showMembershipScreen();
+
             showMessage(
                 membershipMessage,
                 "We could not verify your membership. Check your connection and try again.",
                 "error"
             );
         }
-    } finally {
-        if (thisCheck === profileLoadVersion) {
-            authCheckInProgress = false;
-        }
     }
 });
 
 // =========================================================
-// LIVE GROUP COUNTS
+// LIVE GROUP MEMBERSHIP COUNTS
 // =========================================================
 
 function startGroupCountListener() {
-    if (unsubscribeGroupCounts) unsubscribeGroupCounts();
+    if (unsubscribeGroupCounts) {
+        unsubscribeGroupCounts();
+    }
 
     unsubscribeGroupCounts = onSnapshot(
         collection(db, "groupMemberships"),
@@ -601,7 +669,7 @@ function startGroupCountListener() {
 startGroupCountListener();
 
 // =========================================================
-// PUBLIC CHAT — MATCHES THE CURRENT HTML
+// PUBLIC CHAT HELPERS
 // =========================================================
 
 function getChatName() {
@@ -621,7 +689,6 @@ function saveChatName(name) {
 }
 
 function prepareChat() {
-    // This website uses login-first access, so members must sign in first.
     if (!currentUser || currentUser.isAnonymous || !currentMember) {
         if (chatLogin) chatLogin.style.display = "";
         if (chatRoom) chatRoom.style.display = "none";
@@ -633,18 +700,31 @@ function prepareChat() {
     if (!savedName) {
         if (chatLogin) chatLogin.style.display = "";
         if (chatRoom) chatRoom.style.display = "none";
+
+        if (anonymousNameInput && currentMember.fullName) {
+            anonymousNameInput.value = currentMember.fullName;
+        }
+
         return;
     }
 
-    if (anonymousNameInput) anonymousNameInput.value = savedName;
+    if (anonymousNameInput) {
+        anonymousNameInput.value = savedName;
+    }
 
     if (chatLogin) chatLogin.style.display = "none";
     if (chatRoom) chatRoom.style.display = "";
 
-    if (currentUserName) currentUserName.textContent = savedName;
+    if (currentUserName) {
+        currentUserName.textContent = savedName;
+    }
 
     listenForChatMessages();
 }
+
+// =========================================================
+// ENTER PUBLIC CHAT
+// =========================================================
 
 enterChatButton?.addEventListener("click", () => {
     if (!currentUser || currentUser.isAnonymous || !currentMember) {
@@ -653,6 +733,7 @@ enterChatButton?.addEventListener("click", () => {
             "Please sign in to your St. Monica account first.",
             "error"
         );
+
         showSection("membership");
         return;
     }
@@ -670,14 +751,16 @@ enterChatButton?.addEventListener("click", () => {
 
     saveChatName(name);
 
-    if (currentUserName) currentUserName.textContent = name;
+    if (currentUserName) {
+        currentUserName.textContent = name;
+    }
 
     showMessage(chatLoginMessage, "");
     prepareChat();
 });
 
 // =========================================================
-// LOAD CHAT MESSAGES
+// LISTEN FOR CHAT MESSAGES
 // =========================================================
 
 function listenForChatMessages() {
@@ -707,6 +790,7 @@ function listenForChatMessages() {
         },
         error => {
             console.error("Chat listener error:", error);
+
             showMessage(
                 chatLoginMessage,
                 "Unable to load chat messages. Check your Firestore rules and connection.",
@@ -717,7 +801,7 @@ function listenForChatMessages() {
 }
 
 // =========================================================
-// RENDER A CHAT MESSAGE
+// DISPLAY A CHAT MESSAGE
 // =========================================================
 
 function renderChatMessage(messageId, message) {
@@ -783,14 +867,16 @@ function renderChatMessage(messageId, message) {
         };
 
         if (replyPreview) replyPreview.style.display = "flex";
+
         if (replyPreviewUser) {
             replyPreviewUser.textContent = replyToMessage.user;
         }
+
         if (replyPreviewText) {
             replyPreviewText.textContent = replyToMessage.text;
         }
 
-        messageInput?.focus();
+        if (messageInput) messageInput.focus();
     });
 
     wrapper.appendChild(replyButton);
@@ -812,7 +898,7 @@ function clearReply() {
 cancelReplyButton?.addEventListener("click", clearReply);
 
 // =========================================================
-// CHANGE CHAT NAME
+// CHANGE CHAT DISPLAY NAME
 // =========================================================
 
 function changeChatName() {
@@ -820,7 +906,7 @@ function changeChatName() {
 
     const newName = prompt(
         "Choose your chat display name:",
-        currentName
+        currentName || currentMember?.fullName || ""
     );
 
     if (newName === null) return;
@@ -834,8 +920,13 @@ function changeChatName() {
 
     saveChatName(trimmedName);
 
-    if (currentUserName) currentUserName.textContent = trimmedName;
-    if (anonymousNameInput) anonymousNameInput.value = trimmedName;
+    if (currentUserName) {
+        currentUserName.textContent = trimmedName;
+    }
+
+    if (anonymousNameInput) {
+        anonymousNameInput.value = trimmedName;
+    }
 }
 
 changeNameButton?.addEventListener("click", changeChatName);
@@ -846,28 +937,31 @@ changeNameBottomButton?.addEventListener("click", changeChatName);
 // =========================================================
 
 emojiButton?.addEventListener("click", () => {
-    const emojiChoices = [
+    const emojis = [
         "🙏", "❤️", "😊", "😂", "👍",
         "🕊️", "✝️", "🙌", "✨", "💯"
     ];
 
     const choice = prompt(
-        `Choose an emoji by entering its number:\n\n${emojiChoices
-            .map((emoji, index) => `${index + 1}. ${emoji}`)
-            .join("\n")}`
+        "Choose an emoji by entering its number:\n\n" +
+        emojis.map((emoji, index) => `${index + 1}. ${emoji}`).join("\n")
     );
 
     if (choice === null) return;
 
     const index = Number.parseInt(choice, 10) - 1;
 
-    if (index < 0 || index >= emojiChoices.length || !Number.isInteger(index)) {
+    if (
+        !Number.isInteger(index) ||
+        index < 0 ||
+        index >= emojis.length
+    ) {
         alert("Choose a number from 1 to 10.");
         return;
     }
 
     if (messageInput) {
-        messageInput.value += emojiChoices[index];
+        messageInput.value += emojis[index];
         messageInput.focus();
     }
 });
@@ -894,10 +988,12 @@ chatForm?.addEventListener("submit", async event => {
         return;
     }
 
-    const user = getChatName() || currentMember.fullName || "St. Monica Member";
+    const user =
+        getChatName() ||
+        currentMember.fullName ||
+        "St. Monica Member";
 
-    const sendButton = document.getElementById("send-message-btn");
-    setButtonLoading(sendButton, true, "Sending...");
+    setButtonLoading(sendMessageButton, true, "Sending...");
 
     try {
         const messageData = {
@@ -917,7 +1013,10 @@ chatForm?.addEventListener("submit", async event => {
             messageData
         );
 
-        if (messageInput) messageInput.value = "";
+        if (messageInput) {
+            messageInput.value = "";
+        }
+
         clearReply();
     } catch (error) {
         console.error("Could not send chat message:", error);
@@ -926,16 +1025,26 @@ chatForm?.addEventListener("submit", async event => {
             "Your message could not be sent. Check your connection and Firestore rules."
         );
     } finally {
-        setButtonLoading(sendButton, false);
+        setButtonLoading(sendMessageButton, false);
     }
 });
 
 // =========================================================
-// INITIAL PAGE
+// INITIAL PAGE SETUP
 // =========================================================
 
 document.addEventListener("DOMContentLoaded", () => {
     if (!currentUser || currentUser.isAnonymous || !currentMember) {
         document.body.classList.add("auth-locked");
+        showMembershipChoice();
     }
 });
+
+// Also initialize the membership screen if this module loads
+// after the page's DOM is already available.
+if (document.readyState !== "loading") {
+    if (!currentUser || currentUser.isAnonymous || !currentMember) {
+        document.body.classList.add("auth-locked");
+        showMembershipChoice();
+    }
+}
