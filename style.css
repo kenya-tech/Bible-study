@@ -1343,3 +1343,153 @@ body.auth-locked #membership .membership-status[hidden],
 body.auth-locked #membership #membership-forms[hidden] {
     display: none !important;
 }
+
+/* =========================================================
+   FIXES — MEMBERSHIP, FORMS, MESSAGES AND CHAT
+========================================================= */
+
+/* Always respect the HTML hidden attribute */
+[hidden] {
+    display: none !important;
+}
+
+/* Membership welcome screen */
+.membership-choice {
+    width: min(540px, 100%);
+    margin: 0 auto;
+    padding: 34px 28px;
+    border: 1px solid #ebe1ef;
+    border-radius: 24px;
+    background: #ffffff;
+    text-align: center;
+    box-shadow: 0 18px 45px rgba(49, 25, 63, 0.08);
+}
+
+.membership-choice h3 {
+    margin-bottom: 10px;
+    color: #2e1639;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 28px;
+}
+
+.membership-choice p {
+    margin-bottom: 24px;
+    color: #71677a;
+    font-size: 14px;
+}
+
+.membership-choice button {
+    width: 100%;
+    min-height: 50px;
+    margin-top: 10px;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 12px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #4b176f, #714092);
+    font-size: 14px;
+    font-weight: 700;
+    transition: 0.2s ease;
+}
+
+.membership-choice button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(75, 23, 111, 0.18);
+}
+
+.membership-choice button:focus-visible,
+.membership-submit:focus-visible,
+.back-to-choice:focus-visible {
+    outline: 3px solid #b99acb;
+    outline-offset: 3px;
+}
+
+/* Registration and login form container */
+#membership-forms {
+    width: 100%;
+}
+
+#membership-form,
+#membership-login-form {
+    width: 100%;
+}
+
+/* Support both forms without forcing hidden forms to display */
+#membership-form[hidden],
+#membership-login-form[hidden],
+#membership-choice[hidden],
+#membership-forms[hidden],
+#membership-status[hidden] {
+    display: none !important;
+}
+
+/* Back button */
+.back-to-choice {
+    min-height: 42px;
+    margin-top: 12px;
+    padding: 9px 14px;
+    border: 1px solid #ded2e3;
+    border-radius: 10px;
+    color: #62377b;
+    background: #faf7fb;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.back-to-choice:hover {
+    background: #f1e7f5;
+}
+
+/* Firebase feedback messages use data-type in JavaScript */
+.membership-message[data-type="error"],
+#membership-message[data-type="error"],
+#membership-login-message[data-type="error"],
+#chat-login-message[data-type="error"] {
+    color: #a32d45;
+}
+
+.membership-message[data-type="success"],
+#membership-message[data-type="success"],
+#membership-login-message[data-type="success"] {
+    color: #237448;
+}
+
+#membership-message,
+#membership-login-message,
+#chat-login-message {
+    overflow-wrap: anywhere;
+}
+
+/* Make sure the login-first screen stays centered */
+body.auth-locked main #membership .membership-choice {
+    width: min(540px, calc(100% - 28px));
+    margin: 20px auto;
+}
+
+body.auth-locked main #membership #membership-forms {
+    width: min(540px, calc(100% - 28px));
+    margin: 20px auto;
+}
+
+/* Chat reply preview: hidden until a message is selected */
+#reply-preview[style*="display: none"] {
+    display: none !important;
+}
+
+/* Better button behaviour while requests are running */
+button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+/* Small-screen membership layout */
+@media (max-width: 500px) {
+    .membership-choice {
+        padding: 27px 20px;
+        border-radius: 18px;
+    }
+
+    .membership-choice h3 {
+        font-size: 24px;
+    }
+}
