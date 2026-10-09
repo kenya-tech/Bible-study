@@ -1988,3 +1988,197 @@ button:disabled {
         font-size: 13px;
     }
 }
+
+/* =========================================================
+   ST. MONICA LK3C — SOCIAL MEDIA LINKS
+   WhatsApp and YouTube buttons
+========================================================= */
+
+.social-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 47px;
+    padding: 11px 17px;
+    border: 1px solid transparent;
+    border-radius: 13px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.2;
+    text-decoration: none;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.13);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
+}
+
+.social-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 13px 26px rgba(0, 0, 0, 0.2);
+    filter: brightness(1.04);
+}
+
+.social-link:active {
+    transform: translateY(-1px);
+}
+
+.social-link:focus-visible {
+    outline: 3px solid #c9a45c;
+    outline-offset: 4px;
+}
+
+/* WhatsApp */
+.social-link-whatsapp {
+    color: #ffffff;
+    background: #168b4b;
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.social-link-whatsapp:hover {
+    background: #117b40;
+}
+
+/* YouTube */
+.social-link-youtube {
+    color: #ffffff;
+    background: #d71920;
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.social-link-youtube:hover {
+    background: #b90f18;
+}
+
+/* Icons */
+.social-link-icon {
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 24px;
+    width: 24px;
+    height: 24px;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.social-link-arrow {
+    margin-left: 2px;
+    opacity: 0.8;
+    font-size: 14px;
+}
+
+/* Homepage social buttons */
+.home-social-links {
+    margin-top: 24px;
+}
+
+.home-social-links .social-link {
+    min-height: 49px;
+    padding: 12px 18px;
+}
+
+/* Membership/login page social buttons */
+.membership-social-links {
+    justify-content: center;
+    width: min(100%, 490px);
+    margin: 25px auto 0;
+}
+
+.membership-social-links .social-link {
+    flex: 1 1 190px;
+    min-width: 0;
+    box-shadow: 0 7px 18px rgba(45, 16, 66, 0.12);
+}
+
+/* Footer social buttons */
+.footer-social-links {
+    justify-content: center;
+    margin: 22px auto 0;
+}
+
+.footer-social-links .social-link {
+    min-height: 42px;
+    padding: 10px 14px;
+    font-size: 12px;
+    box-shadow: none;
+}
+
+.footer-social-links .social-link-whatsapp {
+    background: #147d43;
+}
+
+.footer-social-links .social-link-youtube {
+    background: #c9151c;
+}
+
+/* Tablet and mobile screens */
+@media (max-width: 800px) {
+    .social-links {
+        gap: 10px;
+    }
+
+    .social-link {
+        padding: 11px 14px;
+    }
+}
+
+/* Smaller mobile screens */
+@media (max-width: 500px) {
+    .home-social-links {
+        width: 100%;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .home-social-links .social-link {
+        flex: 1 1 100%;
+        width: 100%;
+        min-height: 47px;
+    }
+
+    .membership-social-links {
+        gap: 10px;
+    }
+
+    .membership-social-links .social-link {
+        flex-basis: 100%;
+        width: 100%;
+    }
+
+    .footer-social-links .social-link {
+        flex: 1 1 145px;
+    }
+
+    .social-link {
+        font-size: 12px;
+    }
+
+    .social-link-icon {
+        flex-basis: 22px;
+        width: 22px;
+        height: 22px;
+    }
+}
+
+/* Accessibility: respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .social-link {
+        transition: none;
+    }
+
+    .social-link:hover,
+    .social-link:active {
+        transform: none;
+    }
+}
