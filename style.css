@@ -1804,3 +1804,187 @@ button:disabled {
         min-height: 47px;
     }
 }
+
+/* =========================================================
+   ST. MONICA LK3C — PUBLIC CHAT ALIGNMENT FIX
+   Compatible with the updated script.js
+========================================================= */
+
+/* Chat message list */
+#chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 22px 16px;
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(117, 65, 151, 0.05),
+            transparent 38%
+        ),
+        #fcfbfd;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+/* Each message occupies its own row */
+#chat-messages .message-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 100%;
+    gap: 4px;
+    margin: 0;
+    min-width: 0;
+}
+
+/* Other members' messages — LEFT */
+#chat-messages .message-wrapper.other-message {
+    align-items: flex-start;
+}
+
+/* Your messages — RIGHT */
+#chat-messages .message-wrapper.own-message {
+    align-items: flex-end;
+}
+
+/* Message bubbles */
+#chat-messages .message-bubble {
+    box-sizing: border-box;
+    width: fit-content;
+    max-width: min(78%, 460px);
+    min-width: 90px;
+    padding: 12px 15px 9px;
+    border-radius: 17px;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    box-shadow: 0 3px 10px rgba(45, 23, 57, 0.06);
+}
+
+/* Incoming message bubble */
+#chat-messages .other-message .message-bubble {
+    color: #302438;
+    background: #ffffff;
+    border: 1px solid #ece5f0;
+    border-bottom-left-radius: 5px;
+}
+
+/* Your outgoing message bubble */
+#chat-messages .own-message .message-bubble {
+    color: #ffffff;
+    background: linear-gradient(135deg, #61377b, #45235e);
+    border: 1px solid transparent;
+    border-bottom-right-radius: 5px;
+}
+
+/* Sender names */
+#chat-messages .message-user {
+    display: block;
+    margin-bottom: 5px;
+    color: #71458a;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+#chat-messages .own-message .message-user {
+    color: #e8d5f5;
+}
+
+/* Message text */
+#chat-messages .message-text {
+    margin: 0;
+    color: inherit;
+    font-size: 14px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* Message timestamps */
+#chat-messages .message-time {
+    display: block;
+    margin-top: 7px;
+    color: #93889b;
+    font-size: 10px;
+    text-align: right;
+}
+
+#chat-messages .own-message .message-time {
+    color: #e0cfe9;
+}
+
+/* Reply button */
+#chat-messages .reply-message-button {
+    width: fit-content;
+    margin: 0;
+    padding: 4px 9px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #79548b;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+#chat-messages .reply-message-button:hover {
+    background: #eee5f4;
+}
+
+#chat-messages .own-message .reply-message-button {
+    color: #79548b;
+}
+
+/* Quoted message inside a reply */
+#chat-messages .message-bubble .reply-preview {
+    display: block;
+    margin: 0 0 9px;
+    padding: 8px 10px;
+    border-left: 3px solid #ad83c2;
+    border-radius: 5px;
+    background: rgba(110, 73, 131, 0.09);
+}
+
+#chat-messages .reply-preview strong {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 11px;
+}
+
+#chat-messages .reply-preview p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.5;
+    opacity: 0.85;
+}
+
+#chat-messages .own-message .reply-preview {
+    border-left-color: #e5c8f3;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* Keep long messages inside the chat */
+#chat-messages .message-bubble * {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+/* Mobile layout */
+@media (max-width: 600px) {
+    #chat-messages {
+        padding: 16px 10px;
+        gap: 14px;
+    }
+
+    #chat-messages .message-bubble {
+        max-width: 86%;
+        min-width: 75px;
+        padding: 10px 12px 8px;
+    }
+
+    #chat-messages .message-text {
+        font-size: 13px;
+    }
+}
