@@ -1,9 +1,10 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#30124d">
     <title>St. Monica LK3C Bible Study</title>
 
     <link rel="stylesheet" href="style.css">
@@ -14,7 +15,7 @@
 
 <body class="auth-locked">
 
-    <!-- NAVIGATION -->
+    <!-- HEADER -->
     <header class="site-header">
         <div class="nav-container">
             <a href="#home" class="logo" onclick="showSection('home'); return false;">
@@ -41,6 +42,7 @@
                 <div class="home-badge">ST. MONICA LK3C</div>
                 <h1>Bible Study</h1>
                 <p class="home-subtitle">Faith. Reflection. Conversation.</p>
+
                 <p class="home-description">
                     Welcome to our Bible Study space — a place to reflect on
                     God's Word, discuss real-life experiences and grow together
@@ -51,9 +53,11 @@
                     <button class="primary-button" onclick="showSection('story')">
                         Read This Week's Story
                     </button>
+
                     <button class="secondary-button" onclick="showSection('public-chat')">
                         Join Public Chat
                     </button>
+
                     <button class="secondary-button" onclick="showSection('membership')">
                         Join a Bible Study Group
                     </button>
@@ -64,6 +68,7 @@
         <!-- STORY -->
         <section id="story" class="page-section">
             <div class="section-container">
+
                 <div class="section-heading">
                     <span class="section-label">THIS WEEK'S BIBLE STUDY</span>
                     <h2>LIFE AFTER CAMPUS</h2>
@@ -79,6 +84,7 @@
                         Annastacia struggled with rent, family pressure, and
                         constant rejection.
                     </p>
+
                     <p>
                         Every morning, Vincent would wake up early, dress for
                         interviews, and send applications. Most days ended with
@@ -88,6 +94,7 @@
                         on social media made him question whether he was falling
                         behind.
                     </p>
+
                     <p>
                         Annastacia's situation became even more difficult. Her
                         rent was overdue, her family needed her support, and she
@@ -96,6 +103,7 @@
                         company. For the first time in months, she felt that her
                         life was finally changing.
                     </p>
+
                     <p>
                         However, her boss soon made it clear that her career
                         would move faster if she was willing to give him
@@ -105,6 +113,7 @@
                         whether her principles could survive in a world where
                         people seemed willing to do anything to get ahead.
                     </p>
+
                     <p>
                         Eventually, Annastacia made choices that helped her climb
                         the corporate ladder, even though they conflicted with
@@ -114,6 +123,7 @@
                         struggled with the weight of the decisions she had made
                         to get there.
                     </p>
+
                     <p>
                         Vincent, meanwhile, remained at the bottom. He watched
                         former classmates get better jobs while he continued
@@ -124,6 +134,7 @@
                         came his way, and trusting that his journey did not have
                         to look like everyone else's.
                     </p>
+
                     <p>
                         Years later, Vincent and Annastacia met again. They
                         talked about their lives and realized that neither had
@@ -133,6 +144,7 @@
                         longer to build his career, but he was proud that he had
                         not completely lost himself along the way.
                     </p>
+
                     <p>
                         They both learned that
                         <strong>
@@ -156,14 +168,17 @@
                             <span class="verse-reference">Proverbs 16:8</span>
                             <p>“Better is a little with righteousness than great revenues with injustice.”</p>
                         </div>
+
                         <div class="verse-card">
                             <span class="verse-reference">Matthew 16:26</span>
                             <p>“For what will it profit a man if he gains the whole world and forfeits his soul?”</p>
                         </div>
+
                         <div class="verse-card">
                             <span class="verse-reference">Psalm 37:7</span>
                             <p>“Be still before the Lord and wait patiently for him.”</p>
                         </div>
+
                         <div class="verse-card">
                             <span class="verse-reference">Proverbs 3:5–6</span>
                             <p>“Trust in the Lord with all your heart and lean not on your own understanding.”</p>
@@ -176,6 +191,7 @@
         <!-- QUESTIONS -->
         <section id="questions" class="page-section">
             <div class="section-container">
+
                 <div class="section-heading">
                     <span class="section-label">DISCUSSION</span>
                     <h2>Reflection Questions</h2>
@@ -190,6 +206,7 @@
                             <p>Was Annastacia completely wrong for the choices she made considering the financial and social pressure she was under? Where is the line between understanding someone's circumstances and excusing their actions?</p>
                         </div>
                     </div>
+
                     <div class="question-card">
                         <span class="question-number">02</span>
                         <div>
@@ -197,6 +214,7 @@
                             <p>Vincent questioned whether honesty and patience were actually enough. Have you ever felt that doing the right thing puts you at a disadvantage while others seem to succeed through shortcuts?</p>
                         </div>
                     </div>
+
                     <div class="question-card">
                         <span class="question-number">03</span>
                         <div>
@@ -204,6 +222,7 @@
                             <p>What should success mean to a Christian after campus? Is it wealth, career, status, helping family, happiness, faith, or a combination of these?</p>
                         </div>
                     </div>
+
                     <div class="question-card">
                         <span class="question-number">04</span>
                         <div>
@@ -211,6 +230,7 @@
                             <p>If you were in Vincent's position and an opportunity required you to compromise your values, what factors would influence your decision? Is compromise ever justified?</p>
                         </div>
                     </div>
+
                     <div class="question-card">
                         <span class="question-number">05</span>
                         <div>
@@ -222,157 +242,244 @@
             </div>
         </section>
 
-        <!-- MEMBERSHIP -->
+        <!-- MEMBERSHIP / AUTHENTICATION -->
         <section id="membership" class="page-section">
             <div class="section-container">
 
-                <!-- NEW WELCOME CHOICE SCREEN -->
+                <!-- FIRST SCREEN: REGISTER OR LOG IN -->
                 <div id="membership-choice" class="membership-choice">
-                    <div class="home-badge">ST. MONICA LK3C</div>
+                    <div class="membership-choice-cross">✝</div>
+                    <span class="section-label">ST. MONICA LK3C</span>
                     <h2>Welcome to Bible Study</h2>
-                    <p>Join our community of faith, reflection and fellowship.</p>
-                    <p>How would you like to continue?</p>
+                    <p class="membership-choice-subtitle">
+                        Faith. Reflection. Conversation.
+                    </p>
+                    <p class="membership-choice-description">
+                        Join our community of faith, reflection and fellowship.
+                        Sign in or create an account to continue.
+                    </p>
 
                     <div class="membership-choice-actions">
-                        <button type="button" id="show-register-btn" class="membership-submit">
+                        <button
+                            type="button"
+                            id="show-register-btn"
+                            class="membership-submit">
                             Register
                         </button>
-                        <button type="button" id="show-login-btn" class="membership-submit">
+
+                        <button
+                            type="button"
+                            id="show-login-btn"
+                            class="auth-secondary-button">
                             Log In
                         </button>
                     </div>
-                </div>
 
-                <!-- EXISTING MEMBERSHIP CONTENT -->
-                <div class="section-heading">
-                    <span class="section-label">ST. MONICA LK3C COMMUNITY</span>
-                    <h2>Our Bible Study Groups</h2>
-                    <p class="membership-intro">
-                        Find your group, grow in faith, and build friendships
-                        through God's Word.
+                    <p class="membership-choice-footer">
+                        Lower Kabete Campus Catholic Community
                     </p>
                 </div>
 
-                <div class="group-grid">
-                    <article class="group-card">
-                        <h3>St. Charles Lwanga</h3>
-                        <p>A community growing in faith, fellowship, and service.</p>
-                        <span class="group-count" id="count-charles-lwanga">Members: 0</span>
-                    </article>
-                    <article class="group-card">
-                        <h3>St. Williams</h3>
-                        <p>A space for prayer, reflection, and spiritual growth.</p>
-                        <span class="group-count" id="count-st-williams">Members: 0</span>
-                    </article>
-                    <article class="group-card">
-                        <h3>St. Camillas</h3>
-                        <p>Learn God's Word and encourage one another.</p>
-                        <span class="group-count" id="count-st-camillas">Members: 0</span>
-                    </article>
-                    <article class="group-card">
-                        <h3>St. Mathias Mulumba</h3>
-                        <p>Grow through discussion, prayer, and community.</p>
-                        <span class="group-count" id="count-mathias-mulumba">Members: 0</span>
-                    </article>
-                    <article class="group-card">
-                        <h3>St. Vincent</h3>
-                        <p>Share your journey of faith and support one another.</p>
-                        <span class="group-count" id="count-st-vincent">Members: 0</span>
-                    </article>
+                <!-- AUTHENTICATION STATUS / FEEDBACK -->
+                <div
+                    id="membership-status"
+                    class="membership-status"
+                    role="status"
+                    aria-live="polite"
+                    hidden>
                 </div>
 
-                <div class="membership-card">
-                    <div id="membership-status" class="membership-status" hidden></div>
+                <!-- FORMS: HIDDEN UNTIL THE USER CHOOSES -->
+                <div id="membership-forms" hidden>
 
-                    <div id="membership-forms" hidden>
+                    <!-- REGISTRATION FORM -->
+                    <form id="membership-form" class="membership-card membership-form" hidden>
+                        <button type="button" class="back-to-choice">
+                            ← Back
+                        </button>
 
-                        <!-- REGISTRATION FORM -->
-                        <form id="membership-form" class="membership-form" hidden>
-                            <button type="button" class="back-to-choice">
-                                ← Back
+                        <span class="section-label">JOIN OUR COMMUNITY</span>
+                        <h3>Create Your Account</h3>
+                        <p>Enter your details and choose your Bible study group.</p>
+
+                        <div>
+                            <label for="member-full-name">Full Name</label>
+                            <input
+                                type="text"
+                                id="member-full-name"
+                                name="fullName"
+                                placeholder="Enter your full name"
+                                autocomplete="name"
+                                minlength="2"
+                                maxlength="80"
+                                required>
+                        </div>
+
+                        <div>
+                            <label for="member-phone">Phone Number</label>
+                            <input
+                                type="tel"
+                                id="member-phone"
+                                name="phoneNumber"
+                                placeholder="e.g. 0712345678"
+                                autocomplete="tel"
+                                maxlength="20"
+                                required>
+                        </div>
+
+                        <div>
+                            <label for="member-password">Password</label>
+                            <input
+                                type="password"
+                                id="member-password"
+                                name="password"
+                                placeholder="At least 6 characters"
+                                autocomplete="new-password"
+                                minlength="6"
+                                required>
+                        </div>
+
+                        <div>
+                            <label for="member-group">Choose Your Group</label>
+                            <select id="member-group" name="groupId" required>
+                                <option value="">Select a Bible study group</option>
+                                <option value="charles-lwanga">St. Charles Lwanga</option>
+                                <option value="st-williams">St. Williams</option>
+                                <option value="st-camillas">St. Camillas</option>
+                                <option value="mathias-mulumba">St. Mathias Mulumba</option>
+                                <option value="st-vincent">St. Vincent</option>
+                            </select>
+                        </div>
+
+                        <button
+                            type="submit"
+                            id="membership-submit"
+                            class="membership-submit">
+                            Register &amp; Join Group
+                        </button>
+
+                        <p
+                            id="membership-message"
+                            class="membership-message"
+                            role="status"
+                            aria-live="polite">
+                        </p>
+
+                        <p class="auth-switch-prompt">
+                            Already a member?
+                            <button type="button" id="switch-to-login-btn">
+                                Log in
                             </button>
+                        </p>
+                    </form>
 
-                            <h3>Create Your Account</h3>
-                            <p>Register with your details and join a group immediately.</p>
+                    <!-- LOGIN FORM -->
+                    <form id="membership-login-form" class="membership-card membership-form" hidden>
+                        <button type="button" class="back-to-choice">
+                            ← Back
+                        </button>
 
-                            <div>
-                                <label for="member-full-name">Full Name</label>
-                                <input type="text" id="member-full-name" name="fullName"
-                                    placeholder="Enter your full name" autocomplete="name"
-                                    minlength="2" maxlength="80" required>
-                            </div>
+                        <span class="section-label">WELCOME BACK</span>
+                        <h3>Log In</h3>
+                        <p>Sign in to continue to your Bible study home screen.</p>
 
-                            <div>
-                                <label for="member-phone">Phone Number</label>
-                                <input type="tel" id="member-phone" name="phoneNumber"
-                                    placeholder="e.g. 0712345678" autocomplete="tel"
-                                    maxlength="20" required>
-                            </div>
+                        <div>
+                            <label for="login-member-phone">Phone Number</label>
+                            <input
+                                type="tel"
+                                id="login-member-phone"
+                                name="phoneNumber"
+                                placeholder="Registered phone number"
+                                autocomplete="tel"
+                                maxlength="20"
+                                required>
+                        </div>
 
-                            <div>
-                                <label for="member-password">Password</label>
-                                <input type="password" id="member-password" name="password"
-                                    placeholder="At least 6 characters" autocomplete="new-password"
-                                    minlength="6" required>
-                            </div>
+                        <div>
+                            <label for="login-member-password">Password</label>
+                            <input
+                                type="password"
+                                id="login-member-password"
+                                name="password"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                required>
+                        </div>
 
-                            <div>
-                                <label for="member-group">Choose Your Group</label>
-                                <select id="member-group" name="groupId" required>
-                                    <option value="">Select a Bible study group</option>
-                                    <option value="charles-lwanga">St. Charles Lwanga</option>
-                                    <option value="st-williams">St. Williams</option>
-                                    <option value="st-camillas">St. Camillas</option>
-                                    <option value="mathias-mulumba">St. Mathias Mulumba</option>
-                                    <option value="st-vincent">St. Vincent</option>
-                                </select>
-                            </div>
+                        <button
+                            type="submit"
+                            id="membership-login-submit"
+                            class="membership-submit">
+                            Log In
+                        </button>
 
-                            <button type="submit" id="membership-submit" class="membership-submit">
-                                Register &amp; Join Group
+                        <p
+                            id="membership-login-message"
+                            class="membership-message"
+                            role="status"
+                            aria-live="polite">
+                        </p>
+
+                        <p class="auth-switch-prompt">
+                            New to the community?
+                            <button type="button" id="switch-to-register-btn">
+                                Register
                             </button>
+                        </p>
+                    </form>
+                </div>
 
-                            <p id="membership-message" class="membership-message" role="status" aria-live="polite"></p>
-                        </form>
+                <!-- MEMBER GROUPS: SHOWN AFTER SUCCESSFUL SIGN IN -->
+                <div id="member-groups-content" hidden>
+                    <div class="section-heading">
+                        <span class="section-label">ST. MONICA LK3C COMMUNITY</span>
+                        <h2>Our Bible Study Groups</h2>
+                        <p class="membership-intro">
+                            Find your group, grow in faith, and build friendships
+                            through God's Word.
+                        </p>
+                    </div>
 
-                        <!-- LOGIN FORM -->
-                        <form id="membership-login-form" class="membership-form" hidden>
-                            <button type="button" class="back-to-choice">
-                                ← Back
-                            </button>
+                    <div class="group-grid">
+                        <article class="group-card">
+                            <h3>St. Charles Lwanga</h3>
+                            <p>A community growing in faith, fellowship, and service.</p>
+                            <span class="group-count" id="count-charles-lwanga">Members: 0</span>
+                        </article>
 
-                            <h3>Welcome Back</h3>
-                            <p>Sign in to continue to your Bible study home screen.</p>
+                        <article class="group-card">
+                            <h3>St. Williams</h3>
+                            <p>A space for prayer, reflection, and spiritual growth.</p>
+                            <span class="group-count" id="count-st-williams">Members: 0</span>
+                        </article>
 
-                            <div>
-                                <label for="login-member-phone">Phone Number</label>
-                                <input type="tel" id="login-member-phone" name="phoneNumber"
-                                    placeholder="Registered phone number" autocomplete="tel"
-                                    maxlength="20" required>
-                            </div>
+                        <article class="group-card">
+                            <h3>St. Camillas</h3>
+                            <p>Learn God's Word and encourage one another.</p>
+                            <span class="group-count" id="count-st-camillas">Members: 0</span>
+                        </article>
 
-                            <div>
-                                <label for="login-member-password">Password</label>
-                                <input type="password" id="login-member-password" name="password"
-                                    placeholder="Enter your password" autocomplete="current-password"
-                                    required>
-                            </div>
+                        <article class="group-card">
+                            <h3>St. Mathias Mulumba</h3>
+                            <p>Grow through discussion, prayer, and community.</p>
+                            <span class="group-count" id="count-mathias-mulumba">Members: 0</span>
+                        </article>
 
-                            <button type="submit" id="membership-login-submit" class="membership-submit">
-                                Log In
-                            </button>
-
-                            <p id="membership-login-message" class="membership-message" role="status" aria-live="polite"></p>
-                        </form>
-
+                        <article class="group-card">
+                            <h3>St. Vincent</h3>
+                            <p>Share your journey of faith and support one another.</p>
+                            <span class="group-count" id="count-st-vincent">Members: 0</span>
+                        </article>
                     </div>
                 </div>
+
             </div>
         </section>
 
         <!-- PRAYERS -->
         <section id="prayers" class="page-section">
             <div class="section-container">
+
                 <div class="section-heading">
                     <span class="section-label">PRAYER</span>
                     <h2>Catholic Prayers</h2>
@@ -410,6 +517,7 @@
         <!-- PUBLIC CHAT -->
         <section id="public-chat" class="page-section">
             <div class="section-container">
+
                 <div class="section-heading">
                     <span class="section-label">COMMUNITY</span>
                     <h2>Public Chat</h2>
@@ -420,8 +528,21 @@
                     <div class="chat-login-icon">💬</div>
                     <h3>Join the Discussion</h3>
                     <p>Sign in to your St. Monica account before joining the public chat.</p>
-                    <input type="text" id="anonymous-name" placeholder="Enter your chat name" maxlength="25" autocomplete="off">
-                    <button id="enter-chat-btn" class="enter-chat-button" type="button">Enter Public Chat</button>
+
+                    <input
+                        type="text"
+                        id="anonymous-name"
+                        placeholder="Enter your chat name"
+                        maxlength="25"
+                        autocomplete="off">
+
+                    <button
+                        id="enter-chat-btn"
+                        class="enter-chat-button"
+                        type="button">
+                        Enter Public Chat
+                    </button>
+
                     <p id="chat-login-message" class="chat-login-message"></p>
                 </div>
 
@@ -431,7 +552,13 @@
                             <h3>Public Bible Study Chat</h3>
                             <p>Share respectfully. Build one another up.</p>
                         </div>
-                        <button id="change-name-btn" class="change-name-button" type="button">Change Name</button>
+
+                        <button
+                            id="change-name-btn"
+                            class="change-name-button"
+                            type="button">
+                            Change Name
+                        </button>
                     </div>
 
                     <div class="chat-notice">
@@ -446,13 +573,32 @@
                             <strong id="reply-preview-user"></strong>
                             <p id="reply-preview-text"></p>
                         </div>
+
                         <button id="cancel-reply-btn" type="button">×</button>
                     </div>
 
                     <form id="chat-form" class="chat-form">
-                        <button type="button" id="emoji-btn" class="emoji-button" title="Add emoji">😊</button>
-                        <input type="text" id="message-input" placeholder="Write a message..." maxlength="500" autocomplete="off">
-                        <button type="submit" id="send-message-btn" class="send-message-button">➤</button>
+                        <button
+                            type="button"
+                            id="emoji-btn"
+                            class="emoji-button"
+                            title="Add emoji">
+                            😊
+                        </button>
+
+                        <input
+                            type="text"
+                            id="message-input"
+                            placeholder="Write a message..."
+                            maxlength="500"
+                            autocomplete="off">
+
+                        <button
+                            type="submit"
+                            id="send-message-btn"
+                            class="send-message-button">
+                            ➤
+                        </button>
                     </form>
 
                     <div class="current-user-bar">
@@ -478,4 +624,3 @@
     <script type="module" src="script.js"></script>
 </body>
 </html>
-```
