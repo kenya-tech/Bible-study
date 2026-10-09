@@ -1,4 +1,3 @@
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
 
 import {
@@ -799,8 +798,16 @@ function listenForChatMessages() {
 function renderChatMessage(messageId, message) {
     if (!chatMessages) return;
 
+    // Messages written before the uid field was added will not have it.
+    // Those older messages are shown as messages from other members.
+    const isOwnMessage = Boolean(
+        currentUser?.uid && message.uid && message.uid === currentUser.uid
+    );
+
     const wrapper = document.createElement("div");
-    wrapper.className = "message-wrapper";
+    wrapper.className = isOwnMessage
+        ? "message-wrapper own-message"
+        : "message-wrapper other-message";
     wrapper.dataset.messageId = messageId;
 
     const bubble = document.createElement("div");
@@ -822,7 +829,7 @@ function renderChatMessage(messageId, message) {
 
     const name = document.createElement("strong");
     name.className = "message-user";
-    name.textContent = message.user || "Member";
+    name.textContent = isOwnMessage ? "You" : (message.user || "Member");
 
     const text = document.createElement("p");
     text.className = "message-text";
@@ -991,6 +998,7 @@ chatForm?.addEventListener("submit", async event => {
         const messageData = {
             user,
             text,
+            uid: currentUser.uid,
             timestamp: Date.now()
         };
 
