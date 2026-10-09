@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,7 +29,6 @@
             display: none !important;
         }
 
-        /* Membership page background */
         #membership {
             position: relative;
             isolation: isolate;
@@ -75,7 +73,6 @@
             margin: 0 auto;
         }
 
-        /* Main authentication composition */
         .auth-showcase {
             display: grid;
             grid-template-columns: minmax(0, .93fr) minmax(0, 1.07fr);
@@ -87,7 +84,6 @@
             box-shadow: 0 32px 85px rgba(39,19,51,.13);
         }
 
-        /* Purple welcome panel */
         .auth-brand-panel {
             position: relative;
             display: flex;
@@ -252,7 +248,6 @@
             line-height: 1.8;
         }
 
-        /* White form panel */
         .auth-form-panel {
             display: flex;
             flex-direction: column;
@@ -388,7 +383,6 @@
             text-align: center;
         }
 
-        /* Actual registration and login forms */
         #membership-forms {
             width: 100%;
         }
@@ -575,7 +569,6 @@
             cursor: pointer;
         }
 
-        /* Group cards */
         #member-groups-content .section-heading {
             margin: 15px auto 30px;
             text-align: center;
@@ -629,7 +622,6 @@
             font-weight: 700;
         }
 
-        /* Keyboard accessibility */
         #membership button:focus-visible {
             outline: 3px solid var(--auth-gold);
             outline-offset: 3px;
@@ -641,7 +633,6 @@
             transform: none;
         }
 
-        /* Locked page: no navigation until sign-in */
         body.auth-locked .site-header,
         body.auth-locked .site-footer {
             display: none !important;
@@ -666,12 +657,10 @@
             display: none !important;
         }
 
-        /* When logged in, groups can be shown by JavaScript */
         body:not(.auth-locked) #membership .group-grid {
             display: grid;
         }
 
-        /* Mobile */
         @media (max-width: 760px) {
             #membership {
                 padding: 22px 13px 40px;
@@ -837,6 +826,31 @@
                     <button class="secondary-button" onclick="showSection('membership')">
                         Join a Bible Study Group
                     </button>
+                </div>
+
+                <!-- NEW: WHATSAPP AND YOUTUBE LINKS -->
+                <div class="social-links home-social-links" aria-label="Connect with St. Monica LK3C">
+                    <a
+                        class="social-link social-link-whatsapp"
+                        href="https://wa.me/254797147255?text=Hello%20St.%20Monica%20LK3C"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Contact St. Monica LK3C on WhatsApp">
+                        <span class="social-link-icon" aria-hidden="true">☏</span>
+                        <span>Connect on WhatsApp</span>
+                        <span class="social-link-arrow" aria-hidden="true">↗</span>
+                    </a>
+
+                    <a
+                        class="social-link social-link-youtube"
+                        href="https://youtube.com/@st.monicacatholiccommunity4639?si=_MJRL7lrXqavxk1B"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Visit St. Monica LK3C on YouTube">
+                        <span class="social-link-icon" aria-hidden="true">▶</span>
+                        <span>Watch us on YouTube</span>
+                        <span class="social-link-arrow" aria-hidden="true">↗</span>
+                    </a>
                 </div>
             </div>
         </section>
@@ -1069,6 +1083,31 @@
                             A shared space for God's Word, honest conversations
                             and friendships rooted in faith.
                         </p>
+
+                        <!-- NEW: SOCIAL LINKS ON THE MEMBERSHIP WELCOME SCREEN -->
+                        <div class="social-links membership-social-links" aria-label="Connect with St. Monica LK3C">
+                            <a
+                                class="social-link social-link-whatsapp"
+                                href="https://wa.me/254797147255?text=Hello%20St.%20Monica%20LK3C"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Contact St. Monica LK3C on WhatsApp">
+                                <span class="social-link-icon" aria-hidden="true">☏</span>
+                                <span>WhatsApp</span>
+                                <span class="social-link-arrow" aria-hidden="true">↗</span>
+                            </a>
+
+                            <a
+                                class="social-link social-link-youtube"
+                                href="https://youtube.com/@st.monicacatholiccommunity4639?si=_MJRL7lrXqavxk1B"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Visit St. Monica LK3C on YouTube">
+                                <span class="social-link-icon" aria-hidden="true">▶</span>
+                                <span>YouTube channel</span>
+                                <span class="social-link-arrow" aria-hidden="true">↗</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -1189,7 +1228,7 @@
                                 </p>
                             </form>
 
-                            <!-- Login form -->
+                            <!-- LOGIN FORM -->
                             <form id="membership-login-form" class="membership-card membership-form" hidden>
                                 <button type="button" class="back-to-choice auth-back-button">
                                     <span aria-hidden="true">←</span> Back to welcome
@@ -1410,6 +1449,31 @@
             <h3>St. Monica LK3C</h3>
             <p>Lower Kabete Campus Catholic Community</p>
             <p class="footer-small">Bible Study • Faith • Community</p>
+
+            <!-- NEW: FOOTER SOCIAL LINKS -->
+            <div class="social-links footer-social-links" aria-label="Follow St. Monica LK3C">
+                <a
+                    class="social-link social-link-whatsapp"
+                    href="https://wa.me/254797147255?text=Hello%20St.%20Monica%20LK3C"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Contact St. Monica LK3C on WhatsApp">
+                    <span class="social-link-icon" aria-hidden="true">☏</span>
+                    <span>WhatsApp</span>
+                    <span class="social-link-arrow" aria-hidden="true">↗</span>
+                </a>
+
+                <a
+                    class="social-link social-link-youtube"
+                    href="https://youtube.com/@st.monicacatholiccommunity4639?si=_MJRL7lrXqavxk1B"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Visit St. Monica LK3C on YouTube">
+                    <span class="social-link-icon" aria-hidden="true">▶</span>
+                    <span>YouTube</span>
+                    <span class="social-link-arrow" aria-hidden="true">↗</span>
+                </a>
+            </div>
         </div>
     </footer>
 
