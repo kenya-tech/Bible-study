@@ -81,6 +81,7 @@ const membershipForms = document.getElementById("membership-forms");
 const membershipStatus = document.getElementById("membership-status");
 const membershipMessage = document.getElementById("membership-message");
 const membershipSubmit = document.getElementById("membership-submit");
+const memberGroupsContent = document.getElementById("member-groups-content");
 
 const loginForm = document.getElementById("membership-login-form");
 const loginMessage = document.getElementById("membership-login-message");
@@ -285,8 +286,10 @@ function showSection(sectionId) {
 
     if (authenticated) {
         document.body.classList.remove("auth-locked");
+        showElement(memberGroupsContent);
     } else {
         document.body.classList.add("auth-locked");
+        hideElement(memberGroupsContent);
     }
 
     if (window.location.hash !== `#${sectionId}`) {
@@ -298,10 +301,8 @@ function showSection(sectionId) {
     }
 }
 
-// Make showSection available to HTML onclick attributes.
 window.showSection = showSection;
 
-// Support navigation elements that use data-section.
 document.querySelectorAll("[data-section]").forEach(element => {
     element.addEventListener("click", event => {
         event.preventDefault();
@@ -312,6 +313,7 @@ document.querySelectorAll("[data-section]").forEach(element => {
 function showMembershipScreen() {
     document.body.classList.add("auth-locked");
 
+    hideElement(memberGroupsContent);
     showMembershipChoice();
 
     if (membershipStatus) {
@@ -335,11 +337,7 @@ async function registerMember(event) {
     const groupId = groupInput?.value || "";
 
     if (fullName.length < 2 || fullName.length > 80) {
-        showMessage(
-            membershipMessage,
-            "Enter your full name.",
-            "error"
-        );
+        showMessage(membershipMessage, "Enter your full name.", "error");
         return;
     }
 
@@ -371,7 +369,6 @@ async function registerMember(event) {
     }
 
     registrationInProgress = true;
-
     setButtonLoading(membershipSubmit, true, "Creating account...");
     showMessage(membershipMessage, "Creating your account...");
 
@@ -411,12 +408,6 @@ async function registerMember(event) {
 
         if (passwordInput) passwordInput.value = "";
 
-        showMessage(
-            membershipMessage,
-            "Registration successful! Welcome to St. Monica LK3C.",
-            "success"
-        );
-
         await displayMemberScreen(createdUser, currentMember);
     } catch (error) {
         console.error("Registration error:", error);
@@ -427,8 +418,6 @@ async function registerMember(event) {
             "error"
         );
 
-        // If Auth succeeded but the profile failed to save,
-        // sign out so the incomplete account does not unlock the site.
         if (createdUser && currentUser?.uid === createdUser.uid) {
             try {
                 await signOut(auth);
@@ -560,6 +549,11 @@ async function displayMemberScreen(user, member) {
 
     hideElement(membershipChoice);
     hideElement(membershipForms);
+    hideElement(membershipForm);
+    hideElement(loginForm);
+
+    // Reveal the Bible study group cards after successful authentication.
+    showElement(memberGroupsContent);
 
     document.body.classList.remove("auth-locked");
 
@@ -590,8 +584,6 @@ onAuthStateChanged(auth, async user => {
         return;
     }
 
-    // Registration saves the member profile immediately after
-    // Firebase Authentication creates the account.
     if (registrationInProgress) return;
 
     try {
@@ -1033,18 +1025,16 @@ chatForm?.addEventListener("submit", async event => {
 // INITIAL PAGE SETUP
 // =========================================================
 
-document.addEventListener("DOMContentLoaded", () => {
+function initializeMembershipView() {
     if (!currentUser || currentUser.isAnonymous || !currentMember) {
         document.body.classList.add("auth-locked");
+        hideElement(memberGroupsContent);
         showMembershipChoice();
     }
-});
+}
 
-// Also initialize the membership screen if this module loads
-// after the page's DOM is already available.
-if (document.readyState !== "loading") {
-    if (!currentUser || currentUser.isAnonymous || !currentMember) {
-        document.body.classList.add("auth-locked");
-        showMembershipChoice();
-    }
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeMembershipView);
+} else {
+    initializeMembershipView();
 }
