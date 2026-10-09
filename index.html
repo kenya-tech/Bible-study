@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +13,7 @@
 </head>
 
 <body class="auth-locked">
+
     <!-- NAVIGATION -->
     <header class="site-header">
         <div class="nav-container">
@@ -33,6 +34,7 @@
     </header>
 
     <main>
+
         <!-- HOME -->
         <section id="home" class="page-section active-section">
             <div class="home-content">
@@ -223,6 +225,25 @@
         <!-- MEMBERSHIP -->
         <section id="membership" class="page-section">
             <div class="section-container">
+
+                <!-- NEW WELCOME CHOICE SCREEN -->
+                <div id="membership-choice" class="membership-choice">
+                    <div class="home-badge">ST. MONICA LK3C</div>
+                    <h2>Welcome to Bible Study</h2>
+                    <p>Join our community of faith, reflection and fellowship.</p>
+                    <p>How would you like to continue?</p>
+
+                    <div class="membership-choice-actions">
+                        <button type="button" id="show-register-btn" class="membership-submit">
+                            Register
+                        </button>
+                        <button type="button" id="show-login-btn" class="membership-submit">
+                            Log In
+                        </button>
+                    </div>
+                </div>
+
+                <!-- EXISTING MEMBERSHIP CONTENT -->
                 <div class="section-heading">
                     <span class="section-label">ST. MONICA LK3C COMMUNITY</span>
                     <h2>Our Bible Study Groups</h2>
@@ -263,11 +284,17 @@
                 <div class="membership-card">
                     <div id="membership-status" class="membership-status" hidden></div>
 
-                    <div id="membership-forms">
-                        <h3>Become a Member</h3>
-                        <p>Register with your details and join a group immediately.</p>
+                    <div id="membership-forms" hidden>
 
-                        <form id="membership-form" class="membership-form">
+                        <!-- REGISTRATION FORM -->
+                        <form id="membership-form" class="membership-form" hidden>
+                            <button type="button" class="back-to-choice">
+                                ← Back
+                            </button>
+
+                            <h3>Create Your Account</h3>
+                            <p>Register with your details and join a group immediately.</p>
+
                             <div>
                                 <label for="member-full-name">Full Name</label>
                                 <input type="text" id="member-full-name" name="fullName"
@@ -304,30 +331,40 @@
                             <button type="submit" id="membership-submit" class="membership-submit">
                                 Register &amp; Join Group
                             </button>
+
                             <p id="membership-message" class="membership-message" role="status" aria-live="polite"></p>
                         </form>
 
-                        <div class="membership-login">
-                            <h3>Already a Member?</h3>
-                            <form id="membership-login-form" class="membership-form">
-                                <div>
-                                    <label for="login-member-phone">Phone Number</label>
-                                    <input type="tel" id="login-member-phone" name="phoneNumber"
-                                        placeholder="Registered phone number" autocomplete="tel"
-                                        maxlength="20" required>
-                                </div>
-                                <div>
-                                    <label for="login-member-password">Password</label>
-                                    <input type="password" id="login-member-password" name="password"
-                                        placeholder="Enter your password" autocomplete="current-password"
-                                        required>
-                                </div>
-                                <button type="submit" id="membership-login-submit" class="membership-submit">
-                                    Sign In
-                                </button>
-                                <p id="membership-login-message" class="membership-message" role="status" aria-live="polite"></p>
-                            </form>
-                        </div>
+                        <!-- LOGIN FORM -->
+                        <form id="membership-login-form" class="membership-form" hidden>
+                            <button type="button" class="back-to-choice">
+                                ← Back
+                            </button>
+
+                            <h3>Welcome Back</h3>
+                            <p>Sign in to continue to your Bible study home screen.</p>
+
+                            <div>
+                                <label for="login-member-phone">Phone Number</label>
+                                <input type="tel" id="login-member-phone" name="phoneNumber"
+                                    placeholder="Registered phone number" autocomplete="tel"
+                                    maxlength="20" required>
+                            </div>
+
+                            <div>
+                                <label for="login-member-password">Password</label>
+                                <input type="password" id="login-member-password" name="password"
+                                    placeholder="Enter your password" autocomplete="current-password"
+                                    required>
+                            </div>
+
+                            <button type="submit" id="membership-login-submit" class="membership-submit">
+                                Log In
+                            </button>
+
+                            <p id="membership-login-message" class="membership-message" role="status" aria-live="polite"></p>
+                        </form>
+
                     </div>
                 </div>
             </div>
@@ -382,8 +419,8 @@
                 <div id="chat-login" class="chat-login-card">
                     <div class="chat-login-icon">💬</div>
                     <h3>Join the Discussion</h3>
-                    <p>Choose a name to use in the public chat. No account is required.</p>
-                    <input type="text" id="anonymous-name" placeholder="Enter your name" maxlength="25" autocomplete="off">
+                    <p>Sign in to your St. Monica account before joining the public chat.</p>
+                    <input type="text" id="anonymous-name" placeholder="Enter your chat name" maxlength="25" autocomplete="off">
                     <button id="enter-chat-btn" class="enter-chat-button" type="button">Enter Public Chat</button>
                     <p id="chat-login-message" class="chat-login-message"></p>
                 </div>
@@ -425,6 +462,7 @@
                 </div>
             </div>
         </section>
+
     </main>
 
     <!-- FOOTER -->
@@ -440,3 +478,4 @@
     <script type="module" src="script.js"></script>
 </body>
 </html>
+```
