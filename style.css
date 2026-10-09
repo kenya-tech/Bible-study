@@ -1128,3 +1128,167 @@ a {
 ::-webkit-scrollbar-thumb:hover {
     background: #9c7daa;
 }
+
+/* =========================================================
+   MEMBERSHIP — GROUP CARDS AND REGISTRATION
+========================================================= */
+
+#membership {
+    min-height: calc(100vh - 76px);
+    background:
+        radial-gradient(circle at top right, rgba(125, 70, 155, 0.09), transparent 35%),
+        #f7f3f9;
+}
+
+.membership-intro {
+    max-width: 720px;
+    margin: 0 auto 32px;
+    text-align: center;
+    color: #71677a;
+}
+
+.group-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 35px;
+}
+
+.group-card {
+    padding: 25px;
+    border: 1px solid #e9deef;
+    border-radius: 18px;
+    background: white;
+    box-shadow: 0 8px 25px rgba(47, 24, 60, 0.045);
+}
+
+.group-card h3 {
+    margin-bottom: 8px;
+    color: #321440;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 22px;
+}
+
+.group-card p {
+    color: #71677a;
+    font-size: 14px;
+}
+
+.group-count {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 6px 11px;
+    border-radius: 999px;
+    color: #62377b;
+    background: #f1e7f5;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.membership-card {
+    width: min(540px, 100%);
+    margin: 0 auto;
+    padding: 32px;
+    border: 1px solid #ebe1ef;
+    border-radius: 22px;
+    background: white;
+    box-shadow: 0 18px 45px rgba(49, 25, 63, 0.07);
+}
+
+.membership-card h3 {
+    margin-bottom: 8px;
+    color: #2e1639;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 27px;
+}
+
+.membership-card > p {
+    margin-bottom: 22px;
+    color: #71677a;
+    font-size: 14px;
+}
+
+.membership-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.membership-form label {
+    display: block;
+    margin-bottom: 5px;
+    color: #45334f;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.membership-form input,
+.membership-form select {
+    width: 100%;
+    min-height: 49px;
+    padding: 0 13px;
+    border: 1px solid #ddd2e3;
+    border-radius: 11px;
+    outline: none;
+    background: #fbf9fc;
+    color: #302236;
+    font: inherit;
+    font-size: 14px;
+}
+
+.membership-form input:focus,
+.membership-form select:focus {
+    border-color: #754197;
+    box-shadow: 0 0 0 3px rgba(117, 65, 151, 0.09);
+}
+
+.membership-submit {
+    min-height: 50px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    background: linear-gradient(135deg, #4b176f, #714092);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.membership-submit:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+.membership-message {
+    min-height: 20px;
+    margin-top: 12px;
+    color: #62377b;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.membership-message.error {
+    color: #a32d45;
+}
+
+.membership-status {
+    margin-bottom: 18px;
+    padding: 14px;
+    border-radius: 12px;
+    background: #f5eef8;
+    color: #4b176f;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+    .group-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .group-card {
+        padding: 21px;
+    }
+
+    .membership-card {
+        padding: 24px 19px;
+    }
+}
