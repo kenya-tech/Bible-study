@@ -1292,3 +1292,54 @@ a {
         padding: 24px 19px;
     }
 }
+/* =========================================================
+   LOGIN-FIRST ENTRY SCREEN
+========================================================= */
+
+body.auth-locked .site-header,
+body.auth-locked .site-footer {
+    display: none !important;
+}
+
+body.auth-locked main .page-section {
+    display: none !important;
+}
+
+body.auth-locked main #membership {
+    display: block !important;
+    min-height: 100vh;
+    padding-top: 45px;
+    padding-bottom: 45px;
+}
+
+body.auth-locked #membership .section-heading {
+    margin-bottom: 24px;
+}
+
+body.auth-locked #membership .group-grid {
+    display: none !important;
+}
+
+body.auth-locked #membership .membership-intro {
+    margin-bottom: 0;
+}
+
+body.auth-locked #membership .membership-card {
+    width: min(540px, 100%);
+    margin: 0 auto;
+}
+
+body.auth-locked #membership .membership-login {
+    margin-top: 30px;
+    padding-top: 24px;
+    border-top: 1px solid #ebe1ef;
+}
+
+body.auth-locked #membership .membership-login h3 {
+    font-size: 22px;
+}
+
+body.auth-locked #membership .membership-status[hidden],
+body.auth-locked #membership #membership-forms[hidden] {
+    display: none !important;
+}
