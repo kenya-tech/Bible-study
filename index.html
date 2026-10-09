@@ -4,13 +4,791 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#30124d">
-    <title>St. Monica LK3C Bible Study</title>
+    <meta name="theme-color" content="#251033">
+    <meta name="description" content="St. Monica LK3C Bible Study — faith, reflection, conversation and fellowship at Lower Kabete Campus.">
+    <title>St. Monica LK3C | Bible Study</title>
 
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- PREMIUM MEMBERSHIP REDESIGN -->
+    <style>
+        :root {
+            --auth-ink: #271333;
+            --auth-plum: #49205f;
+            --auth-purple: #6d4387;
+            --auth-lilac: #eee4f4;
+            --auth-gold: #d6b36e;
+            --auth-muted: #82758a;
+            --auth-paper: #fff;
+            --auth-bg: #f7f3f9;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        /* Membership page background */
+        #membership {
+            position: relative;
+            isolation: isolate;
+            min-height: 100vh;
+            padding: 42px 22px 75px;
+            overflow: hidden;
+            background:
+                radial-gradient(ellipse at 4% 5%, rgba(214,179,110,.16), transparent 32%),
+                radial-gradient(ellipse at 95% 95%, rgba(109,67,135,.13), transparent 36%),
+                var(--auth-bg);
+        }
+
+        #membership::before,
+        #membership::after {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            width: 270px;
+            height: 270px;
+            border: 1px solid rgba(109,67,135,.09);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        #membership::before {
+            top: 70px;
+            right: -140px;
+            box-shadow: 0 0 0 28px rgba(109,67,135,.025),
+                        0 0 0 58px rgba(109,67,135,.02);
+        }
+
+        #membership::after {
+            bottom: 20px;
+            left: -180px;
+            box-shadow: 0 0 0 28px rgba(214,179,110,.04),
+                        0 0 0 58px rgba(214,179,110,.025);
+        }
+
+        #membership > .section-container {
+            width: 100%;
+            max-width: 1080px;
+            margin: 0 auto;
+        }
+
+        /* Main authentication composition */
+        .auth-showcase {
+            display: grid;
+            grid-template-columns: minmax(0, .93fr) minmax(0, 1.07fr);
+            min-height: 620px;
+            overflow: hidden;
+            background: var(--auth-paper);
+            border: 1px solid rgba(73,32,95,.08);
+            border-radius: 26px;
+            box-shadow: 0 32px 85px rgba(39,19,51,.13);
+        }
+
+        /* Purple welcome panel */
+        .auth-brand-panel {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100%;
+            padding: 42px 38px 34px;
+            overflow: hidden;
+            color: #fff;
+            background:
+                radial-gradient(ellipse at 15% 15%, rgba(214,179,110,.17), transparent 37%),
+                radial-gradient(ellipse at 95% 80%, rgba(157,111,181,.20), transparent 42%),
+                linear-gradient(150deg, #321641 0%, #49205f 52%, #251033 100%);
+        }
+
+        .auth-brand-panel::before {
+            content: "";
+            position: absolute;
+            width: 330px;
+            height: 330px;
+            top: 26%;
+            right: -185px;
+            border: 1px solid rgba(255,255,255,.11);
+            border-radius: 50%;
+            box-shadow:
+                0 0 0 24px rgba(255,255,255,.025),
+                0 0 0 52px rgba(255,255,255,.02),
+                0 0 0 82px rgba(255,255,255,.015);
+            pointer-events: none;
+        }
+
+        .auth-brand-panel::after {
+            content: "✦";
+            position: absolute;
+            right: 42px;
+            top: 48%;
+            color: rgba(214,179,110,.38);
+            font-size: 30px;
+            pointer-events: none;
+        }
+
+        .auth-brand-top,
+        .auth-brand-copy,
+        .auth-brand-bottom {
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-brand-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .auth-brand-emblem {
+            display: grid;
+            place-items: center;
+            flex: 0 0 44px;
+            width: 44px;
+            height: 44px;
+            color: var(--auth-gold);
+            border: 1px solid rgba(214,179,110,.65);
+            border-radius: 50%;
+            font-size: 25px;
+        }
+
+        .auth-brand-name {
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1.6px;
+            text-transform: uppercase;
+        }
+
+        .auth-brand-subname {
+            margin-top: 4px;
+            color: rgba(255,255,255,.62);
+            font-size: 10px;
+            letter-spacing: .8px;
+        }
+
+        .auth-brand-copy {
+            padding: 55px 0;
+        }
+
+        .auth-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 22px;
+            color: var(--auth-gold);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2.3px;
+            text-transform: uppercase;
+        }
+
+        .auth-eyebrow::before {
+            content: "";
+            width: 24px;
+            height: 1px;
+            background: var(--auth-gold);
+        }
+
+        .auth-brand-copy h1 {
+            max-width: 390px;
+            margin: 0;
+            color: #fff;
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: clamp(38px, 4vw, 55px);
+            font-weight: 500;
+            line-height: 1.12;
+            letter-spacing: -1.5px;
+        }
+
+        .auth-brand-copy h1 em {
+            color: var(--auth-gold);
+            font-weight: 500;
+        }
+
+        .auth-brand-description {
+            max-width: 335px;
+            margin: 22px 0 0;
+            color: rgba(255,255,255,.73);
+            font-size: 13px;
+            line-height: 2;
+        }
+
+        .auth-brand-verse {
+            max-width: 320px;
+            margin-top: 32px;
+            padding: 17px 19px;
+            border-left: 2px solid var(--auth-gold);
+            background: rgba(255,255,255,.055);
+        }
+
+        .auth-brand-verse p {
+            margin: 0;
+            color: rgba(255,255,255,.88);
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 16px;
+            font-style: italic;
+            line-height: 1.65;
+        }
+
+        .auth-brand-verse span {
+            display: block;
+            margin-top: 9px;
+            color: var(--auth-gold);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .auth-brand-bottom {
+            padding-top: 18px;
+            border-top: 1px solid rgba(255,255,255,.13);
+            color: rgba(255,255,255,.52);
+            font-size: 10px;
+            letter-spacing: .7px;
+            line-height: 1.8;
+        }
+
+        /* White form panel */
+        .auth-form-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 43px clamp(25px, 4vw, 52px);
+            background: #fff;
+        }
+
+        .auth-form-heading {
+            margin-bottom: 27px;
+        }
+
+        .auth-form-kicker {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--auth-purple);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .auth-form-heading h2,
+        .auth-form-heading h3 {
+            margin: 0;
+            color: var(--auth-ink);
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: clamp(27px, 3vw, 35px);
+            font-weight: 600;
+            line-height: 1.25;
+            letter-spacing: -.6px;
+        }
+
+        .auth-form-heading p {
+            margin: 11px 0 0;
+            color: var(--auth-muted);
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .auth-choice-actions {
+            display: grid;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .auth-choice-actions button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            width: 100%;
+            min-height: 58px;
+            padding: 0 19px;
+            border: 1px solid #e8deed;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+        }
+
+        .auth-choice-actions button span {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .auth-button-icon {
+            display: grid;
+            place-items: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            font-size: 16px;
+        }
+
+        .auth-choice-actions .auth-register-action {
+            color: #fff;
+            border-color: transparent;
+            background: linear-gradient(130deg, #49205f, #70458a);
+            box-shadow: 0 9px 20px rgba(73,32,95,.17);
+        }
+
+        .auth-register-action .auth-button-icon {
+            color: var(--auth-gold);
+            background: rgba(255,255,255,.12);
+        }
+
+        .auth-choice-actions .auth-login-action {
+            color: var(--auth-ink);
+            background: #fff;
+        }
+
+        .auth-login-action .auth-button-icon {
+            color: var(--auth-purple);
+            background: var(--auth-lilac);
+        }
+
+        .auth-choice-actions button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(39,19,51,.11);
+        }
+
+        .auth-choice-arrow {
+            font-size: 18px;
+            opacity: .7;
+        }
+
+        .auth-form-divider {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin: 25px 0 18px;
+            color: #a094a8;
+            font-size: 10px;
+        }
+
+        .auth-form-divider::before,
+        .auth-form-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee7f1;
+        }
+
+        .auth-choice-footnote {
+            margin: 0;
+            color: #93879a;
+            font-size: 10px;
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        /* Actual registration and login forms */
+        #membership-forms {
+            width: 100%;
+        }
+
+        #membership-form,
+        #membership-login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            background: transparent;
+            border: 0;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .auth-back-button {
+            align-self: flex-start;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 0;
+            margin: 0 0 8px;
+            color: var(--auth-purple);
+            background: transparent;
+            border: 0;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .auth-back-button:hover {
+            color: var(--auth-ink);
+        }
+
+        .auth-form-fields {
+            display: grid;
+            gap: 14px;
+        }
+
+        .auth-field label {
+            display: block;
+            margin-bottom: 7px;
+            color: #403347;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .auth-field input,
+        .auth-field select {
+            box-sizing: border-box;
+            width: 100%;
+            min-height: 47px;
+            padding: 12px 14px;
+            color: var(--auth-ink);
+            background: #fcfaff;
+            border: 1px solid #e7dfea;
+            border-radius: 10px;
+            outline: none;
+            font-family: inherit;
+            font-size: 12px;
+            transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+        }
+
+        .auth-field input::placeholder {
+            color: #a69aab;
+        }
+
+        .auth-field input:hover,
+        .auth-field select:hover {
+            border-color: #c9b4d6;
+        }
+
+        .auth-field input:focus,
+        .auth-field select:focus {
+            background: #fff;
+            border-color: #81549a;
+            box-shadow: 0 0 0 4px rgba(109,67,135,.10);
+        }
+
+        .auth-submit-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            min-height: 51px;
+            margin-top: 4px;
+            padding: 13px 18px;
+            color: #fff;
+            background: linear-gradient(130deg, #49205f, #70458a);
+            border: 0;
+            border-radius: 10px;
+            box-shadow: 0 8px 18px rgba(73,32,95,.16);
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .auth-submit-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 24px rgba(73,32,95,.23);
+        }
+
+        .auth-submit-arrow {
+            color: var(--auth-gold);
+            font-size: 17px;
+        }
+
+        .auth-switch-prompt {
+            margin: 0;
+            color: var(--auth-muted);
+            font-size: 11px;
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        .auth-switch-prompt button {
+            padding: 0;
+            margin-left: 3px;
+            color: var(--auth-purple);
+            background: transparent;
+            border: 0;
+            font: inherit;
+            font-weight: 700;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            cursor: pointer;
+        }
+
+        .membership-message {
+            margin: 0;
+            overflow-wrap: anywhere;
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+        #membership-message[data-type="error"],
+        #membership-login-message[data-type="error"] {
+            color: #b42340;
+        }
+
+        #membership-message[data-type="success"],
+        #membership-login-message[data-type="success"] {
+            color: #237448;
+        }
+
+        #membership-status {
+            width: min(100%, 650px);
+            margin: 0 auto 30px;
+            padding: 27px;
+            color: var(--auth-ink);
+            background: #fff;
+            border: 1px solid #e9deef;
+            border-radius: 18px;
+            box-shadow: 0 18px 48px rgba(39,19,51,.08);
+        }
+
+        #membership-status h3 {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 25px;
+        }
+
+        #membership-status p {
+            color: var(--auth-muted);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        #membership-status button {
+            width: 100%;
+            min-height: 46px;
+            padding: 12px;
+            color: #fff;
+            background: var(--auth-plum);
+            border: 0;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Group cards */
+        #member-groups-content .section-heading {
+            margin: 15px auto 30px;
+            text-align: center;
+        }
+
+        #member-groups-content .section-heading h2 {
+            color: var(--auth-ink);
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: clamp(28px, 4vw, 39px);
+        }
+
+        #member-groups-content .membership-intro {
+            color: var(--auth-muted);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        #member-groups-content .group-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        #member-groups-content .group-card {
+            padding: 23px;
+            background: #fff;
+            border: 1px solid #eae0ef;
+            border-radius: 16px;
+            box-shadow: 0 10px 28px rgba(39,19,51,.045);
+        }
+
+        #member-groups-content .group-card h3 {
+            color: var(--auth-plum);
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 19px;
+        }
+
+        #member-groups-content .group-card p {
+            color: var(--auth-muted);
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        #member-groups-content .group-count {
+            display: inline-block;
+            padding: 7px 10px;
+            color: var(--auth-purple);
+            background: var(--auth-lilac);
+            border-radius: 7px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        /* Keyboard accessibility */
+        #membership button:focus-visible {
+            outline: 3px solid var(--auth-gold);
+            outline-offset: 3px;
+        }
+
+        #membership button:disabled {
+            opacity: .7;
+            cursor: wait;
+            transform: none;
+        }
+
+        /* Locked page: no navigation until sign-in */
+        body.auth-locked .site-header,
+        body.auth-locked .site-footer {
+            display: none !important;
+        }
+
+        body.auth-locked main .page-section {
+            display: none !important;
+        }
+
+        body.auth-locked main #membership {
+            display: block !important;
+            min-height: 100vh;
+            padding-top: 35px;
+            padding-bottom: 45px;
+        }
+
+        body.auth-locked #membership .auth-showcase {
+            min-height: min(680px, calc(100vh - 80px));
+        }
+
+        body.auth-locked #membership .group-grid {
+            display: none !important;
+        }
+
+        /* When logged in, groups can be shown by JavaScript */
+        body:not(.auth-locked) #membership .group-grid {
+            display: grid;
+        }
+
+        /* Mobile */
+        @media (max-width: 760px) {
+            #membership {
+                padding: 22px 13px 40px;
+            }
+
+            .auth-showcase {
+                grid-template-columns: 1fr;
+                max-width: 520px;
+                min-height: 0;
+                margin: 0 auto;
+                border-radius: 20px;
+            }
+
+            .auth-brand-panel {
+                min-height: 0;
+                padding: 25px 24px 24px;
+            }
+
+            .auth-brand-emblem {
+                width: 38px;
+                height: 38px;
+                flex-basis: 38px;
+                font-size: 21px;
+            }
+
+            .auth-brand-name {
+                font-size: 11px;
+            }
+
+            .auth-brand-subname {
+                font-size: 9px;
+            }
+
+            .auth-brand-copy {
+                padding: 28px 0 22px;
+            }
+
+            .auth-eyebrow {
+                margin-bottom: 13px;
+                font-size: 9px;
+            }
+
+            .auth-brand-copy h1 {
+                max-width: 360px;
+                font-size: clamp(34px, 9vw, 43px);
+            }
+
+            .auth-brand-description {
+                max-width: 420px;
+                margin-top: 13px;
+                font-size: 12px;
+                line-height: 1.8;
+            }
+
+            .auth-brand-verse {
+                display: none;
+            }
+
+            .auth-brand-bottom {
+                padding-top: 13px;
+                font-size: 9px;
+            }
+
+            .auth-form-panel {
+                padding: 29px 23px 31px;
+            }
+
+            .auth-form-heading {
+                margin-bottom: 22px;
+            }
+
+            .auth-form-heading h2,
+            .auth-form-heading h3 {
+                font-size: 29px;
+            }
+
+            .auth-choice-actions {
+                margin-top: 23px;
+            }
+
+            body.auth-locked #membership .auth-showcase {
+                min-height: 0;
+            }
+
+            #member-groups-content .group-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .auth-brand-panel {
+                padding: 22px 19px;
+            }
+
+            .auth-form-panel {
+                padding: 25px 18px;
+            }
+
+            .auth-brand-copy h1 {
+                font-size: 33px;
+            }
+
+            .auth-choice-actions button {
+                min-height: 54px;
+                padding: 0 13px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #membership *,
+            #membership *::before,
+            #membership *::after {
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
 </head>
 
 <body class="auth-locked">
@@ -53,11 +831,9 @@
                     <button class="primary-button" onclick="showSection('story')">
                         Read This Week's Story
                     </button>
-
                     <button class="secondary-button" onclick="showSection('public-chat')">
                         Join Public Chat
                     </button>
-
                     <button class="secondary-button" onclick="showSection('membership')">
                         Join a Bible Study Group
                     </button>
@@ -68,7 +844,6 @@
         <!-- STORY -->
         <section id="story" class="page-section">
             <div class="section-container">
-
                 <div class="section-heading">
                     <span class="section-label">THIS WEEK'S BIBLE STUDY</span>
                     <h2>LIFE AFTER CAMPUS</h2>
@@ -84,7 +859,6 @@
                         Annastacia struggled with rent, family pressure, and
                         constant rejection.
                     </p>
-
                     <p>
                         Every morning, Vincent would wake up early, dress for
                         interviews, and send applications. Most days ended with
@@ -94,7 +868,6 @@
                         on social media made him question whether he was falling
                         behind.
                     </p>
-
                     <p>
                         Annastacia's situation became even more difficult. Her
                         rent was overdue, her family needed her support, and she
@@ -103,7 +876,6 @@
                         company. For the first time in months, she felt that her
                         life was finally changing.
                     </p>
-
                     <p>
                         However, her boss soon made it clear that her career
                         would move faster if she was willing to give him
@@ -113,7 +885,6 @@
                         whether her principles could survive in a world where
                         people seemed willing to do anything to get ahead.
                     </p>
-
                     <p>
                         Eventually, Annastacia made choices that helped her climb
                         the corporate ladder, even though they conflicted with
@@ -123,7 +894,6 @@
                         struggled with the weight of the decisions she had made
                         to get there.
                     </p>
-
                     <p>
                         Vincent, meanwhile, remained at the bottom. He watched
                         former classmates get better jobs while he continued
@@ -134,7 +904,6 @@
                         came his way, and trusting that his journey did not have
                         to look like everyone else's.
                     </p>
-
                     <p>
                         Years later, Vincent and Annastacia met again. They
                         talked about their lives and realized that neither had
@@ -144,7 +913,6 @@
                         longer to build his career, but he was proud that he had
                         not completely lost himself along the way.
                     </p>
-
                     <p>
                         They both learned that
                         <strong>
@@ -168,17 +936,14 @@
                             <span class="verse-reference">Proverbs 16:8</span>
                             <p>“Better is a little with righteousness than great revenues with injustice.”</p>
                         </div>
-
                         <div class="verse-card">
                             <span class="verse-reference">Matthew 16:26</span>
                             <p>“For what will it profit a man if he gains the whole world and forfeits his soul?”</p>
                         </div>
-
                         <div class="verse-card">
                             <span class="verse-reference">Psalm 37:7</span>
                             <p>“Be still before the Lord and wait patiently for him.”</p>
                         </div>
-
                         <div class="verse-card">
                             <span class="verse-reference">Proverbs 3:5–6</span>
                             <p>“Trust in the Lord with all your heart and lean not on your own understanding.”</p>
@@ -191,7 +956,6 @@
         <!-- QUESTIONS -->
         <section id="questions" class="page-section">
             <div class="section-container">
-
                 <div class="section-heading">
                     <span class="section-label">DISCUSSION</span>
                     <h2>Reflection Questions</h2>
@@ -206,7 +970,6 @@
                             <p>Was Annastacia completely wrong for the choices she made considering the financial and social pressure she was under? Where is the line between understanding someone's circumstances and excusing their actions?</p>
                         </div>
                     </div>
-
                     <div class="question-card">
                         <span class="question-number">02</span>
                         <div>
@@ -214,7 +977,6 @@
                             <p>Vincent questioned whether honesty and patience were actually enough. Have you ever felt that doing the right thing puts you at a disadvantage while others seem to succeed through shortcuts?</p>
                         </div>
                     </div>
-
                     <div class="question-card">
                         <span class="question-number">03</span>
                         <div>
@@ -222,7 +984,6 @@
                             <p>What should success mean to a Christian after campus? Is it wealth, career, status, helping family, happiness, faith, or a combination of these?</p>
                         </div>
                     </div>
-
                     <div class="question-card">
                         <span class="question-number">04</span>
                         <div>
@@ -230,7 +991,6 @@
                             <p>If you were in Vincent's position and an opportunity required you to compromise your values, what factors would influence your decision? Is compromise ever justified?</p>
                         </div>
                     </div>
-
                     <div class="question-card">
                         <span class="question-number">05</span>
                         <div>
@@ -246,190 +1006,242 @@
         <section id="membership" class="page-section">
             <div class="section-container">
 
-                <!-- FIRST SCREEN: REGISTER OR LOG IN -->
-                <div id="membership-choice" class="membership-choice">
-                    <div class="membership-choice-cross">✝</div>
-                    <span class="section-label">ST. MONICA LK3C</span>
-                    <h2>Welcome to Bible Study</h2>
-                    <p class="membership-choice-subtitle">
-                        Faith. Reflection. Conversation.
-                    </p>
-                    <p class="membership-choice-description">
-                        Join our community of faith, reflection and fellowship.
-                        Sign in or create an account to continue.
-                    </p>
+                <!-- REGISTER OR LOG IN -->
+                <div id="membership-choice" class="auth-showcase">
 
-                    <div class="membership-choice-actions">
-                        <button
-                            type="button"
-                            id="show-register-btn"
-                            class="membership-submit">
-                            Register
-                        </button>
+                    <aside class="auth-brand-panel">
+                        <div class="auth-brand-top">
+                            <div class="auth-brand-emblem" aria-hidden="true">✝</div>
+                            <div>
+                                <div class="auth-brand-name">St. Monica LK3C</div>
+                                <div class="auth-brand-subname">Catholic Campus Community</div>
+                            </div>
+                        </div>
 
-                        <button
-                            type="button"
-                            id="show-login-btn"
-                            class="auth-secondary-button">
-                            Log In
-                        </button>
+                        <div class="auth-brand-copy">
+                            <span class="auth-eyebrow">A place to belong</span>
+                            <h1>Grow in faith.<br>Walk in <em>purpose.</em></h1>
+                            <p class="auth-brand-description">
+                                Life brings questions. Faith gives us a place to
+                                reflect, listen, learn and grow together. Your
+                                Bible study journey begins here.
+                            </p>
+
+                            <div class="auth-brand-verse">
+                                <p>“For where two or three gather in my name, there am I with them.”</p>
+                                <span>Matthew 18:20</span>
+                            </div>
+                        </div>
+
+                        <div class="auth-brand-bottom">
+                            LOWER KABETE CAMPUS CATHOLIC COMMUNITY<br>
+                            FAITH &nbsp;·&nbsp; REFLECTION &nbsp;·&nbsp; FELLOWSHIP
+                        </div>
+                    </aside>
+
+                    <div class="auth-form-panel">
+                        <div class="auth-form-heading">
+                            <span class="auth-form-kicker">Welcome to our community</span>
+                            <h2>Your journey<br>starts here.</h2>
+                            <p>Sign in to continue, or create an account to join your Bible study group.</p>
+                        </div>
+
+                        <div class="auth-choice-actions">
+                            <button type="button" id="show-register-btn" class="auth-register-action">
+                                <span>
+                                    <span class="auth-button-icon" aria-hidden="true">✦</span>
+                                    Create an account
+                                </span>
+                                <span class="auth-choice-arrow" aria-hidden="true">→</span>
+                            </button>
+
+                            <button type="button" id="show-login-btn" class="auth-login-action">
+                                <span>
+                                    <span class="auth-button-icon" aria-hidden="true">↗</span>
+                                    I already have an account
+                                </span>
+                                <span class="auth-choice-arrow" aria-hidden="true">→</span>
+                            </button>
+                        </div>
+
+                        <div class="auth-form-divider">YOUR COMMUNITY AWAITS</div>
+                        <p class="auth-choice-footnote">
+                            A shared space for God's Word, honest conversations
+                            and friendships rooted in faith.
+                        </p>
                     </div>
-
-                    <p class="membership-choice-footer">
-                        Lower Kabete Campus Catholic Community
-                    </p>
                 </div>
 
-                <!-- AUTHENTICATION STATUS / FEEDBACK -->
-                <div
-                    id="membership-status"
-                    class="membership-status"
-                    role="status"
-                    aria-live="polite"
-                    hidden>
+                <!-- AUTHENTICATION STATUS -->
+                <div id="membership-status"
+                     class="membership-status"
+                     role="status"
+                     aria-live="polite"
+                     hidden>
                 </div>
 
-                <!-- FORMS: HIDDEN UNTIL THE USER CHOOSES -->
+                <!-- REGISTRATION AND LOGIN -->
                 <div id="membership-forms" hidden>
 
-                    <!-- REGISTRATION FORM -->
-                    <form id="membership-form" class="membership-card membership-form" hidden>
-                        <button type="button" class="back-to-choice">
-                            ← Back
-                        </button>
+                    <!-- REGISTRATION -->
+                    <div class="auth-showcase">
+                        <aside class="auth-brand-panel">
+                            <div class="auth-brand-top">
+                                <div class="auth-brand-emblem" aria-hidden="true">✝</div>
+                                <div>
+                                    <div class="auth-brand-name">St. Monica LK3C</div>
+                                    <div class="auth-brand-subname">Catholic Campus Community</div>
+                                </div>
+                            </div>
 
-                        <span class="section-label">JOIN OUR COMMUNITY</span>
-                        <h3>Create Your Account</h3>
-                        <p>Enter your details and choose your Bible study group.</p>
+                            <div class="auth-brand-copy">
+                                <span class="auth-eyebrow">Take your place</span>
+                                <h1>Faith grows<br>when we <em>share it.</em></h1>
+                                <p class="auth-brand-description">
+                                    Find your people, share your reflections,
+                                    explore Scripture and build friendships that
+                                    encourage you in your walk with Christ.
+                                </p>
 
-                        <div>
-                            <label for="member-full-name">Full Name</label>
-                            <input
-                                type="text"
-                                id="member-full-name"
-                                name="fullName"
-                                placeholder="Enter your full name"
-                                autocomplete="name"
-                                minlength="2"
-                                maxlength="80"
-                                required>
+                                <div class="auth-brand-verse">
+                                    <p>“As iron sharpens iron, so one person sharpens another.”</p>
+                                    <span>Proverbs 27:17</span>
+                                </div>
+                            </div>
+
+                            <div class="auth-brand-bottom">
+                                YOUR COMMUNITY. YOUR FAITH JOURNEY.
+                            </div>
+                        </aside>
+
+                        <div class="auth-form-panel">
+                            <form id="membership-form" class="membership-card membership-form" hidden>
+                                <button type="button" class="back-to-choice auth-back-button">
+                                    <span aria-hidden="true">←</span> Back to welcome
+                                </button>
+
+                                <div class="auth-form-heading">
+                                    <span class="auth-form-kicker">Become a member</span>
+                                    <h3>Create your account.</h3>
+                                    <p>Fill in your details and choose the Bible study group you would like to join.</p>
+                                </div>
+
+                                <div class="auth-form-fields">
+                                    <div class="auth-field">
+                                        <label for="member-full-name">Full name</label>
+                                        <input
+                                            type="text"
+                                            id="member-full-name"
+                                            name="fullName"
+                                            placeholder="Your full name"
+                                            autocomplete="name"
+                                            minlength="2"
+                                            maxlength="80"
+                                            required>
+                                    </div>
+
+                                    <div class="auth-field">
+                                        <label for="member-phone">Phone number</label>
+                                        <input
+                                            type="tel"
+                                            id="member-phone"
+                                            name="phoneNumber"
+                                            placeholder="e.g. 0712345678"
+                                            autocomplete="tel"
+                                            maxlength="20"
+                                            required>
+                                    </div>
+
+                                    <div class="auth-field">
+                                        <label for="member-password">Create a password</label>
+                                        <input
+                                            type="password"
+                                            id="member-password"
+                                            name="password"
+                                            placeholder="At least 6 characters"
+                                            autocomplete="new-password"
+                                            minlength="6"
+                                            required>
+                                    </div>
+
+                                    <div class="auth-field">
+                                        <label for="member-group">Choose your Bible study group</label>
+                                        <select id="member-group" name="groupId" required>
+                                            <option value="">Select your group</option>
+                                            <option value="charles-lwanga">St. Charles Lwanga</option>
+                                            <option value="st-williams">St. Williams</option>
+                                            <option value="st-camillas">St. Camillas</option>
+                                            <option value="mathias-mulumba">St. Mathias Mulumba</option>
+                                            <option value="st-vincent">St. Vincent</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <button type="submit" id="membership-submit" class="membership-submit auth-submit-button">
+                                    Create account <span class="auth-submit-arrow" aria-hidden="true">→</span>
+                                </button>
+
+                                <p id="membership-message" class="membership-message" role="status" aria-live="polite"></p>
+
+                                <p class="auth-switch-prompt">
+                                    Already part of St. Monica?
+                                    <button type="button" id="switch-to-login-btn" onclick="document.getElementById('show-login-btn').click()">Log in</button>
+                                </p>
+                            </form>
+
+                            <!-- Login form -->
+                            <form id="membership-login-form" class="membership-card membership-form" hidden>
+                                <button type="button" class="back-to-choice auth-back-button">
+                                    <span aria-hidden="true">←</span> Back to welcome
+                                </button>
+
+                                <div class="auth-form-heading">
+                                    <span class="auth-form-kicker">It's good to have you back</span>
+                                    <h3>Welcome back.</h3>
+                                    <p>Log in with the phone number and password you used when registering.</p>
+                                </div>
+
+                                <div class="auth-form-fields">
+                                    <div class="auth-field">
+                                        <label for="login-member-phone">Phone number</label>
+                                        <input
+                                            type="tel"
+                                            id="login-member-phone"
+                                            name="phoneNumber"
+                                            placeholder="Your registered phone number"
+                                            autocomplete="tel"
+                                            maxlength="20"
+                                            required>
+                                    </div>
+
+                                    <div class="auth-field">
+                                        <label for="login-member-password">Password</label>
+                                        <input
+                                            type="password"
+                                            id="login-member-password"
+                                            name="password"
+                                            placeholder="Enter your password"
+                                            autocomplete="current-password"
+                                            required>
+                                    </div>
+                                </div>
+
+                                <button type="submit" id="membership-login-submit" class="membership-submit auth-submit-button">
+                                    Log in to your account <span class="auth-submit-arrow" aria-hidden="true">→</span>
+                                </button>
+
+                                <p id="membership-login-message" class="membership-message" role="status" aria-live="polite"></p>
+
+                                <p class="auth-switch-prompt">
+                                    New to the community?
+                                    <button type="button" id="switch-to-register-btn" onclick="document.getElementById('show-register-btn').click()">Create an account</button>
+                                </p>
+                            </form>
                         </div>
-
-                        <div>
-                            <label for="member-phone">Phone Number</label>
-                            <input
-                                type="tel"
-                                id="member-phone"
-                                name="phoneNumber"
-                                placeholder="e.g. 0712345678"
-                                autocomplete="tel"
-                                maxlength="20"
-                                required>
-                        </div>
-
-                        <div>
-                            <label for="member-password">Password</label>
-                            <input
-                                type="password"
-                                id="member-password"
-                                name="password"
-                                placeholder="At least 6 characters"
-                                autocomplete="new-password"
-                                minlength="6"
-                                required>
-                        </div>
-
-                        <div>
-                            <label for="member-group">Choose Your Group</label>
-                            <select id="member-group" name="groupId" required>
-                                <option value="">Select a Bible study group</option>
-                                <option value="charles-lwanga">St. Charles Lwanga</option>
-                                <option value="st-williams">St. Williams</option>
-                                <option value="st-camillas">St. Camillas</option>
-                                <option value="mathias-mulumba">St. Mathias Mulumba</option>
-                                <option value="st-vincent">St. Vincent</option>
-                            </select>
-                        </div>
-
-                        <button
-                            type="submit"
-                            id="membership-submit"
-                            class="membership-submit">
-                            Register &amp; Join Group
-                        </button>
-
-                        <p
-                            id="membership-message"
-                            class="membership-message"
-                            role="status"
-                            aria-live="polite">
-                        </p>
-
-                        <p class="auth-switch-prompt">
-                            Already a member?
-                            <button type="button" id="switch-to-login-btn">
-                                Log in
-                            </button>
-                        </p>
-                    </form>
-
-                    <!-- LOGIN FORM -->
-                    <form id="membership-login-form" class="membership-card membership-form" hidden>
-                        <button type="button" class="back-to-choice">
-                            ← Back
-                        </button>
-
-                        <span class="section-label">WELCOME BACK</span>
-                        <h3>Log In</h3>
-                        <p>Sign in to continue to your Bible study home screen.</p>
-
-                        <div>
-                            <label for="login-member-phone">Phone Number</label>
-                            <input
-                                type="tel"
-                                id="login-member-phone"
-                                name="phoneNumber"
-                                placeholder="Registered phone number"
-                                autocomplete="tel"
-                                maxlength="20"
-                                required>
-                        </div>
-
-                        <div>
-                            <label for="login-member-password">Password</label>
-                            <input
-                                type="password"
-                                id="login-member-password"
-                                name="password"
-                                placeholder="Enter your password"
-                                autocomplete="current-password"
-                                required>
-                        </div>
-
-                        <button
-                            type="submit"
-                            id="membership-login-submit"
-                            class="membership-submit">
-                            Log In
-                        </button>
-
-                        <p
-                            id="membership-login-message"
-                            class="membership-message"
-                            role="status"
-                            aria-live="polite">
-                        </p>
-
-                        <p class="auth-switch-prompt">
-                            New to the community?
-                            <button type="button" id="switch-to-register-btn">
-                                Register
-                            </button>
-                        </p>
-                    </form>
+                    </div>
                 </div>
 
-                <!-- MEMBER GROUPS: SHOWN AFTER SUCCESSFUL SIGN IN -->
+                <!-- MEMBER GROUPS -->
                 <div id="member-groups-content" hidden>
                     <div class="section-heading">
                         <span class="section-label">ST. MONICA LK3C COMMUNITY</span>
@@ -479,7 +1291,6 @@
         <!-- PRAYERS -->
         <section id="prayers" class="page-section">
             <div class="section-container">
-
                 <div class="section-heading">
                     <span class="section-label">PRAYER</span>
                     <h2>Catholic Prayers</h2>
@@ -517,7 +1328,6 @@
         <!-- PUBLIC CHAT -->
         <section id="public-chat" class="page-section">
             <div class="section-container">
-
                 <div class="section-heading">
                     <span class="section-label">COMMUNITY</span>
                     <h2>Public Chat</h2>
@@ -536,10 +1346,7 @@
                         maxlength="25"
                         autocomplete="off">
 
-                    <button
-                        id="enter-chat-btn"
-                        class="enter-chat-button"
-                        type="button">
+                    <button id="enter-chat-btn" class="enter-chat-button" type="button">
                         Enter Public Chat
                     </button>
 
@@ -553,10 +1360,7 @@
                             <p>Share respectfully. Build one another up.</p>
                         </div>
 
-                        <button
-                            id="change-name-btn"
-                            class="change-name-button"
-                            type="button">
+                        <button id="change-name-btn" class="change-name-button" type="button">
                             Change Name
                         </button>
                     </div>
@@ -573,18 +1377,11 @@
                             <strong id="reply-preview-user"></strong>
                             <p id="reply-preview-text"></p>
                         </div>
-
                         <button id="cancel-reply-btn" type="button">×</button>
                     </div>
 
                     <form id="chat-form" class="chat-form">
-                        <button
-                            type="button"
-                            id="emoji-btn"
-                            class="emoji-button"
-                            title="Add emoji">
-                            😊
-                        </button>
+                        <button type="button" id="emoji-btn" class="emoji-button" title="Add emoji">😊</button>
 
                         <input
                             type="text"
@@ -593,12 +1390,7 @@
                             maxlength="500"
                             autocomplete="off">
 
-                        <button
-                            type="submit"
-                            id="send-message-btn"
-                            class="send-message-button">
-                            ➤
-                        </button>
+                        <button type="submit" id="send-message-btn" class="send-message-button">➤</button>
                     </form>
 
                     <div class="current-user-bar">
