@@ -2182,3 +2182,42 @@ button:disabled {
         transform: none;
     }
 }
+
+/* Chat alignment compatibility fix */
+#chat-messages .message-wrapper.mine,
+#chat-messages .message-wrapper.own-message {
+    align-items: flex-end;
+}
+
+#chat-messages .message-wrapper.other,
+#chat-messages .message-wrapper.other-message {
+    align-items: flex-start;
+}
+
+#chat-messages .message-wrapper.mine,
+#chat-messages .message-wrapper.own-message {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#chat-messages .message-wrapper.other,
+#chat-messages .message-wrapper.other-message {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#chat-messages .message-wrapper.mine .message-bubble,
+#chat-messages .message-wrapper.own-message .message-bubble {
+    color: white;
+    background: linear-gradient(135deg, #61377b, #45235e);
+    border-bottom-right-radius: 5px;
+}
+
+#chat-messages .message-wrapper.other .message-bubble,
+#chat-messages .message-wrapper.other-message .message-bubble {
+    color: #302438;
+    background: white;
+    border-bottom-left-radius: 5px;
+}
