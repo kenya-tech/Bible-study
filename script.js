@@ -252,6 +252,8 @@ document.querySelectorAll(".back-to-choice").forEach(button => {
 });
 
 // ======================================================
+
+ // ======================================================
 // 5. NAVIGATION
 // ======================================================
 
@@ -263,31 +265,31 @@ const PROTECTED_SECTIONS = new Set([
 ]);
 
 function showSection(sectionId) {
-  if (!$(sectionId)) sectionId = "home";
+  if (!document.getElementById(sectionId)) {
+    sectionId = "home";
+  }
 
+  // Protected sections require a signed-in member.
   if (!currentUser && PROTECTED_SECTIONS.has(sectionId)) {
     sectionId = "membership";
   }
 
-  if (sectionId === "admin") {
-    sectionId = isAdmin() ? "membership" : "home";
-  }
-
+  // Hide every section, then activate the selected one.
   document.querySelectorAll(".page-section").forEach(section => {
-    section.classList.remove("active-section");
+    section.classList.remove("active");
     section.hidden = true;
   });
 
-  const selected = $(sectionId);
+  const selected = document.getElementById(sectionId);
 
   if (selected) {
     selected.hidden = false;
-    selected.classList.add("active-section");
+    selected.classList.add("active");
   }
 
   document.body.classList.toggle("auth-locked", !currentUser);
 
-  const groupsContent = $("member-groups-content");
+  const groupsContent = document.getElementById("member-groups-content");
 
   if (groupsContent) {
     groupsContent.hidden = !isMember();
@@ -302,26 +304,28 @@ function showSection(sectionId) {
   }
 }
 
+// Make the function accessible to the HTML onclick buttons.
 window.showSection = showSection;
 
-document.querySelectorAll("[data-section]").forEach(element => {
-  element.addEventListener("click", event => {
+// Handle navigation buttons.
+document.querySelectorAll("[data-section]").forEach(button => {
+  button.addEventListener("click", event => {
     event.preventDefault();
-    showSection(element.dataset.section);
+    showSection(button.dataset.section);
   });
 });
 
+// Handle internal links.
 document.querySelectorAll('a[href^="#"]').forEach(link => {
   link.addEventListener("click", event => {
-    const sectionId = link.getAttribute("href")?.slice(1);
+    const sectionId = link.getAttribute("href").slice(1);
 
-    if ($(sectionId)?.classList.contains("page-section")) {
+    if (document.getElementById(sectionId)?.classList.contains("page-section")) {
       event.preventDefault();
       showSection(sectionId);
     }
   });
 });
-
 // ======================================================
 // 6. REGISTER A MEMBER
 // ======================================================
