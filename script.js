@@ -1,3 +1,4 @@
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
 
 import {
@@ -76,18 +77,16 @@ const GROUPS = {
 };
 
 // ======================================================
-// 3. SHORTCUTS AND APPLICATION STATE
+// 3. APPLICATION STATE AND HELPERS
 // ======================================================
 
 const $ = id => document.getElementById(id);
 
 let currentUser = null;
 let currentMember = null;
-
 let unsubscribeChat = null;
 let unsubscribeGroupCounts = null;
 let unsubscribeStudyContent = null;
-
 let replyToMessage = null;
 let registrationInProgress = false;
 let profileLoadVersion = 0;
@@ -98,23 +97,15 @@ const membershipForms = $("membership-forms");
 const membershipForm = $("membership-form");
 const loginForm = $("membership-login-form");
 const membershipStatus = $("membership-status");
-
 const membershipMessage = $("membership-message");
 const loginMessage = $("membership-login-message");
-
 const memberGroupsContent = $("member-groups-content");
-
 const chatJoinPanel = $("chat-join-panel");
 const chatRoom = $("chat-room");
 const chatMessages = $("chat-messages");
 
-// ======================================================
-// 4. GENERAL HELPERS
-// ======================================================
-
 function showMessage(element, message, type = "info") {
   if (!element) return;
-
   element.textContent = message;
   element.dataset.type = type;
 }
@@ -134,17 +125,32 @@ function setLoading(button, loading, loadingText = "Please wait…") {
     if (!button.disabled) {
       button.dataset.originalText = button.textContent;
     }
-
     button.disabled = true;
     button.textContent = loadingText;
   } else {
     button.disabled = false;
-
     if (button.dataset.originalText) {
       button.textContent = button.dataset.originalText;
       delete button.dataset.originalText;
     }
   }
+}
+
+function firstExistingId(...ids) {
+  return ids.map(id => $(id)).find(Boolean) || null;
+}
+
+function getFieldValue(...ids) {
+  return firstExistingId(...ids)?.value.trim() || "";
+}
+
+function setFieldValue(value, ...ids) {
+  const field = firstExistingId(...ids);
+  if (field) field.value = value;
+}
+
+function chatField(...ids) {
+  return firstExistingId(...ids);
 }
 
 function normalizePhoneNumber(value) {
@@ -167,28 +173,20 @@ function authError(error) {
   const messages = {
     "auth/email-already-in-use":
       "An account already exists with this phone number. Please log in.",
-
     "auth/invalid-email":
       "The account details are invalid.",
-
     "auth/weak-password":
       "Your password must contain at least 6 characters.",
-
     "auth/invalid-credential":
       "Incorrect phone number or password.",
-
     "auth/user-not-found":
       "No account was found. Please register first.",
-
     "auth/wrong-password":
       "Incorrect phone number or password.",
-
     "auth/too-many-requests":
       "Too many attempts. Please wait and try again.",
-
     "auth/network-request-failed":
       "Network error. Check your internet connection.",
-
     "auth/operation-not-allowed":
       "Email/password sign-in is not enabled in Firebase."
   };
@@ -206,7 +204,7 @@ function isMember() {
 }
 
 // ======================================================
-// 5. MEMBERSHIP SCREEN
+// 4. MEMBERSHIP SCREEN
 // ======================================================
 
 function showMembershipChoice() {
@@ -215,7 +213,6 @@ function showMembershipChoice() {
   hide(membershipStatus);
   hide(membershipForm);
   hide(loginForm);
-
   showMessage(membershipMessage, "");
   showMessage(loginMessage, "");
 }
@@ -226,7 +223,6 @@ function showRegistrationForm() {
   show(membershipForm);
   hide(loginForm);
   hide(membershipStatus);
-
   showMessage(membershipMessage, "");
 }
 
@@ -236,57 +232,39 @@ function showLoginForm() {
   hide(membershipForm);
   show(loginForm);
   hide(membershipStatus);
-
   showMessage(loginMessage, "");
 }
 
-$("show-register-btn")?.addEventListener(
-  "click",
-  showRegistrationForm
-);
-
-$("show-login-btn")?.addEventListener(
-  "click",
-  showLoginForm
-);
-
-$("switch-to-login-btn")?.addEventListener(
-  "click",
-  showLoginForm
-);
-
-$("switch-to-register-btn")?.addEventListener(
-  "click",
-  showRegistrationForm
-);
+$("show-register-btn")?.addEventListener("click", showRegistrationForm);
+$("show-login-btn")?.addEventListener("click", showLoginForm);
+$("switch-to-login-btn")?.addEventListener("click", showLoginForm);
+$("switch-to-register-btn")?.addEventListener("click", showRegistrationForm);
 
 document.querySelectorAll(".back-to-choice").forEach(button => {
   button.addEventListener("click", showMembershipChoice);
 });
 
 // ======================================================
-// 6. PAGE NAVIGATION AND MEMBER-ONLY SECTIONS
+// 5. NAVIGATION
 // ======================================================
 
 const PROTECTED_SECTIONS = new Set([
   "story",
   "questions",
   "prayers",
-  "public-chat",
-  "admin"
+  "public-chat"
 ]);
 
 function showSection(sectionId) {
-  if (!$(sectionId)) {
-    sectionId = "home";
-  }
+  if (!$(sectionId)) sectionId = "home";
 
   if (!currentUser && PROTECTED_SECTIONS.has(sectionId)) {
     sectionId = "membership";
   }
 
-  if (sectionId === "admin" && !isAdmin()) {
-    sectionId = "home";
+  // The admin editor is inside Membership, not a separate section.
+  if (sectionId === "admin") {
+    sectionId = isAdmin() ? "membership" : "home";
   }
 
   document.querySelectorAll(".page-section").forEach(section => {
@@ -325,7 +303,6 @@ document.querySelectorAll("[data-section]").forEach(element => {
   });
 });
 
-// Support existing navigation links that call showSection('section-id').
 document.querySelectorAll('a[href^="#"]').forEach(link => {
   link.addEventListener("click", event => {
     const sectionId = link.getAttribute("href")?.slice(1);
@@ -338,25 +315,19 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 });
 
 // ======================================================
-// 7. REGISTER A MEMBER
+// 6. REGISTER A MEMBER
 // ======================================================
 
 async function registerMember(event) {
   event.preventDefault();
 
   const fullName = $("member-full-name")?.value.trim() || "";
-  const phoneNumber = normalizePhoneNumber(
-    $("member-phone")?.value
-  );
+  const phoneNumber = normalizePhoneNumber($("member-phone")?.value);
   const password = $("member-password")?.value || "";
   const groupId = $("member-group")?.value || "";
 
   if (fullName.length < 2 || fullName.length > 80) {
-    showMessage(
-      membershipMessage,
-      "Enter your full name.",
-      "error"
-    );
+    showMessage(membershipMessage, "Enter your full name.", "error");
     return;
   }
 
@@ -388,17 +359,8 @@ async function registerMember(event) {
   }
 
   registrationInProgress = true;
-
-  setLoading(
-    $("membership-submit"),
-    true,
-    "Creating account…"
-  );
-
-  showMessage(
-    membershipMessage,
-    "Creating your account…"
-  );
+  setLoading($("membership-submit"), true, "Creating account…");
+  showMessage(membershipMessage, "Creating your account…");
 
   let createdUser = null;
 
@@ -428,24 +390,14 @@ async function registerMember(event) {
     await batch.commit();
 
     currentUser = createdUser;
-    currentMember = {
-      fullName,
-      phoneNumber,
-      groupId
-    };
+    currentMember = { fullName, phoneNumber, groupId };
 
     $("member-password").value = "";
 
-    startGroupCountListener();
     await displayMemberScreen(createdUser, currentMember);
   } catch (error) {
     console.error("Registration error:", error);
-
-    showMessage(
-      membershipMessage,
-      authError(error),
-      "error"
-    );
+    showMessage(membershipMessage, authError(error), "error");
 
     if (createdUser) {
       try {
@@ -456,21 +408,14 @@ async function registerMember(event) {
     }
   } finally {
     registrationInProgress = false;
-
-    setLoading(
-      $("membership-submit"),
-      false
-    );
+    setLoading($("membership-submit"), false);
   }
 }
 
-membershipForm?.addEventListener(
-  "submit",
-  registerMember
-);
+membershipForm?.addEventListener("submit", registerMember);
 
 // ======================================================
-// 8. LOG IN A MEMBER
+// 7. LOG IN A MEMBER
 // ======================================================
 
 async function loginMember(event) {
@@ -479,7 +424,6 @@ async function loginMember(event) {
   const phoneNumber = normalizePhoneNumber(
     $("login-member-phone")?.value
   );
-
   const password = $("login-member-password")?.value || "";
 
   if (!phoneNumber) {
@@ -492,24 +436,12 @@ async function loginMember(event) {
   }
 
   if (!password) {
-    showMessage(
-      loginMessage,
-      "Enter your password.",
-      "error"
-    );
+    showMessage(loginMessage, "Enter your password.", "error");
     return;
   }
 
-  setLoading(
-    $("membership-login-submit"),
-    true,
-    "Signing in…"
-  );
-
-  showMessage(
-    loginMessage,
-    "Checking your account…"
-  );
+  setLoading($("membership-login-submit"), true, "Signing in…");
+  showMessage(loginMessage, "Checking your account…");
 
   try {
     const credential = await signInWithEmailAndPassword(
@@ -522,7 +454,7 @@ async function loginMember(event) {
       doc(db, "members", credential.user.uid)
     );
 
-    if (!profile.exists()) {
+    if (!profile.exists() && credential.user.uid !== ADMIN_UID) {
       await signOut(auth);
 
       showMessage(
@@ -530,48 +462,33 @@ async function loginMember(event) {
         "Your member profile could not be found. Please contact the Bible study leadership.",
         "error"
       );
-
       return;
     }
 
     currentUser = credential.user;
-    currentMember = profile.data();
+    currentMember = profile.exists()
+      ? profile.data()
+      : { fullName: "Administrator", groupId: "" };
 
     $("login-member-password").value = "";
 
-    await displayMemberScreen(
-      currentUser,
-      currentMember
-    );
+    await displayMemberScreen(currentUser, currentMember);
   } catch (error) {
     console.error("Login error:", error);
-
-    showMessage(
-      loginMessage,
-      authError(error),
-      "error"
-    );
+    showMessage(loginMessage, authError(error), "error");
   } finally {
-    setLoading(
-      $("membership-login-submit"),
-      false
-    );
+    setLoading($("membership-login-submit"), false);
   }
 }
 
-loginForm?.addEventListener(
-  "submit",
-  loginMember
-);
+loginForm?.addEventListener("submit", loginMember);
 
 // ======================================================
-// 9. MEMBER DASHBOARD AND SIGN-OUT
+// 8. MEMBER DASHBOARD AND ADMIN VISIBILITY
 // ======================================================
 
 async function displayMemberScreen(user, member) {
-  if (!user || user.isAnonymous || !member) {
-    return;
-  }
+  if (!user || user.isAnonymous || !member) return;
 
   currentUser = user;
   currentMember = member;
@@ -580,14 +497,14 @@ async function displayMemberScreen(user, member) {
     membershipStatus.replaceChildren();
 
     const heading = document.createElement("h3");
-    heading.textContent =
-      `Welcome, ${member.fullName || "Member"}!`;
+    heading.textContent = `Welcome, ${member.fullName || "Member"}!`;
 
     const group = document.createElement("p");
-
     group.textContent = GROUPS[member.groupId]
       ? `Your Bible study group: ${GROUPS[member.groupId].name}`
-      : "Your membership is active.";
+      : isAdmin()
+        ? "Administrator account"
+        : "Your membership is active.";
 
     const logout = document.createElement("button");
     logout.type = "button";
@@ -612,17 +529,18 @@ async function displayMemberScreen(user, member) {
   hide(membershipForm);
   hide(loginForm);
 
-  if (memberGroupsContent) {
-    show(memberGroupsContent);
-  }
+  if (memberGroupsContent) show(memberGroupsContent);
 
   document.body.classList.remove("auth-locked");
 
+  // IMPORTANT: the editor's actual ID in index.html is admin-editor.
+  const adminEditor = $("admin-editor");
+
   if (isAdmin()) {
-    show($("admin"));
+    show(adminEditor);
     await loadAdminContent();
   } else {
-    hide($("admin"));
+    hide(adminEditor);
   }
 
   startGroupCountListener();
@@ -632,12 +550,11 @@ async function displayMemberScreen(user, member) {
 }
 
 // ======================================================
-// 10. CHECK THE AUTHENTICATION STATE
+// 9. FIREBASE AUTHENTICATION STATE
 // ======================================================
 
 onAuthStateChanged(auth, async user => {
   currentUser = user;
-
   const thisCheck = ++profileLoadVersion;
 
   if (!user) {
@@ -660,63 +577,41 @@ onAuthStateChanged(auth, async user => {
 
     hide(chatRoom);
     show(chatJoinPanel);
-
-    hide($("admin"));
+    hide($("admin-editor"));
 
     if (memberGroupsContent) {
       memberGroupsContent.hidden = true;
     }
 
     document.body.classList.add("auth-locked");
-
     showMembershipChoice();
     showSection("home");
-
     return;
   }
 
-  if (registrationInProgress) {
-    return;
-  }
+  if (registrationInProgress) return;
 
   try {
-    const profile = await getDoc(
-      doc(db, "members", user.uid)
-    );
+    const profile = await getDoc(doc(db, "members", user.uid));
 
-    if (thisCheck !== profileLoadVersion) {
-      return;
-    }
+    if (thisCheck !== profileLoadVersion) return;
 
-    // Allow the designated admin account to access the editor
-    // even if it was created before member registration was added.
-    if (!profile.exists() && user.uid === ADMIN_UID) {
-      currentMember = {
-        fullName: "Administrator",
-        groupId: ""
-      };
-
-      await displayMemberScreen(user, currentMember);
-      return;
-    }
-
-    if (!profile.exists()) {
+    if (!profile.exists() && user.uid !== ADMIN_UID) {
       currentMember = null;
       await signOut(auth);
       return;
     }
 
-    currentMember = profile.data();
+    currentMember = profile.exists()
+      ? profile.data()
+      : { fullName: "Administrator", groupId: "" };
 
-    await displayMemberScreen(
-      user,
-      currentMember
-    );
+    await displayMemberScreen(user, currentMember);
   } catch (error) {
     console.error("Profile verification error:", error);
 
     currentMember = null;
-
+    hide($("admin-editor"));
     showMembershipChoice();
 
     showMessage(
@@ -726,8 +621,9 @@ onAuthStateChanged(auth, async user => {
     );
   }
 });
+
 // ======================================================
-// 11. GROUP MEMBER COUNTS
+// 10. GROUP MEMBER COUNTS
 // ======================================================
 
 function startGroupCountListener() {
@@ -759,44 +655,37 @@ function startGroupCountListener() {
         const countElement = $(group.countId);
 
         if (countElement) {
-          countElement.textContent =
-            `Members: ${counts[groupId]}`;
+          countElement.textContent = `Members: ${counts[groupId]}`;
         }
       });
     },
-    error => {
-      console.error("Group count listener error:", error);
-    }
+    error => console.error("Group count listener error:", error)
   );
 }
 
-// Add icons only where the HTML has a suitable group card.
 function addGroupIcons() {
   Object.entries(GROUPS).forEach(([groupId, group]) => {
     const card =
       document.querySelector(`[data-group="${groupId}"]`) ||
       $(`group-${groupId}`);
 
-    if (!card) return;
+    if (!card || card.querySelector(".group-icon")) return;
 
-    if (!card.querySelector(".group-icon")) {
-      const icon = document.createElement("span");
-      icon.className = "group-icon";
-      icon.setAttribute("aria-hidden", "true");
-      icon.textContent = group.icon;
+    const icon = document.createElement("span");
+    icon.className = "group-icon";
+    icon.setAttribute("aria-hidden", "true");
+    icon.textContent = group.icon;
 
-      card.prepend(icon);
-    }
+    card.prepend(icon);
   });
 }
 
 // ======================================================
-// 12. DEFAULT STORY AND DISCUSSION QUESTIONS
+// 11. DEFAULT STORY AND DISCUSSION QUESTIONS
 // ======================================================
 
 const defaultContent = {
   title: "LIFE AFTER CAMPUS",
-
   subtitle: "A story about success, choices, faith and values",
 
   story: `After graduation, Vincent and Annastacia entered the job market with the same dream: to build successful lives. Months passed, but neither could find a stable job. Vincent survived through small jobs while Annastacia struggled with rent, family pressure, and constant rejection.
@@ -840,7 +729,7 @@ They both learned that life after campus is not simply about finding a job or be
 };
 
 // ======================================================
-// 13. RENDER STORY AND QUESTIONS
+// 12. RENDER STORY AND QUESTIONS
 // ======================================================
 
 function getQuestionCards() {
@@ -849,24 +738,16 @@ function getQuestionCards() {
 
 function renderStoryAndQuestions(content) {
   const storySection = $("story");
-
-  const storyHeading =
-    storySection?.querySelector(".section-heading h2");
-
-  const storySubtitle =
-    storySection?.querySelector(".section-heading p");
-
-  const storyCard =
-    storySection?.querySelector(".story-card");
+  const storyHeading = storySection?.querySelector(".section-heading h2");
+  const storySubtitle = storySection?.querySelector(".section-heading p");
+  const storyCard = storySection?.querySelector(".story-card");
 
   if (storyHeading) {
-    storyHeading.textContent =
-      content.title || defaultContent.title;
+    storyHeading.textContent = content.title || defaultContent.title;
   }
 
   if (storySubtitle) {
-    storySubtitle.textContent =
-      content.subtitle || defaultContent.subtitle;
+    storySubtitle.textContent = content.subtitle || defaultContent.subtitle;
   }
 
   if (storyCard) {
@@ -884,7 +765,6 @@ function renderStoryAndQuestions(content) {
   }
 
   const cards = getQuestionCards();
-
   const questions =
     Array.isArray(content.questions) && content.questions.length
       ? content.questions
@@ -892,15 +772,13 @@ function renderStoryAndQuestions(content) {
 
   questions.forEach((question, index) => {
     const card = cards[index];
-
     if (!card) return;
 
     const heading = card.querySelector("h3");
     const paragraph = card.querySelector("p");
 
     if (heading) {
-      heading.textContent =
-        question.title || `Question ${index + 1}`;
+      heading.textContent = question.title || `Question ${index + 1}`;
     }
 
     if (paragraph) {
@@ -910,27 +788,11 @@ function renderStoryAndQuestions(content) {
 }
 
 // ======================================================
-// 14. ADMIN EDITOR: READ AND FILL FIELDS
+// 13. ADMIN EDITOR: READ AND FILL FIELDS
 // ======================================================
 
-// These helpers support both the field IDs in your pasted HTML
-// and the alternate IDs used in the earlier JavaScript.
-
-function firstExistingId(...ids) {
-  return ids.map(id => $(id)).find(Boolean) || null;
-}
-
-function setFieldValue(value, ...ids) {
-  const field = firstExistingId(...ids);
-
-  if (field) {
-    field.value = value;
-  }
-}
-
-function getFieldValue(...ids) {
-  return firstExistingId(...ids)?.value.trim() || "";
-}
+// Each admin-question-N textarea contains:
+// question title, a blank line, then the discussion prompt.
 
 function fillAdminForm(content) {
   setFieldValue(
@@ -953,53 +815,71 @@ function fillAdminForm(content) {
     const question = content.questions?.[index] || fallback;
     const number = index + 1;
 
-    setFieldValue(
-      question.title || "",
-      `admin-question-${number}-title`,
-      `admin-question-${number}`
+    // Support separate fields if the HTML uses them.
+    const titleField = $(`admin-question-${number}-title`);
+    const textField = firstExistingId(
+      `admin-question-${number}-prompt`,
+      `admin-question-${number}-text`
     );
 
+    if (titleField && textField) {
+      titleField.value = question.title || fallback.title;
+      textField.value = question.text || fallback.text;
+      return;
+    }
+
+    // Actual current HTML uses one textarea per question.
     setFieldValue(
-      question.text || "",
-      `admin-question-${number}-text`
+      `${question.title || fallback.title}\n\n${question.text || fallback.text}`,
+      `admin-question-${number}`
     );
   });
 }
 
 function readAdminForm() {
+  const questions = defaultContent.questions.map((fallback, index) => {
+    const number = index + 1;
+    const titleField = $(`admin-question-${number}-title`);
+    const textField = firstExistingId(
+      `admin-question-${number}-prompt`,
+      `admin-question-${number}-text`
+    );
+
+    if (titleField && textField) {
+      return {
+        title: titleField.value.trim() || fallback.title,
+        text: textField.value.trim()
+      };
+    }
+
+    const value = getFieldValue(`admin-question-${number}`);
+    const parts = value.split(/\n\s*\n/);
+
+    return {
+      title: (parts.shift() || "").trim() || fallback.title,
+      text: parts.join("\n\n").trim()
+    };
+  });
+
   return {
     title: getFieldValue("admin-story-title"),
-
     subtitle: getFieldValue("admin-story-subtitle"),
-
-    story: getFieldValue(
-      "admin-story-content",
-      "admin-story-text"
-    ),
-
-    questions: defaultContent.questions.map((fallback, index) => {
-      const number = index + 1;
-
-      return {
-        title: getFieldValue(
-          `admin-question-${number}-title`,
-          `admin-question-${number}`
-        ) || fallback.title,
-
-        text: getFieldValue(
-          `admin-question-${number}-text`
-        ) || ""
-      };
-    })
+    story: getFieldValue("admin-story-content", "admin-story-text"),
+    questions
   };
 }
 
 // ======================================================
-// 15. LOAD ADMIN CONTENT FROM FIRESTORE
+// 14. LOAD ADMIN CONTENT FROM FIRESTORE
 // ======================================================
 
 async function loadAdminContent() {
   if (!isAdmin()) return;
+
+  const messageElement = firstExistingId(
+    "admin-editor-message",
+    "admin-save-message"
+  );
 
   try {
     const snapshot = await getDoc(
@@ -1014,10 +894,7 @@ async function loadAdminContent() {
     fillAdminForm(content);
 
     showMessage(
-      firstExistingId(
-        "admin-editor-message",
-        "admin-save-message"
-      ),
+      messageElement,
       snapshot.exists()
         ? "Your saved content is loaded."
         : "Default content loaded. Save changes to store it in Firebase."
@@ -1029,10 +906,7 @@ async function loadAdminContent() {
     fillAdminForm(defaultContent);
 
     showMessage(
-      firstExistingId(
-        "admin-editor-message",
-        "admin-save-message"
-      ),
+      messageElement,
       "Could not load saved content. Check your Firestore rules and internet connection.",
       "error"
     );
@@ -1040,20 +914,23 @@ async function loadAdminContent() {
 }
 
 // ======================================================
-// 16. SAVE ADMIN CONTENT
+// 15. SAVE AND RESET ADMIN CONTENT
 // ======================================================
 
-async function saveAdminContent() {
+async function saveAdminContent(event) {
+  if (event) event.preventDefault();
+
+  const messageElement = firstExistingId(
+    "admin-editor-message",
+    "admin-save-message"
+  );
+
   if (!isAdmin()) {
     showMessage(
-      firstExistingId(
-        "admin-editor-message",
-        "admin-save-message"
-      ),
+      messageElement,
       "Only the authorized administrator can save content.",
       "error"
     );
-
     return;
   }
 
@@ -1062,19 +939,13 @@ async function saveAdminContent() {
   if (
     !content.title ||
     !content.story ||
-    content.questions.some(question =>
-      !question.title || !question.text
-    )
+    content.questions.some(question => !question.title || !question.text)
   ) {
     showMessage(
-      firstExistingId(
-        "admin-editor-message",
-        "admin-save-message"
-      ),
+      messageElement,
       "Complete the story title, story text, and all five question titles and prompts.",
       "error"
     );
-
     return;
   }
 
@@ -1083,17 +954,8 @@ async function saveAdminContent() {
     "admin-save-content-btn"
   );
 
-  const messageElement = firstExistingId(
-    "admin-editor-message",
-    "admin-save-message"
-  );
-
   setLoading(button, true, "Saving…");
-
-  showMessage(
-    messageElement,
-    "Saving changes to Firebase…"
-  );
+  showMessage(messageElement, "Saving changes to Firebase…");
 
   try {
     await setDoc(
@@ -1106,8 +968,6 @@ async function saveAdminContent() {
     );
 
     renderStoryAndQuestions(content);
-
-    // Keep the admin editor fields in sync with what was saved.
     fillAdminForm(content);
 
     showMessage(
@@ -1127,13 +987,28 @@ async function saveAdminContent() {
   }
 }
 
-firstExistingId(
+const adminForm = $("admin-content-form");
+
+adminForm?.addEventListener("submit", saveAdminContent);
+
+const adminSaveButton = firstExistingId(
   "admin-save-btn",
   "admin-save-content-btn"
-)?.addEventListener("click", saveAdminContent);
+);
+
+adminSaveButton?.addEventListener("click", event => {
+  // A submit button is handled by the form's submit listener.
+  if (event.currentTarget.type === "submit" && adminForm) return;
+  saveAdminContent(event);
+});
+
+$("admin-reset-btn")?.addEventListener("click", async () => {
+  if (!isAdmin()) return;
+  await loadAdminContent();
+});
 
 // ======================================================
-// 17. LIVE CONTENT UPDATES
+// 16. LIVE CONTENT UPDATES
 // ======================================================
 
 function startStudyContentListener() {
@@ -1153,20 +1028,23 @@ function startStudyContentListener() {
 
       renderStoryAndQuestions(content);
 
-      if (isAdmin()) {
+      // Do not overwrite the admin's form while they are editing.
+      if (
+        isAdmin() &&
+        !document.activeElement?.closest("#admin-editor")
+      ) {
         fillAdminForm(content);
       }
     },
     error => {
       console.error("Study content listener error:", error);
-
-      // Only signed-in members receive the built-in fallback here.
       renderStoryAndQuestions(defaultContent);
     }
   );
 }
+
 // ======================================================
-// 18. CHAT DISPLAY NAME
+// 17. CHAT DISPLAY NAME
 // ======================================================
 
 function getChatName() {
@@ -1186,32 +1064,24 @@ function saveChatName(name) {
   }
 }
 
-function chatField(...ids) {
-  return firstExistingId(...ids);
-}
-
 function updateChatNameDisplays(name) {
   const currentName = chatField(
     "chat-current-user",
     "current-user-name"
   );
 
-  if (currentName) {
-    currentName.textContent = name;
-  }
+  if (currentName) currentName.textContent = name;
 
   const nameInput = chatField(
     "chat-display-name",
     "anonymous-name"
   );
 
-  if (nameInput) {
-    nameInput.value = name;
-  }
+  if (nameInput) nameInput.value = name;
 }
 
 // ======================================================
-// 19. PREPARE THE CHAT SCREEN
+// 18. PREPARE CHAT SCREEN
 // ======================================================
 
 function prepareChat() {
@@ -1248,13 +1118,12 @@ function prepareChat() {
 
   hide(chatJoinPanel);
   show(chatRoom);
-
   updateChatNameDisplays(savedName);
   listenForChatMessages();
 }
 
 // ======================================================
-// 20. JOIN THE CHAT
+// 19. JOIN CHAT
 // ======================================================
 
 async function joinChat(event) {
@@ -1284,7 +1153,6 @@ async function joinChat(event) {
       "Choose a chat name between 2 and 25 characters.",
       "error"
     );
-
     return;
   }
 
@@ -1299,23 +1167,18 @@ async function joinChat(event) {
   prepareChat();
 }
 
-chatField(
-  "chat-join-form"
-)?.addEventListener("submit", joinChat);
+chatField("chat-join-form")?.addEventListener("submit", joinChat);
 
-chatField(
-  "chat-join-btn",
-  "enter-chat-btn"
-)?.addEventListener("click", event => {
-  // If the button belongs to the form, the form submit handler
-  // will perform the action.
-  if (event.currentTarget.form) return;
-
-  joinChat(event);
-});
+chatField("chat-join-btn", "enter-chat-btn")?.addEventListener(
+  "click",
+  event => {
+    if (event.currentTarget.form) return;
+    joinChat(event);
+  }
+);
 
 // ======================================================
-// 21. LOAD CHAT MESSAGES IN REAL TIME
+// 20. LOAD CHAT MESSAGES IN REAL TIME
 // ======================================================
 
 function listenForChatMessages() {
@@ -1339,11 +1202,8 @@ function listenForChatMessages() {
 
       if (snapshot.empty) {
         const empty = document.createElement("p");
-
         empty.className = "chat-empty-state";
-        empty.textContent =
-          "Be the first to start the conversation.";
-
+        empty.textContent = "Be the first to start the conversation.";
         chatMessages.appendChild(empty);
         return;
       }
@@ -1370,13 +1230,12 @@ function listenForChatMessages() {
 }
 
 // ======================================================
-// 22. DISPLAY A CHAT MESSAGE
+// 21. DISPLAY A CHAT MESSAGE
 // ======================================================
 
 function renderChatMessage(id, message) {
   const ownMessage =
-    currentUser?.uid &&
-    message.uid === currentUser.uid;
+    currentUser?.uid && message.uid === currentUser.uid;
 
   const wrapper = document.createElement("div");
 
@@ -1389,7 +1248,6 @@ function renderChatMessage(id, message) {
   const bubble = document.createElement("div");
   bubble.className = "message-bubble";
 
-  // Show the original message when this message is a reply.
   if (message.replyText) {
     const quote = document.createElement("div");
     quote.className = "reply-preview";
@@ -1406,9 +1264,7 @@ function renderChatMessage(id, message) {
 
   const name = document.createElement("strong");
   name.className = "message-user";
-  name.textContent = ownMessage
-    ? "You"
-    : (message.user || "Member");
+  name.textContent = ownMessage ? "You" : (message.user || "Member");
 
   const text = document.createElement("p");
   text.className = "message-text";
@@ -1418,73 +1274,53 @@ function renderChatMessage(id, message) {
   time.className = "message-time";
 
   if (typeof message.timestamp === "number") {
-    time.textContent = new Date(
-      message.timestamp
-    ).toLocaleTimeString([], {
+    time.textContent = new Date(message.timestamp).toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit"
     });
   } else if (message.timestamp?.toDate) {
-    time.textContent = message.timestamp
-      .toDate()
-      .toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit"
-      });
+    time.textContent = message.timestamp.toDate().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
   }
 
   bubble.append(name, text, time);
   wrapper.appendChild(bubble);
 
   const replyButton = document.createElement("button");
-
   replyButton.type = "button";
   replyButton.className = "reply-message-button";
   replyButton.textContent = "Reply";
 
   replyButton.addEventListener("click", () => {
-    setReply({
-      ...message,
-      id
-    });
+    setReply({ ...message, id });
   });
 
   wrapper.appendChild(replyButton);
 
-  // Swiping left on a message starts a reply.
-  wrapper.addEventListener(
-    "touchstart",
-    event => {
-      chatTouchStartX = event.changedTouches[0].screenX;
-    },
-    { passive: true }
-  );
+  wrapper.addEventListener("touchstart", event => {
+    chatTouchStartX = event.changedTouches[0].screenX;
+  }, { passive: true });
 
-  wrapper.addEventListener(
-    "touchend",
-    event => {
-      const endX = event.changedTouches[0].screenX;
+  wrapper.addEventListener("touchend", event => {
+    const endX = event.changedTouches[0].screenX;
 
-      if (
-        chatTouchStartX !== null &&
-        chatTouchStartX - endX > 65
-      ) {
-        setReply({
-          ...message,
-          id
-        });
-      }
+    if (
+      chatTouchStartX !== null &&
+      chatTouchStartX - endX > 65
+    ) {
+      setReply({ ...message, id });
+    }
 
-      chatTouchStartX = null;
-    },
-    { passive: true }
-  );
+    chatTouchStartX = null;
+  }, { passive: true });
 
   chatMessages.appendChild(wrapper);
 }
 
 // ======================================================
-// 23. REPLY TO A MESSAGE
+// 22. REPLY TO A MESSAGE
 // ======================================================
 
 function setReply(message) {
@@ -1514,18 +1350,10 @@ function setReply(message) {
     preview.style.display = "flex";
   }
 
-  if (replyName) {
-    replyName.textContent = replyToMessage.user;
-  }
+  if (replyName) replyName.textContent = replyToMessage.user;
+  if (replyText) replyText.textContent = replyToMessage.text;
 
-  if (replyText) {
-    replyText.textContent = replyToMessage.text;
-  }
-
-  chatField(
-    "chat-message-input",
-    "message-input"
-  )?.focus();
+  chatField("chat-message-input", "message-input")?.focus();
 }
 
 function cancelReply() {
@@ -1561,7 +1389,7 @@ chatField(
 )?.addEventListener("click", cancelReply);
 
 // ======================================================
-// 24. CHANGE CHAT NAME
+// 23. CHANGE CHAT NAME
 // ======================================================
 
 function changeChatName() {
@@ -1599,7 +1427,7 @@ $("change-name-bottom-btn")?.addEventListener(
 );
 
 // ======================================================
-// 25. EMOJI PICKER
+// 24. EMOJI PICKER
 // ======================================================
 
 $("emoji-btn")?.addEventListener("click", () => {
@@ -1610,9 +1438,7 @@ $("emoji-btn")?.addEventListener("click", () => {
 
   const choice = prompt(
     "Choose an emoji by entering its number:\n\n" +
-    emojis.map((emoji, index) =>
-      `${index + 1}. ${emoji}`
-    ).join("\n")
+    emojis.map((emoji, index) => `${index + 1}. ${emoji}`).join("\n")
   );
 
   if (choice === null) return;
@@ -1628,10 +1454,7 @@ $("emoji-btn")?.addEventListener("click", () => {
     return;
   }
 
-  const input = chatField(
-    "chat-message-input",
-    "message-input"
-  );
+  const input = chatField("chat-message-input", "message-input");
 
   if (input) {
     input.value += emojis[index];
@@ -1640,7 +1463,7 @@ $("emoji-btn")?.addEventListener("click", () => {
 });
 
 // ======================================================
-// 26. SEND A CHAT MESSAGE
+// 25. SEND A CHAT MESSAGE
 // ======================================================
 
 async function sendChatMessage(event) {
@@ -1657,11 +1480,7 @@ async function sendChatMessage(event) {
     return;
   }
 
-  const input = chatField(
-    "chat-message-input",
-    "message-input"
-  );
-
+  const input = chatField("chat-message-input", "message-input");
   const text = input?.value.trim() || "";
 
   if (!text) return;
@@ -1672,28 +1491,19 @@ async function sendChatMessage(event) {
       "Messages cannot exceed 500 characters.",
       "error"
     );
-
     return;
   }
 
-  const sendButton = chatField(
-    "chat-send-btn",
-    "send-message-btn"
-  );
+  const sendButton = chatField("chat-send-btn", "send-message-btn");
 
   setLoading(sendButton, true, "Sending…");
-
-  showMessage(
-    chatField("chat-message-status"),
-    ""
-  );
+  showMessage(chatField("chat-message-status"), "");
 
   try {
     const data = {
       user: getChatName() ||
         currentMember.fullName ||
         "St. Monica Member",
-
       text,
       uid: currentUser.uid,
       timestamp: Date.now()
@@ -1710,10 +1520,7 @@ async function sendChatMessage(event) {
       data
     );
 
-    if (input) {
-      input.value = "";
-    }
-
+    if (input) input.value = "";
     cancelReply();
   } catch (error) {
     console.error("Could not send chat message:", error);
@@ -1734,13 +1541,10 @@ chatField(
 )?.addEventListener("submit", sendChatMessage);
 
 // ======================================================
-// 27. INITIALIZE THE WEBSITE
+// 26. INITIALIZE THE WEBSITE
 // ======================================================
 
-// Display the built-in content while Firebase checks authentication.
-// Protected sections are redirected to membership until sign-in succeeds.
 renderStoryAndQuestions(defaultContent);
-
 addGroupIcons();
 
 if (window.location.hash) {
