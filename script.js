@@ -736,6 +736,7 @@ function getQuestionCards() {
   return [...document.querySelectorAll("#questions .question-card")];
 }
 
+
 function renderStoryAndQuestions(content) {
   const storySection = $("story");
   const storyHeading = storySection?.querySelector(".section-heading h2");
@@ -764,6 +765,35 @@ function renderStoryAndQuestions(content) {
       });
   }
 
+  // Render Bible verses
+  const versesDisplay = $("bible-verses-display");
+
+  if (versesDisplay) {
+    versesDisplay.replaceChildren();
+
+    const verses =
+      Array.isArray(content.verses) && content.verses.length
+        ? content.verses
+        : defaultContent.verses || [];
+
+    verses.forEach(verse => {
+      const card = document.createElement("div");
+      card.className = "verse-card";
+
+      const reference = document.createElement("span");
+      reference.className = "verse-reference";
+      reference.textContent = verse.reference || "";
+
+      const text = document.createElement("p");
+      text.textContent = verse.text || "";
+
+      card.appendChild(reference);
+      card.appendChild(text);
+      versesDisplay.appendChild(card);
+    });
+  }
+
+  // Render reflection questions
   const cards = getQuestionCards();
   const questions =
     Array.isArray(content.questions) && content.questions.length
