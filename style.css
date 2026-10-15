@@ -2221,3 +2221,135 @@ button:disabled {
     background: white;
     border-bottom-left-radius: 5px;
 }
+/* =========================================================
+   ST. MONICA LK3C — ADMIN EDITOR DESIGN
+========================================================= */
+
+#admin-editor {
+    width: min(100%, 900px);
+    margin: 35px auto;
+    padding: clamp(22px, 4vw, 38px);
+    border: 1px solid #e7d9ef;
+    border-radius: 24px;
+    background: linear-gradient(145deg, #ffffff, #faf6fd);
+    box-shadow: 0 20px 50px rgba(45, 16, 66, 0.10);
+    color: #30243a;
+}
+
+#admin-editor h2,
+#admin-editor h3 {
+    color: #2d1042;
+    font-family: "Playfair Display", Georgia, serif;
+}
+
+#admin-editor h2 {
+    margin-bottom: 10px;
+    font-size: clamp(25px, 4vw, 34px);
+}
+
+#admin-editor h3 {
+    margin: 25px 0 14px;
+    font-size: 21px;
+}
+
+#admin-editor p {
+    color: #81758a;
+}
+
+#admin-content-form {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+    margin-top: 22px;
+}
+
+#admin-editor label {
+    display: block;
+    margin-bottom: 7px;
+    color: #4b176f;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+#admin-editor input,
+#admin-editor textarea {
+    display: block;
+    width: 100%;
+    padding: 13px 15px;
+    border: 1px solid #e2d5e9;
+    border-radius: 12px;
+    outline: none;
+    background: #fdfbff;
+    color: #30243a;
+    font: inherit;
+    font-size: 14px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#admin-editor textarea {
+    min-height: 110px;
+    resize: vertical;
+    line-height: 1.7;
+}
+
+#admin-editor input:focus,
+#admin-editor textarea:focus {
+    border-color: #8553a2;
+    box-shadow: 0 0 0 4px rgba(133, 83, 162, 0.12);
+    background: #ffffff;
+}
+
+#admin-editor button {
+    min-height: 46px;
+    padding: 11px 18px;
+    border: none;
+    border-radius: 12px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#admin-save-btn {
+    color: #ffffff;
+    background: linear-gradient(135deg, #4b176f, #714092);
+    box-shadow: 0 8px 18px rgba(75, 23, 111, 0.16);
+}
+
+#admin-save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(75, 23, 111, 0.22);
+}
+
+#admin-reset-btn {
+    color: #62377b;
+    background: #f1e7f5;
+    border: 1px solid #e4d5ed;
+}
+
+#admin-reset-btn:hover {
+    transform: translateY(-1px);
+    background: #e9dcf2;
+}
+
+#admin-editor button:focus-visible {
+    outline: 3px solid #c9a45c;
+    outline-offset: 3px;
+}
+
+#admin-editor button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+@media (max-width: 600px) {
+    #admin-editor {
+        margin: 22px auto;
+        padding: 22px 17px;
+        border-radius: 18px;
+    }
+
+    #admin-editor button {
+        width: 100%;
+    }
+}
