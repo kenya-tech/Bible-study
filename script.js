@@ -845,6 +845,7 @@ function renderStoryAndQuestions(content) {
 // Each admin-question-N textarea contains:
 // question title, a blank line, then the discussion prompt.
 
+
 function fillAdminForm(content) {
   setFieldValue(
     content.title || defaultContent.title,
@@ -860,6 +861,18 @@ function fillAdminForm(content) {
     content.story || defaultContent.story,
     "admin-story-content",
     "admin-story-text"
+  );
+
+  // Fill the Bible verses editor
+  const verses = Array.isArray(content.verses) && content.verses.length
+    ? content.verses
+    : defaultContent.verses;
+
+  setFieldValue(
+    verses.map(verse =>
+      `${verse.reference}\n${verse.text}`
+    ).join("\n\n"),
+    "admin-bible-verses"
   );
 
   defaultContent.questions.forEach((fallback, index) => {
