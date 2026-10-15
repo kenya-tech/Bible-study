@@ -725,8 +725,29 @@ They both learned that life after campus is not simply about finding a job or be
       title: "Protecting Your Identity",
       text: "Matthew 16:26 asks what it profits someone to gain the whole world but lose their soul. In today's competitive job market, what are young graduates most likely to sacrifice, and how can they protect their faith, values and identity?"
     }
+  
+  ],
+
+  verses: [
+    {
+      reference: "Proverbs 16:8",
+      text: "Better is a little with righteousness than great revenues with injustice."
+    },
+    {
+      reference: "Matthew 16:26",
+      text: "For what will it profit a man if he gains the whole world and forfeits his soul?"
+    },
+    {
+      reference: "Psalm 37:7",
+      text: "Be still before the Lord and wait patiently for him."
+    },
+    {
+      reference: "Proverbs 3:5–6",
+      text: "Trust in the Lord with all your heart and lean not on your own understanding."
+    }
   ]
 };
+
 
 // ======================================================
 // 12. RENDER STORY AND QUESTIONS
