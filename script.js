@@ -900,6 +900,7 @@ function fillAdminForm(content) {
   });
 }
 
+
 function readAdminForm() {
   const questions = defaultContent.questions.map((fallback, index) => {
     const number = index + 1;
@@ -925,11 +926,32 @@ function readAdminForm() {
     };
   });
 
+  // Read Bible verses: reference on one line, text on the next.
+  const versesText = getFieldValue("admin-bible-verses");
+
+  const verses = versesText
+    .split(/\n\s*\n/)
+    .map(block => {
+      const lines = block
+        .split("\n")
+        .map(line => line.trim())
+        .filter(Boolean);
+
+      if (lines.length < 2) return null;
+
+      return {
+        reference: lines[0],
+        text: lines.slice(1).join(" ")
+      };
+    })
+    .filter(Boolean);
+
   return {
     title: getFieldValue("admin-story-title"),
     subtitle: getFieldValue("admin-story-subtitle"),
     story: getFieldValue("admin-story-content", "admin-story-text"),
-    questions
+    questions,
+    verses
   };
 }
 
