@@ -764,6 +764,184 @@
                 animation-iteration-count: 1 !important;
             }
         }
+        /* =========================================
+   ST. MONICA LK3C — PROFESSIONAL HOMEPAGE
+   Homepage styling only
+========================================= */
+
+#home {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 76vh;
+    padding: 76px 24px 84px;
+    background:
+        radial-gradient(ellipse at 10% 10%, rgba(211, 177, 111, .18), transparent 38%),
+        radial-gradient(ellipse at 90% 90%, rgba(112, 76, 137, .22), transparent 35%),
+        linear-gradient(135deg, #180d24 0%, #352044 52%, #241332 100%);
+    color: #fff;
+}
+
+#home::before {
+    content: "✝";
+    position: absolute;
+    z-index: -1;
+    right: 5%;
+    top: 6%;
+    color: rgba(255, 255, 255, .035);
+    font-size: clamp(220px, 38vw, 480px);
+    line-height: 1;
+    pointer-events: none;
+}
+
+#home .home-content {
+    position: relative;
+    width: min(100%, 900px);
+    margin: 0 auto;
+    text-align: center;
+}
+
+#home .home-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 17px;
+    margin-bottom: 22px;
+    border: 1px solid rgba(232, 204, 148, .55);
+    border-radius: 50px;
+    background: rgba(255, 255, 255, .07);
+    color: #f1d7a3;
+    font-size: .76rem;
+    font-weight: 800;
+    letter-spacing: 2.2px;
+}
+
+#home h1 {
+    margin: 0;
+    color: #fff;
+    font-size: clamp(3rem, 8vw, 5.6rem);
+    font-weight: 800;
+    letter-spacing: -2.5px;
+    line-height: 1.05;
+}
+
+#home .home-subtitle {
+    margin: 22px 0 0;
+    color: #f0d5a0;
+    font-size: clamp(1.05rem, 3vw, 1.45rem);
+    font-weight: 600;
+    letter-spacing: .5px;
+}
+
+#home .home-description {
+    max-width: 650px;
+    margin: 22px auto 0;
+    color: rgba(255, 255, 255, .82);
+    font-size: 1.05rem;
+    line-height: 1.9;
+}
+
+#home .home-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    margin-top: 35px;
+}
+
+#home .home-actions button {
+    min-height: 52px;
+    padding: 15px 22px;
+    border-radius: 12px;
+    font: inherit;
+    font-size: .94rem;
+    font-weight: 750;
+    cursor: pointer;
+    transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+#home .home-actions button:hover {
+    transform: translateY(-3px);
+}
+
+#home .home-actions .primary-button {
+    border: 1px solid #f0d5a0;
+    background: #e7c789;
+    color: #281733;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
+}
+
+#home .home-actions .primary-button:hover {
+    background: #f3dcae;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .24);
+}
+
+#home .home-actions .secondary-button {
+    border: 1px solid rgba(255, 255, 255, .28);
+    background: rgba(255, 255, 255, .07);
+    color: #fff;
+}
+
+#home .home-actions .secondary-button:hover {
+    background: rgba(255, 255, 255, .15);
+}
+
+#home .home-social-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+#home .home-social-links .social-link {
+    border-color: rgba(255, 255, 255, .18);
+    background: rgba(255, 255, 255, .055);
+    color: rgba(255, 255, 255, .88);
+    transition: background .2s ease, transform .2s ease;
+}
+
+#home .home-social-links .social-link:hover {
+    background: rgba(255, 255, 255, .13);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+    #home {
+        min-height: 70vh;
+        padding: 58px 20px 64px;
+    }
+
+    #home h1 {
+        letter-spacing: -1.5px;
+    }
+
+    #home .home-description {
+        font-size: .98rem;
+        line-height: 1.8;
+    }
+
+    #home .home-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        margin-top: 28px;
+    }
+
+    #home .home-actions button {
+        width: 100%;
+    }
+
+    #home .home-social-links {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #home .home-social-links .social-link {
+        justify-content: center;
+    }
+}
     </style>
 </head>
 
