@@ -2165,3 +2165,30 @@ html.auth-pending .app-splash {
         font-size: 16px;
     }
 }
+
+/* =========================================================
+   EMBLEM — transparent PNG
+   No square frame: drop the rounded corners and box shadows used
+   for the old solid logo, and add a soft glow that follows the shape.
+========================================================= */
+
+.site-logo-img,
+.footer-logo-img,
+.signin-logo,
+.app-splash img,
+.home-pill img {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 14px rgba(226, 185, 104, 0.25));
+}
+
+.signin-logo {
+    width: 72px !important;
+    height: 72px !important;
+}
+
+.app-splash img {
+    width: 150px;
+    height: 150px;
+}
