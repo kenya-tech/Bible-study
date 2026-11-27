@@ -52,27 +52,27 @@ const GROUPS = {
   "charles-lwanga": {
     name: "St. Charles Lwanga",
     countId: "count-charles-lwanga",
-    icon: "✝️"
+    icon: "cross"
   },
   "st-williams": {
     name: "St. Williams",
     countId: "count-st-williams",
-    icon: "🕊️"
+    icon: "bird"
   },
   "st-camillas": {
     name: "St. Camillas",
     countId: "count-st-camillas",
-    icon: "📖"
+    icon: "book-open"
   },
   "mathias-mulumba": {
     name: "St. Mathias Mulumba",
     countId: "count-mathias-mulumba",
-    icon: "🙏"
+    icon: "hand-heart"
   },
   "st-vincent": {
     name: "St. Vincent",
     countId: "count-st-vincent",
-    icon: "✨"
+    icon: "sparkles"
   }
 };
 
@@ -123,15 +123,16 @@ function setLoading(button, loading, loadingText = "Please wait…") {
 
   if (loading) {
     if (!button.disabled) {
-      button.dataset.originalText = button.textContent;
+      // Keep innerHTML so button icons survive the loading state.
+      button.dataset.originalHtml = button.innerHTML;
     }
     button.disabled = true;
     button.textContent = loadingText;
   } else {
     button.disabled = false;
-    if (button.dataset.originalText) {
-      button.textContent = button.dataset.originalText;
-      delete button.dataset.originalText;
+    if (button.dataset.originalHtml) {
+      button.innerHTML = button.dataset.originalHtml;
+      delete button.dataset.originalHtml;
     }
   }
 }
@@ -278,6 +279,14 @@ function showSection(sectionId) {
     selectedSection.hidden = false;
     selectedSection.classList.add("active-section");
   }
+
+  document.querySelectorAll(".main-nav [data-nav]").forEach(link => {
+    if (link.dataset.nav === sectionId) {
+      link.setAttribute("aria-current", "page");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
 
   document.body.classList.toggle("auth-locked", !currentUser);
 
@@ -674,7 +683,7 @@ function addGroupIcons() {
     const icon = document.createElement("span");
     icon.className = "group-icon";
     icon.setAttribute("aria-hidden", "true");
-    icon.textContent = group.icon;
+    icon.innerHTML = `<i data-lucide="${group.icon}"></i>`;
 
     card.prepend(icon);
   });

@@ -1,0 +1,416 @@
+/* =========================================================
+   ST. MONICA LK3C — MODERN UI LAYER
+   Loaded after style.css. Adds Lucide icon sizing, a refreshed
+   header with mobile menu, and polish for cards and buttons.
+   Existing styles are left in place; this file only refines them.
+========================================================= */
+
+:root {
+    --m-ink: #241332;
+    --m-plum: #4b176f;
+    --m-violet: #7b3ba0;
+    --m-lilac: #f3edf7;
+    --m-gold: #d6b36e;
+    --m-muted: #6f6478;
+    --m-border: rgba(75, 23, 111, 0.10);
+    --m-radius: 18px;
+    --m-shadow-sm: 0 1px 2px rgba(36, 19, 50, 0.06), 0 2px 8px rgba(36, 19, 50, 0.04);
+    --m-shadow-md: 0 10px 30px -12px rgba(36, 19, 50, 0.22);
+    --m-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+::selection {
+    background: rgba(123, 59, 160, 0.18);
+}
+
+:focus-visible {
+    outline: 2px solid var(--m-violet);
+    outline-offset: 3px;
+    border-radius: 8px;
+}
+
+/* ---------- Lucide icons ---------- */
+
+svg.lucide {
+    width: 1.15em;
+    height: 1.15em;
+    flex-shrink: 0;
+    vertical-align: -0.2em;
+}
+
+.btn-icon,
+svg.btn-icon {
+    width: 1.1em;
+    height: 1.1em;
+}
+
+.primary-button,
+.secondary-button,
+.text-button,
+.auth-submit,
+button[type="submit"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+}
+
+.logo-cross svg.lucide {
+    width: 18px;
+    height: 18px;
+}
+
+.footer-cross {
+    display: inline-grid;
+    place-items: center;
+}
+
+.auth-brand-emblem {
+    display: grid;
+    place-items: center;
+}
+
+.auth-brand-emblem svg.lucide {
+    width: 55%;
+    height: 55%;
+}
+
+.auth-button-icon,
+.dashboard-card-icon,
+.social-link-icon,
+.group-icon {
+    display: inline-grid;
+    place-items: center;
+}
+
+.dashboard-card-icon {
+    width: 46px;
+    height: 46px;
+    margin-bottom: 14px;
+    border-radius: 14px;
+    color: var(--m-plum);
+    background: linear-gradient(135deg, var(--m-lilac), #fff);
+    border: 1px solid var(--m-border);
+}
+
+.dashboard-card-icon svg.lucide {
+    width: 22px;
+    height: 22px;
+}
+
+.group-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    color: var(--m-plum);
+    background: var(--m-lilac);
+}
+
+.group-icon svg.lucide {
+    width: 20px;
+    height: 20px;
+}
+
+.social-link-arrow svg.lucide,
+.auth-choice-arrow svg.lucide {
+    transition: transform 0.25s var(--m-ease);
+}
+
+.social-link:hover .social-link-arrow svg.lucide {
+    transform: translate(2px, -2px);
+}
+
+.auth-choice:hover .auth-choice-arrow svg.lucide,
+button:hover .auth-submit-arrow svg.lucide {
+    transform: translateX(3px);
+}
+
+#chat-cancel-reply-btn {
+    display: inline-grid;
+    place-items: center;
+}
+
+/* ---------- Header ---------- */
+
+.site-header {
+    background: rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+    backdrop-filter: saturate(180%) blur(16px);
+    border-bottom: 1px solid var(--m-border);
+    transition: box-shadow 0.3s var(--m-ease), background 0.3s var(--m-ease);
+}
+
+.site-header.is-scrolled {
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 8px 24px -16px rgba(36, 19, 50, 0.35);
+}
+
+.main-nav a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: color 0.2s ease, background 0.2s ease;
+}
+
+.main-nav a svg.lucide {
+    width: 16px;
+    height: 16px;
+    opacity: 0.75;
+}
+
+.main-nav a[aria-current="page"] {
+    color: var(--m-plum);
+    background: var(--m-lilac);
+}
+
+.main-nav a[aria-current="page"] svg.lucide {
+    opacity: 1;
+}
+
+.nav-toggle {
+    display: none;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    padding: 0;
+    border: 1px solid var(--m-border);
+    border-radius: 12px;
+    color: var(--m-ink);
+    background: #fff;
+    cursor: pointer;
+}
+
+.nav-toggle svg.lucide {
+    width: 20px;
+    height: 20px;
+}
+
+/* Compact desktop: hide labels' icons only when space is tight */
+@media (max-width: 1100px) and (min-width: 901px) {
+    .main-nav a svg.lucide {
+        display: none;
+    }
+}
+
+/* Mobile: hamburger + dropdown panel */
+@media (max-width: 900px) {
+    .nav-container {
+        position: relative;
+    }
+
+    .nav-toggle {
+        display: inline-grid;
+    }
+
+    .main-nav {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        padding: 10px;
+        overflow: visible;
+        border: 1px solid var(--m-border);
+        border-radius: var(--m-radius);
+        background: #fff;
+        box-shadow: var(--m-shadow-md);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-6px) scale(0.98);
+        transform-origin: top center;
+        transition:
+            opacity 0.2s var(--m-ease),
+            transform 0.2s var(--m-ease),
+            visibility 0s linear 0.2s;
+    }
+
+    .site-header.nav-open .main-nav {
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        transition-delay: 0s;
+    }
+
+    .main-nav a {
+        padding: 12px 14px;
+        font-size: 14px;
+        border-radius: 12px;
+    }
+
+    .main-nav a svg.lucide {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+    }
+}
+
+@media (max-width: 500px) {
+    .nav-container {
+        flex-direction: row;
+        align-items: center;
+        padding: 0;
+    }
+}
+
+@media (max-width: 380px) {
+    .main-nav {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ---------- Section transitions ---------- */
+
+.page-section.active-section > * {
+    animation: m-fade-up 0.45s var(--m-ease) both;
+}
+
+@keyframes m-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ---------- Buttons ---------- */
+
+.primary-button,
+.secondary-button {
+    transition:
+        transform 0.2s var(--m-ease),
+        box-shadow 0.2s var(--m-ease),
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.primary-button:hover:not(:disabled),
+.secondary-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+.primary-button:active:not(:disabled),
+.secondary-button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+button:disabled {
+    cursor: progress;
+    opacity: 0.7;
+}
+
+/* ---------- Cards ---------- */
+
+.story-card,
+.verse-card,
+.question-card,
+.prayer-card,
+.dashboard-card,
+.chat-card {
+    border-color: var(--m-border);
+    box-shadow: var(--m-shadow-sm);
+    transition:
+        transform 0.25s var(--m-ease),
+        box-shadow 0.25s var(--m-ease),
+        border-color 0.25s ease;
+}
+
+.verse-card:hover,
+.question-card:hover,
+.prayer-card:hover,
+.dashboard-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(123, 59, 160, 0.22);
+    box-shadow: var(--m-shadow-md);
+}
+
+.story-card p {
+    max-width: 68ch;
+}
+
+/* ---------- Forms ---------- */
+
+input,
+select,
+textarea {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--m-violet);
+    box-shadow: 0 0 0 4px rgba(123, 59, 160, 0.12);
+    outline: none;
+}
+
+/* ---------- Accessibility ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .page-section.active-section > *,
+    .main-nav,
+    .primary-button,
+    .secondary-button,
+    .story-card,
+    .verse-card,
+    .question-card,
+    .prayer-card,
+    .dashboard-card {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* ---------- Logo ---------- */
+
+.site-logo-img,
+.footer-logo-img {
+    display: block;
+    flex-shrink: 0;
+    border-radius: 10px;
+    box-shadow: 0 6px 16px -6px rgba(16, 39, 68, 0.45);
+}
+
+.site-logo-img { width: 36px; height: 36px; }
+.footer-logo-img { width: 32px; height: 32px; border-radius: 9px; }
+
+@media (max-width: 800px) {
+    .site-logo-img { width: 32px; height: 32px; }
+}
+
+/* ---------- No white flash when over-scrolling ---------- */
+/* Disable the rubber-band bounce and match the backdrop to the page,
+   so scrolling past the top or bottom never reveals a white strip. */
+
+html,
+body {
+    overscroll-behavior-y: none;
+}
+
+html {
+    background: #f7f4fa;
+}
+
+/* signed-out: dark sign-in screen */
+html:has(body.auth-locked),
+body.auth-locked {
+    background: #140a1d;
+}

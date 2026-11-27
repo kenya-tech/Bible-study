@@ -7,8 +7,11 @@
     <meta name="theme-color" content="#251033">
     <meta name="description" content="St. Monica LK3C Bible Study — faith, reflection, conversation and fellowship at Lower Kabete Campus.">
     <title>St. Monica LK3C | Bible Study</title>
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+    <link rel="apple-touch-icon" href="assets/logo.svg">
 
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="modern.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
@@ -943,6 +946,7 @@
     }
 }
     </style>
+    <link rel="stylesheet" href="auth.css">
 </head>
 
 <body class="auth-locked">
@@ -951,17 +955,21 @@
     <header class="site-header">
         <div class="nav-container">
             <a href="#home" class="logo" onclick="showSection('home'); return false;">
-                <span class="logo-cross">✝</span>
+                <img src="assets/logo.svg" alt="" class="site-logo-img" width="36" height="36">
                 <span>St. Monica LK3C</span>
             </a>
 
-            <nav class="main-nav">
-                <a href="#home" onclick="showSection('home'); return false;">Home</a>
-                <a href="#story" onclick="showSection('story'); return false;">Story</a>
-                <a href="#questions" onclick="showSection('questions'); return false;">Questions</a>
-                <a href="#membership" onclick="showSection('membership'); return false;">Membership</a>
-                <a href="#prayers" onclick="showSection('prayers'); return false;">Prayers</a>
-                <a href="#public-chat" onclick="showSection('public-chat'); return false;">Public Chat</a>
+            <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav">
+                <i data-lucide="menu"></i>
+            </button>
+
+            <nav class="main-nav" id="main-nav" aria-label="Main">
+                <a href="#home" data-nav="home" onclick="showSection('home'); return false;"><i data-lucide="house"></i><span>Home</span></a>
+                <a href="#story" data-nav="story" onclick="showSection('story'); return false;"><i data-lucide="book-open"></i><span>Story</span></a>
+                <a href="#questions" data-nav="questions" onclick="showSection('questions'); return false;"><i data-lucide="messages-square"></i><span>Questions</span></a>
+                <a href="#membership" data-nav="membership" onclick="showSection('membership'); return false;"><i data-lucide="users"></i><span>Membership</span></a>
+                <a href="#prayers" data-nav="prayers" onclick="showSection('prayers'); return false;"><i data-lucide="hand-heart"></i><span>Prayers</span></a>
+                <a href="#public-chat" data-nav="public-chat" onclick="showSection('public-chat'); return false;"><i data-lucide="message-circle"></i><span>Public Chat</span></a>
             </nav>
         </div>
     </header>
@@ -983,13 +991,13 @@
 
                 <div class="home-actions">
                     <button class="primary-button" onclick="showSection('story')">
-                        Read This Week's Story
+                        <i data-lucide="book-open" class="btn-icon"></i> Read This Week's Story
                     </button>
                     <button class="secondary-button" onclick="showSection('public-chat')">
-                        Join Public Chat
+                        <i data-lucide="message-circle" class="btn-icon"></i> Join Public Chat
                     </button>
                     <button class="secondary-button" onclick="showSection('membership')">
-                        Join a Bible Study Group
+                        <i data-lucide="users" class="btn-icon"></i> Join a Bible Study Group
                     </button>
                 </div>
 
@@ -1001,9 +1009,9 @@
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Contact St. Monica LK3C on WhatsApp">
-                        <span class="social-link-icon" aria-hidden="true">☏</span>
+                        <span class="social-link-icon" aria-hidden="true"><i data-lucide="message-circle"></i></span>
                         <span>Connect on WhatsApp</span>
-                        <span class="social-link-arrow" aria-hidden="true">↗</span>
+                        <span class="social-link-arrow" aria-hidden="true"><i data-lucide="arrow-up-right"></i></span>
                     </a>
 
                     <a
@@ -1012,9 +1020,9 @@
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Visit St. Monica LK3C on YouTube">
-                        <span class="social-link-icon" aria-hidden="true">▶</span>
+                        <span class="social-link-icon" aria-hidden="true"><i data-lucide="youtube"></i></span>
                         <span>Watch us on YouTube</span>
-                        <span class="social-link-arrow" aria-hidden="true">↗</span>
+                        <span class="social-link-arrow" aria-hidden="true"><i data-lucide="arrow-up-right"></i></span>
                     </a>
                 </div>
             </div>
@@ -1189,92 +1197,249 @@
         <section id="membership" class="page-section">
             <div class="section-container">
 
-                <!-- REGISTER OR LOG IN -->
-                <div id="membership-choice" class="auth-showcase">
+                <!-- SIGN-IN EXPERIENCE (welcome, register, log in) -->
+                <div class="signin-shell">
+                    <div class="signin-aurora" aria-hidden="true"><span></span><span></span><span></span></div>
 
-                    <aside class="auth-brand-panel">
-                        <div class="auth-brand-top">
-                            <div class="auth-brand-emblem" aria-hidden="true">✝</div>
-                            <div>
-                                <div class="auth-brand-name">St. Monica LK3C</div>
-                                <div class="auth-brand-subname">Catholic Campus Community</div>
-                            </div>
+                    <aside class="signin-hero">
+                        <div class="signin-brand">
+                            <img src="assets/logo.svg" alt="" class="signin-logo" width="44" height="44">
+                            <span>
+                                <strong>St. Monica LK3C</strong>
+                                <small>Catholic Campus Community</small>
+                            </span>
                         </div>
 
-                        <div class="auth-brand-copy">
-                            <span class="auth-eyebrow">A place to belong</span>
-                            <h1>Grow in faith.<br>Walk in <em>purpose.</em></h1>
-                            <p class="auth-brand-description">
-                                Life brings questions. Faith gives us a place to
-                                reflect, listen, learn and grow together. Your
-                                Bible study journey begins here.
+                        <div class="signin-hero-body">
+                            <span class="signin-pill"><i data-lucide="sparkles"></i> Weekly Bible study · Lower Kabete</span>
+                            <h1>Grow in faith.<br><span class="signin-gradient">Walk in purpose.</span></h1>
+                            <p class="signin-lead">
+                                Life brings questions. Faith gives us a place to reflect,
+                                listen, learn and grow together.
                             </p>
 
-                            <div class="auth-brand-verse">
-                                <p>“For where two or three gather in my name, there am I with them.”</p>
-                                <span>Matthew 18:20</span>
-                            </div>
+                            <ul class="signin-features">
+                                <li>
+                                    <span class="signin-feature-icon"><i data-lucide="book-open-text"></i></span>
+                                    <span><strong>Weekly stories</strong>Real-life reflections rooted in Scripture</span>
+                                </li>
+                                <li>
+                                    <span class="signin-feature-icon"><i data-lucide="messages-square"></i></span>
+                                    <span><strong>Honest conversations</strong>Discuss questions with your group</span>
+                                </li>
+                                <li>
+                                    <span class="signin-feature-icon"><i data-lucide="hand-heart"></i></span>
+                                    <span><strong>Pray together</strong>Traditional prayers and fellowship</span>
+                                </li>
+                            </ul>
+
+                            <figure class="signin-verse">
+                                <i data-lucide="quote"></i>
+                                <blockquote>For where two or three gather in my name, there am I with them.</blockquote>
+                                <figcaption>Matthew 18:20</figcaption>
+                            </figure>
                         </div>
 
-                        <div class="auth-brand-bottom">
-                            LOWER KABETE CAMPUS · UNIVERSITY OF NAIROBI
+                        <div class="signin-hero-foot">
+                            <div class="signin-avatars" aria-hidden="true">
+                                <span title="St. Charles Lwanga"><i data-lucide="cross"></i></span>
+                                <span title="St. Williams"><i data-lucide="bird"></i></span>
+                                <span title="St. Camillas"><i data-lucide="book-open"></i></span>
+                                <span title="St. Mathias Mulumba"><i data-lucide="hand-heart"></i></span>
+                                <span title="St. Vincent"><i data-lucide="sparkles"></i></span>
+                            </div>
+                            <span>5 Bible study groups · University of Nairobi</span>
                         </div>
                     </aside>
 
-                    <div class="auth-form-panel">
+                    <div class="signin-panel">
+                        <div class="signin-card">
 
-                        <!-- WELCOME SCREEN -->
-                        <div class="auth-form-heading">
-                            <span class="auth-form-kicker">Welcome to our community</span>
-                            <h2>Your journey<br>starts here.</h2>
-                            <p>Sign in to continue, or create an account to join your Bible study group.</p>
+                            <!-- WELCOME -->
+                            <div id="membership-choice" class="signin-view">
+                                <div class="signin-heading">
+                                    <span class="signin-kicker">Welcome</span>
+                                    <h2>Your journey starts here.</h2>
+                                    <p>Create an account to join your Bible study group, or sign in to continue.</p>
+                                </div>
+
+                                <div class="signin-options">
+                                    <button type="button" id="show-register-btn" class="signin-option signin-option-primary">
+                                        <span class="signin-option-icon"><i data-lucide="user-plus"></i></span>
+                                        <span class="signin-option-text">
+                                            <strong>Create an account</strong>
+                                            <small>Join a Bible study group in under a minute</small>
+                                        </span>
+                                        <i data-lucide="arrow-right" class="signin-option-arrow"></i>
+                                    </button>
+                                    <button type="button" id="show-login-btn" class="signin-option">
+                                        <span class="signin-option-icon"><i data-lucide="log-in"></i></span>
+                                        <span class="signin-option-text">
+                                            <strong>Sign in</strong>
+                                            <small>Welcome back — pick up where you left off</small>
+                                        </span>
+                                        <i data-lucide="arrow-right" class="signin-option-arrow"></i>
+                                    </button>
+                                </div>
+
+                                <div class="signin-divider"><span>Connect with us</span></div>
+
+                                <div class="signin-socials">
+                                    <a class="signin-social signin-social-whatsapp"
+                                       href="https://wa.me/254797147255?text=Hello%20St.%20Monica%20LK3C"
+                                       target="_blank" rel="noopener noreferrer">
+                                        <i data-lucide="message-circle"></i> WhatsApp
+                                    </a>
+                                    <a class="signin-social signin-social-youtube"
+                                       href="https://youtube.com/@st.monicacatholiccommunity4639?si=_MJRL7lrXqavxk1B"
+                                       target="_blank" rel="noopener noreferrer">
+                                        <i data-lucide="youtube"></i> YouTube
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- REGISTER / LOG IN FORMS -->
+                            <div id="membership-forms" class="signin-view" hidden>
+                                <button type="button" class="back-to-choice signin-back">
+                                    <i data-lucide="arrow-left"></i> Back
+                                </button>
+
+                                <div class="signin-tabs" role="tablist" aria-label="Account">
+                                    <button type="button" id="switch-to-login-btn" role="tab">Sign in</button>
+                                    <button type="button" id="switch-to-register-btn" role="tab">Create account</button>
+                                </div>
+
+                                <!-- LOG IN -->
+                                <form id="membership-login-form" class="signin-form" hidden>
+                                    <div class="signin-heading">
+                                        <h3>Welcome back.</h3>
+                                        <p>Sign in with your registered phone number and password.</p>
+                                    </div>
+
+                                    <div class="signin-field">
+                                        <label for="login-member-phone">Phone number</label>
+                                        <div class="signin-input">
+                                            <i data-lucide="phone"></i>
+                                            <input type="tel" id="login-member-phone" name="phoneNumber"
+                                                placeholder="0712 345 678" autocomplete="tel" maxlength="20" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="signin-field">
+                                        <label for="login-member-password">Password</label>
+                                        <div class="signin-input">
+                                            <i data-lucide="lock"></i>
+                                            <input type="password" id="login-member-password" name="password"
+                                                placeholder="Enter your password" autocomplete="current-password" required>
+                                            <button type="button" class="signin-reveal" data-reveal="login-member-password" aria-label="Show password">
+                                                <i data-lucide="eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" id="membership-login-submit" class="signin-submit">
+                                        Sign in <i data-lucide="arrow-right"></i>
+                                    </button>
+                                    <p id="membership-login-message" class="signin-message" role="status" aria-live="polite"></p>
+                                </form>
+
+                                <!-- REGISTER -->
+                                <form id="membership-form" class="signin-form" hidden>
+                                    <div class="signin-heading">
+                                        <h3>Create your account.</h3>
+                                        <p>Fill in your details and choose the group you'd like to join.</p>
+                                    </div>
+
+                                    <div class="signin-field">
+                                        <label for="member-full-name">Full name</label>
+                                        <div class="signin-input">
+                                            <i data-lucide="user-round"></i>
+                                            <input type="text" id="member-full-name" name="fullName"
+                                                placeholder="Your full name" autocomplete="name" minlength="2" maxlength="80" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="signin-field">
+                                        <label for="member-phone">Phone number</label>
+                                        <div class="signin-input">
+                                            <i data-lucide="phone"></i>
+                                            <input type="tel" id="member-phone" name="phoneNumber"
+                                                placeholder="0712 345 678" autocomplete="tel" maxlength="20" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="signin-field">
+                                        <label for="member-password">Create a password</label>
+                                        <div class="signin-input">
+                                            <i data-lucide="lock"></i>
+                                            <input type="password" id="member-password" name="password"
+                                                placeholder="At least 6 characters" autocomplete="new-password" minlength="6" required>
+                                            <button type="button" class="signin-reveal" data-reveal="member-password" aria-label="Show password">
+                                                <i data-lucide="eye"></i>
+                                            </button>
+                                        </div>
+                                        <div class="signin-strength" data-strength="0" aria-hidden="true">
+                                            <span></span><span></span><span></span>
+                                            <em></em>
+                                        </div>
+                                    </div>
+
+                                    <fieldset class="signin-field signin-groups">
+                                        <legend>Choose your Bible study group</legend>
+                                        <!-- script.js reads this select; the tiles below keep it in sync -->
+                                        <select id="member-group" name="groupId" class="visually-hidden" tabindex="-1" aria-hidden="true">
+                                            <option value="">Select your group</option>
+                                            <option value="charles-lwanga">St. Charles Lwanga</option>
+                                            <option value="st-williams">St. Williams</option>
+                                            <option value="st-camillas">St. Camillas</option>
+                                            <option value="mathias-mulumba">St. Mathias Mulumba</option>
+                                            <option value="st-vincent">St. Vincent</option>
+                                        </select>
+                                        <div class="signin-group-grid">
+                                            <label class="signin-group">
+                                                <input type="radio" name="groupChoice" value="charles-lwanga" required>
+                                                <span class="signin-group-icon"><i data-lucide="cross"></i></span>
+                                                <span class="signin-group-name">St. Charles Lwanga</span>
+                                                <span class="signin-group-check"><i data-lucide="check"></i></span>
+                                            </label>
+                                            <label class="signin-group">
+                                                <input type="radio" name="groupChoice" value="st-williams" required>
+                                                <span class="signin-group-icon"><i data-lucide="bird"></i></span>
+                                                <span class="signin-group-name">St. Williams</span>
+                                                <span class="signin-group-check"><i data-lucide="check"></i></span>
+                                            </label>
+                                            <label class="signin-group">
+                                                <input type="radio" name="groupChoice" value="st-camillas" required>
+                                                <span class="signin-group-icon"><i data-lucide="book-open"></i></span>
+                                                <span class="signin-group-name">St. Camillas</span>
+                                                <span class="signin-group-check"><i data-lucide="check"></i></span>
+                                            </label>
+                                            <label class="signin-group">
+                                                <input type="radio" name="groupChoice" value="mathias-mulumba" required>
+                                                <span class="signin-group-icon"><i data-lucide="hand-heart"></i></span>
+                                                <span class="signin-group-name">St. Mathias Mulumba</span>
+                                                <span class="signin-group-check"><i data-lucide="check"></i></span>
+                                            </label>
+                                            <label class="signin-group">
+                                                <input type="radio" name="groupChoice" value="st-vincent" required>
+                                                <span class="signin-group-icon"><i data-lucide="sparkles"></i></span>
+                                                <span class="signin-group-name">St. Vincent</span>
+                                                <span class="signin-group-check"><i data-lucide="check"></i></span>
+                                            </label>
+                                        </div>
+                                    </fieldset>
+
+                                    <button type="submit" id="membership-submit" class="signin-submit">
+                                        Create account <i data-lucide="arrow-right"></i>
+                                    </button>
+                                    <p id="membership-message" class="signin-message" role="status" aria-live="polite"></p>
+                                </form>
+                            </div>
                         </div>
 
-                        <div class="auth-choice-actions">
-                            <button type="button" id="show-register-btn" class="auth-register-action">
-                                <span>
-                                    <span class="auth-button-icon" aria-hidden="true">✦</span>
-                                    Create an account
-                                </span>
-                                <span class="auth-choice-arrow" aria-hidden="true">→</span>
-                            </button>
-
-                            <button type="button" id="show-login-btn" class="auth-login-action">
-                                <span>
-                                    <span class="auth-button-icon" aria-hidden="true">↗</span>
-                                    I already have an account
-                                </span>
-                                <span class="auth-choice-arrow" aria-hidden="true">→</span>
-                            </button>
-                        </div>
-
-                        <div class="auth-form-divider">YOUR COMMUNITY AWAITS</div>
-                        <p class="auth-choice-footnote">
-                            A shared space for God's Word, honest conversations
-                            and friendships rooted in faith.
+                        <p class="signin-foot">
+                            <i data-lucide="map-pin"></i> Lower Kabete Campus · University of Nairobi
                         </p>
-
-                        <div class="social-links membership-social-links" aria-label="Connect with St. Monica LK3C">
-                            <a
-                                class="social-link social-link-whatsapp"
-                                href="https://wa.me/254797147255?text=Hello%20St.%20Monica%20LK3C"
-                                target="_blank"
-                                rel="noopener noreferrer">
-                                <span class="social-link-icon" aria-hidden="true">☏</span>
-                                <span>WhatsApp</span>
-                                <span class="social-link-arrow" aria-hidden="true">↗</span>
-                            </a>
-
-                            <a
-                                class="social-link social-link-youtube"
-                                href="https://youtube.com/@st.monicacatholiccommunity4639?si=_MJRL7lrXqavxk1B"
-                                target="_blank"
-                                rel="noopener noreferrer">
-                                <span class="social-link-icon" aria-hidden="true">▶</span>
-                                <span>YouTube channel</span>
-                                <span class="social-link-arrow" aria-hidden="true">↗</span>
-                            </a>
-                        </div>
                     </div>
                 </div>
 
@@ -1287,169 +1452,6 @@
                     hidden>
                 </div>
 
-                <!-- REGISTRATION AND LOGIN FORMS -->
-                <div id="membership-forms" hidden>
-
-                    <!-- REGISTRATION FORM -->
-                    <div class="auth-showcase">
-                        <aside class="auth-brand-panel">
-                            <div class="auth-brand-top">
-                                <div class="auth-brand-emblem" aria-hidden="true">✝</div>
-                                <div>
-                                    <div class="auth-brand-name">St. Monica LK3C</div>
-                                    <div class="auth-brand-subname">Catholic Campus Community</div>
-                                </div>
-                            </div>
-
-                            <div class="auth-brand-copy">
-                                <span class="auth-eyebrow">Take your place</span>
-                                <h1>Faith grows<br>when we <em>share it.</em></h1>
-                                <p class="auth-brand-description">
-                                    Find your people, share your reflections,
-                                    explore Scripture and build friendships that
-                                    encourage you in your walk with Christ.
-                                </p>
-
-                                <div class="auth-brand-verse">
-                                    <p>“As iron sharpens iron, so one person sharpens another.”</p>
-                                    <span>Proverbs 27:17</span>
-                                </div>
-                            </div>
-
-                            <div class="auth-brand-bottom">
-                                YOUR COMMUNITY. YOUR FAITH JOURNEY.
-                            </div>
-                        </aside>
-
-                        <div class="auth-form-panel">
-
-                            <!-- REGISTER -->
-                            <form id="membership-form" class="membership-card membership-form" hidden>
-                                <button type="button" class="back-to-choice auth-back-button">
-                                    <span aria-hidden="true">←</span> Back to welcome
-                                </button>
-
-                                <div class="auth-form-heading">
-                                    <span class="auth-form-kicker">Become a member</span>
-                                    <h3>Create your account.</h3>
-                                    <p>Fill in your details and choose the Bible study group you would like to join.</p>
-                                </div>
-
-                                <div class="auth-form-fields">
-                                    <div class="auth-field">
-                                        <label for="member-full-name">Full name</label>
-                                        <input
-                                            type="text"
-                                            id="member-full-name"
-                                            name="fullName"
-                                            placeholder="Your full name"
-                                            autocomplete="name"
-                                            minlength="2"
-                                            maxlength="80"
-                                            required>
-                                    </div>
-
-                                    <div class="auth-field">
-                                        <label for="member-phone">Phone number</label>
-                                        <input
-                                            type="tel"
-                                            id="member-phone"
-                                            name="phoneNumber"
-                                            placeholder="e.g. 0712345678"
-                                            autocomplete="tel"
-                                            maxlength="20"
-                                            required>
-                                    </div>
-
-                                    <div class="auth-field">
-                                        <label for="member-password">Create a password</label>
-                                        <input
-                                            type="password"
-                                            id="member-password"
-                                            name="password"
-                                            placeholder="At least 6 characters"
-                                            autocomplete="new-password"
-                                            minlength="6"
-                                            required>
-                                    </div>
-
-                                    <div class="auth-field">
-                                        <label for="member-group">Choose your Bible study group</label>
-                                        <select id="member-group" name="groupId" required>
-                                            <option value="">Select your group</option>
-                                            <option value="charles-lwanga">St. Charles Lwanga</option>
-                                            <option value="st-williams">St. Williams</option>
-                                            <option value="st-camillas">St. Camillas</option>
-                                            <option value="mathias-mulumba">St. Mathias Mulumba</option>
-                                            <option value="st-vincent">St. Vincent</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <button type="submit" id="membership-submit" class="membership-submit auth-submit-button">
-                                    Create account <span class="auth-submit-arrow" aria-hidden="true">→</span>
-                                </button>
-
-                                <p id="membership-message" class="membership-message" role="status" aria-live="polite"></p>
-
-                                <p class="auth-switch-prompt">
-                                    Already part of St. Monica?
-                                    <button type="button" id="switch-to-login-btn">Log in</button>
-                                </p>
-                            </form>
-
-                            <!-- LOGIN FORM -->
-                            <form id="membership-login-form" class="membership-card membership-form" hidden>
-                                <button type="button" class="back-to-choice auth-back-button">
-                                    <span aria-hidden="true">←</span> Back to welcome
-                                </button>
-
-                                <div class="auth-form-heading">
-                                    <span class="auth-form-kicker">It's good to have you back</span>
-                                    <h3>Welcome back.</h3>
-                                    <p>Log in with your registered phone number and password.</p>
-                                </div>
-
-                                <div class="auth-form-fields">
-                                    <div class="auth-field">
-                                        <label for="login-member-phone">Phone number</label>
-                                        <input
-                                            type="tel"
-                                            id="login-member-phone"
-                                            name="phoneNumber"
-                                            placeholder="Your registered phone number"
-                                            autocomplete="tel"
-                                            maxlength="20"
-                                            required>
-                                    </div>
-
-                                    <div class="auth-field">
-                                        <label for="login-member-password">Password</label>
-                                        <input
-                                            type="password"
-                                            id="login-member-password"
-                                            name="password"
-                                            placeholder="Enter your password"
-                                            autocomplete="current-password"
-                                            required>
-                                    </div>
-                                </div>
-
-                                <button type="submit" id="membership-login-submit" class="membership-submit auth-submit-button">
-                                    Log in <span class="auth-submit-arrow" aria-hidden="true">→</span>
-                                </button>
-
-                                <p id="membership-login-message" class="membership-message" role="status" aria-live="polite"></p>
-
-                                <p class="auth-switch-prompt">
-                                    New to the community?
-                                    <button type="button" id="switch-to-register-btn">Create an account</button>
-                                </p>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- MEMBER DASHBOARD -->
                 <div id="member-dashboard" class="member-dashboard" hidden>
                     <div class="dashboard-header">
@@ -1459,23 +1461,23 @@
                             <p>You're part of St. Monica LK3C Bible Study.</p>
                         </div>
                         <button type="button" id="member-logout-btn" class="secondary-button">
-                            Log out
+                            <i data-lucide="log-out" class="btn-icon"></i> Log out
                         </button>
                     </div>
 
                     <div class="dashboard-grid">
                         <div class="dashboard-card">
-                            <span class="dashboard-card-icon" aria-hidden="true">✦</span>
+                            <span class="dashboard-card-icon" aria-hidden="true"><i data-lucide="users"></i></span>
                             <h3>Your Bible Study Group</h3>
                             <p id="dashboard-group-name">Your selected group</p>
                         </div>
 
                         <div class="dashboard-card">
-                            <span class="dashboard-card-icon" aria-hidden="true">✝</span>
+                            <span class="dashboard-card-icon" aria-hidden="true"><i data-lucide="sprout"></i></span>
                             <h3>Keep Growing</h3>
                             <p>Read the weekly story and join the discussion.</p>
                             <button type="button" class="text-button" onclick="showSection('story')">
-                                Read this week's story →
+                                Read this week's story <i data-lucide="arrow-right" class="btn-icon"></i>
                             </button>
                         </div>
                     </div>
@@ -1740,7 +1742,7 @@
                                 type="button"
                                 id="chat-cancel-reply-btn"
                                 aria-label="Cancel reply">
-                                ×
+                                <i data-lucide="x"></i>
                             </button>
                         </div>
 
@@ -1760,7 +1762,7 @@
                                 type="submit"
                                 id="chat-send-btn"
                                 class="primary-button">
-                                Send
+                                <i data-lucide="send-horizontal" class="btn-icon"></i> Send
                             </button>
                         </form>
 
@@ -1776,7 +1778,7 @@
     <footer class="site-footer">
         <div class="footer-inner">
             <div class="footer-brand">
-                <span class="footer-cross" aria-hidden="true">✝</span>
+                <img src="assets/logo.svg" alt="" class="footer-logo-img" width="32" height="32">
                 <span>St. Monica LK3C</span>
             </div>
             <p>Read. Reflect. Pray. Connect.</p>
@@ -1787,6 +1789,8 @@
     </footer>
 
     <!-- FIREBASE AND WEBSITE LOGIC -->
+    <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+    <script src="modern.js" defer></script>
     <script type="module" src="script.js"></script>
 
 </body>
