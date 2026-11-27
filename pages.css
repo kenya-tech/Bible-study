@@ -376,7 +376,7 @@ body:not(.auth-locked) .site-header.is-scrolled {
 }
 
 .home-pill img {
-    border-radius: 7px;
+    border-radius: 8px;
 }
 
 #home h1 {
@@ -1702,7 +1702,7 @@ html.auth-pending .app-splash {
 }
 
 .app-splash img {
-    border-radius: 20px;
+    border-radius: 30px;
     box-shadow: 0 20px 50px -16px rgba(245, 198, 106, 0.45);
     animation: splash-pulse 1.6s ease-in-out infinite;
 }

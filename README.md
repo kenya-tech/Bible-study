@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.svg" alt="St. Monica LK3C Bible Study logo" width="96" height="96">
+  <img src="assets/emblem.svg" alt="Arise and Evangelize — St. Monica LK3C emblem" width="160" height="160">
 </p>
 
 <h1 align="center">St. Monica LK3C — Bible Study</h1>
@@ -55,7 +55,7 @@ Bible-study/
 ├── script.js      # Firebase, auth, navigation, chat, admin logic
 ├── version.json   # Current release version (see "Releasing an update")
 └── assets/
-    └── logo.svg   # Logo and favicon
+    └── emblem.svg # "Arise and Evangelize" emblem (logo + favicon)
 ```
 
 ## Running locally

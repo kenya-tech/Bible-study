@@ -295,11 +295,11 @@ textarea:focus {
     box-shadow: 0 6px 16px -6px rgba(16, 39, 68, 0.45);
 }
 
-.site-logo-img { width: 36px; height: 36px; }
-.footer-logo-img { width: 32px; height: 32px; border-radius: 9px; }
+.site-logo-img { width: 44px; height: 44px; border-radius: 12px; }
+.footer-logo-img { width: 56px; height: 56px; border-radius: 14px; }
 
 @media (max-width: 800px) {
-    .site-logo-img { width: 32px; height: 32px; }
+    .site-logo-img { width: 40px; height: 40px; }
 }
 
 /* ---------- No white flash when over-scrolling ---------- */
