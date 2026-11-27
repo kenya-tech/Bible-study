@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-<title>Bible Study</title>
-<rect width="512" height="512" rx="112" fill="#102744"/>
-<path fill="#F5C66A" d="M239 102h34v53h53v34h-53v68h-34v-68h-53v-34h53z"/>
-<path fill="#FFF7E7" d="M92 218C152 207 211 230 256 275C301 230 360 207 420 218V344C356 334 302 354 256 403C210 354 156 334 92 344Z"/>
-<path fill="none" stroke="#102744" stroke-width="14" stroke-linecap="round" d="M256 282V392"/>
-<path fill="none" stroke="#F5C66A" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" d="M75 247V367C143 355 205 375 256 426C307 375 369 355 437 367V247"/>
-</svg>
