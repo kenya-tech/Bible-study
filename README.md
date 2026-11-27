@@ -27,7 +27,9 @@ chat with the community.
 - **Public chat:** a real-time community conversation with replies and reactions.
 - **Bible study groups:** live member counts for each group.
 - **Admin editor:** admins can update the weekly story, verses and questions.
-- **Responsive design:** works on phones, tablets and desktops, with a mobile menu.
+- **Guided weekly flow:** Read → Reflect → Discuss, with a reading-progress bar.
+- **Responsive design:** transparent header on desktop and an app-style tab bar on phones.
+- **Stays on your page after refresh:** a short splash shows while your session loads.
 
 ## Tech stack
 
@@ -48,7 +50,8 @@ Bible-study/
 ├── style.css      # Base styles
 ├── modern.css     # Modern UI layer: header, nav, cards, buttons
 ├── auth.css       # Sign-in / registration screens
-├── modern.js      # Icons, mobile menu, sign-in form helpers
+├── pages.css      # Page redesign: header, home, story, chat, footer
+├── modern.js      # Icons, sign-in helpers, reading progress
 ├── script.js      # Firebase, auth, navigation, chat, admin logic
 └── assets/
     └── logo.svg   # Logo and favicon

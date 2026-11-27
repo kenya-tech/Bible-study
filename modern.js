@@ -42,39 +42,37 @@
     }
   }).observe(document.body, { childList: true, subtree: true });
 
-  // ---------- Mobile navigation ----------
   const header = document.querySelector(".site-header");
-  const toggle = document.querySelector(".nav-toggle");
-  const nav = document.getElementById("main-nav");
 
-  function setMenu(open) {
-    if (!header || !toggle) return;
-    header.classList.toggle("nav-open", open);
-    toggle.setAttribute("aria-expanded", String(open));
-    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
-    toggle.innerHTML = `<i data-lucide="${open ? "x" : "menu"}"></i>`;
-    renderIcons();
+  // ---------- Story: reading time + progress ----------
+  const storyCard = document.querySelector("#story .story-card");
+  const readingTime = document.getElementById("story-reading-time");
+  const progressBar = document.querySelector(".read-progress span");
+
+  function updateReadingTime() {
+    if (!storyCard || !readingTime) return;
+    const words = storyCard.textContent.trim().split(/\s+/).filter(Boolean).length;
+    const minutes = Math.max(1, Math.round(words / 200));
+    readingTime.textContent = `${minutes} min read`;
   }
 
-  if (toggle && nav) {
-    toggle.addEventListener("click", () => {
-      setMenu(!header.classList.contains("nav-open"));
-    });
+  if (storyCard) {
+    updateReadingTime();
+    // script.js replaces the story text when content loads from Firebase
+    new MutationObserver(updateReadingTime).observe(storyCard, { childList: true });
+  }
 
-    nav.addEventListener("click", event => {
-      if (event.target.closest("a")) setMenu(false);
-    });
-
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape" && header.classList.contains("nav-open")) {
-        setMenu(false);
-        toggle.focus();
-      }
-    });
-
-    window.matchMedia("(min-width: 901px)").addEventListener("change", e => {
-      if (e.matches) setMenu(false);
-    });
+  function updateProgress() {
+    if (!progressBar || !storyCard) return;
+    const story = document.getElementById("story");
+    if (!story || story.hidden) {
+      progressBar.style.transform = "scaleX(0)";
+      return;
+    }
+    const rect = storyCard.getBoundingClientRect();
+    const total = rect.height - window.innerHeight * 0.6;
+    const done = Math.min(1, Math.max(0, -rect.top / Math.max(total, 1)));
+    progressBar.style.transform = `scaleX(${done})`;
   }
 
   // ---------- Sign-in: show / hide password ----------
@@ -141,10 +139,14 @@
     syncTabs();
   }
 
-  // ---------- Header shadow on scroll ----------
+  // ---------- Header: transparent at top, glass when scrolled ----------
   if (header) {
-    const onScroll = () => header.classList.toggle("is-scrolled", window.scrollY > 8);
+    const onScroll = () => {
+      header.classList.toggle("is-scrolled", window.scrollY > 12);
+      updateProgress();
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
     onScroll();
   }
 })();

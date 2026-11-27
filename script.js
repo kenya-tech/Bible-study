@@ -256,6 +256,36 @@ const PROTECTED_SECTIONS = new Set([
   "public-chat"
 ]);
 
+// The page the user asked for (e.g. after a refresh on #story).
+// Routing waits for Firebase to restore the session, then goes here.
+const AUTH_HINT_KEY = "stmonica-signed-in";
+let pendingSection = window.location.hash.slice(1);
+
+function isRoutableSection(sectionId) {
+  return Boolean(sectionId) && sectionId !== "admin" && Boolean($(sectionId));
+}
+
+function takePendingSection() {
+  const sectionId = pendingSection;
+  pendingSection = "";
+  return isRoutableSection(sectionId) ? sectionId : "home";
+}
+
+// Remove the loading splash and remember whether a session exists,
+// so the next refresh shows the splash instead of the login screen.
+function markAuthReady(signedIn) {
+  try {
+    if (signedIn) {
+      localStorage.setItem(AUTH_HINT_KEY, "1");
+    } else {
+      localStorage.removeItem(AUTH_HINT_KEY);
+    }
+  } catch {
+    // Storage can be unavailable (private mode); the splash is optional.
+  }
+  document.documentElement.classList.remove("auth-pending");
+}
+
 function showSection(sectionId) {
   if (!$(sectionId)) sectionId = "home";
 
@@ -280,7 +310,10 @@ function showSection(sectionId) {
     selectedSection.classList.add("active-section");
   }
 
-  document.querySelectorAll(".main-nav [data-nav]").forEach(link => {
+  // Start each page at the top.
+  window.scrollTo(0, 0);
+
+  document.querySelectorAll("[data-nav]").forEach(link => {
     if (link.dataset.nav === sectionId) {
       link.setAttribute("aria-current", "page");
     } else {
@@ -555,7 +588,8 @@ async function displayMemberScreen(user, member) {
   startGroupCountListener();
   startStudyContentListener();
 
-  showSection("home");
+  showSection(takePendingSection());
+  markAuthReady(true);
 }
 
 // ======================================================
@@ -595,6 +629,7 @@ onAuthStateChanged(auth, async user => {
     document.body.classList.add("auth-locked");
     showMembershipChoice();
     showSection("home");
+    markAuthReady(false);
     return;
   }
 
@@ -618,6 +653,7 @@ onAuthStateChanged(auth, async user => {
     await displayMemberScreen(user, currentMember);
   } catch (error) {
     console.error("Profile verification error:", error);
+    markAuthReady(false);
 
     currentMember = null;
     hide($("admin-editor"));
@@ -1642,14 +1678,8 @@ chatField(
 renderStoryAndQuestions(defaultContent);
 addGroupIcons();
 
-if (window.location.hash) {
-  const initialSection = window.location.hash.slice(1);
-
-  if ($(initialSection) && initialSection !== "admin") {
-    showSection(initialSection);
-  } else {
-    showSection("home");
-  }
-} else {
-  showSection("home");
+// Returning members see the splash until Firebase restores their session;
+// everyone else gets the page (or the sign-in screen) right away.
+if (!document.documentElement.classList.contains("auth-pending")) {
+  showSection(isRoutableSection(pendingSection) ? pendingSection : "home");
 }
