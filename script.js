@@ -286,7 +286,11 @@ function markAuthReady(signedIn) {
   document.documentElement.classList.remove("auth-pending");
 }
 
-function showSection(sectionId) {
+// Each page gets its own history entry (#home, #story, …) so the browser
+// Back/Forward buttons move between pages instead of leaving the site.
+// Pass { replace: true } for redirects and automatic routing.
+function showSection(sectionId, { replace = false } = {}) {
+  const requestedSection = sectionId;
   if (!$(sectionId)) sectionId = "home";
 
   if (!currentUser && PROTECTED_SECTIONS.has(sectionId)) {
@@ -328,7 +332,12 @@ function showSection(sectionId) {
   }
 
   if (window.location.hash !== `#${sectionId}`) {
-    history.replaceState(null, "", `#${sectionId}`);
+    // A redirect (e.g. to sign-in) replaces the entry instead of adding one.
+    if (replace || sectionId !== requestedSection) {
+      history.replaceState(null, "", `#${sectionId}`);
+    } else {
+      history.pushState(null, "", `#${sectionId}`);
+    }
   }
 
   if (sectionId === "public-chat") {
@@ -337,6 +346,10 @@ function showSection(sectionId) {
 }
 
 window.showSection = showSection;
+
+window.addEventListener("popstate", () => {
+  showSection(window.location.hash.slice(1) || "home", { replace: true });
+});
 
 document.querySelectorAll("[data-section]").forEach(element => {
   element.addEventListener("click", event => {
@@ -529,42 +542,100 @@ loginForm?.addEventListener("submit", loginMember);
 // 8. MEMBER DASHBOARD AND ADMIN VISIBILITY
 // ======================================================
 
+// ======================================================
+// PROFILE PAGE
+// ======================================================
+
+function initialsFor(name) {
+  const parts = String(name || "").trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return "M";
+  const first = parts[0][0] || "";
+  const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
+  return (first + last).toUpperCase();
+}
+
+function formatMemberSince(member) {
+  const date = member?.createdAt?.toDate?.();
+  if (!date) return "";
+  return date.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+}
+
+function renderProfile(member) {
+  const dashboard = $("member-dashboard");
+  if (!dashboard) return;
+
+  const name = member.fullName || (isAdmin() ? "Administrator" : "Member");
+  const group = GROUPS[member.groupId];
+  const since = formatMemberSince(member);
+
+  $("profile-avatar").textContent = initialsFor(name);
+  $("dashboard-member-name").textContent = name;
+  $("dashboard-group-name").textContent = group
+    ? group.name
+    : isAdmin() ? "Administrator account" : "No group selected";
+  $("profile-group-title").textContent = group ? group.name : "No group yet";
+  $("profile-role").textContent = isAdmin() ? "Administrator" : "Member";
+
+  const sinceChip = $("profile-since");
+  sinceChip.hidden = !since;
+  sinceChip.querySelector("span").textContent = since ? `Member since ${since}` : "";
+
+  const groupIcon = $("profile-group-icon");
+  groupIcon.innerHTML = `<i data-lucide="${group ? group.icon : "users"}"></i>`;
+
+  // Highlight the member's own group in the community grid
+  document.querySelectorAll("#member-groups-content .group-card").forEach(card => {
+    card.classList.toggle("is-mine", card.dataset.group === member.groupId);
+  });
+
+  syncProfileGroupCount(member.groupId);
+  show(dashboard);
+}
+
+// Mirror the live member count of the user's group onto the profile card.
+let profileCountObserver = null;
+
+function syncProfileGroupCount(groupId) {
+  const target = $("profile-group-count");
+  const source = GROUPS[groupId] ? $(GROUPS[groupId].countId) : null;
+
+  profileCountObserver?.disconnect();
+  if (!target) return;
+
+  if (!source) {
+    target.textContent = "Choose a group to join";
+    return;
+  }
+
+  const update = () => {
+    const count = source.textContent.replace(/[^0-9]/g, "");
+    target.textContent = count
+      ? `${count} member${count === "1" ? "" : "s"}`
+      : "Members loading…";
+  };
+
+  update();
+  profileCountObserver = new MutationObserver(update);
+  profileCountObserver.observe(source, { childList: true, characterData: true, subtree: true });
+}
+
+$("member-logout-btn")?.addEventListener("click", async () => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error("Sign-out error:", error);
+    alert("Unable to sign out. Please try again.");
+  }
+});
+
 async function displayMemberScreen(user, member) {
   if (!user || user.isAnonymous || !member) return;
 
   currentUser = user;
   currentMember = member;
 
-  if (membershipStatus) {
-    membershipStatus.replaceChildren();
-
-    const heading = document.createElement("h3");
-    heading.textContent = `Welcome, ${member.fullName || "Member"}!`;
-
-    const group = document.createElement("p");
-    group.textContent = GROUPS[member.groupId]
-      ? `Your Bible study group: ${GROUPS[member.groupId].name}`
-      : isAdmin()
-        ? "Administrator account"
-        : "Your membership is active.";
-
-    const logout = document.createElement("button");
-    logout.type = "button";
-    logout.className = "membership-submit";
-    logout.textContent = "Sign Out";
-
-    logout.addEventListener("click", async () => {
-      try {
-        await signOut(auth);
-      } catch (error) {
-        console.error("Sign-out error:", error);
-        alert("Unable to sign out. Please try again.");
-      }
-    });
-
-    membershipStatus.append(heading, group, logout);
-    show(membershipStatus);
-  }
+  renderProfile(member);
+  hide(membershipStatus);
 
   hide(membershipChoice);
   hide(membershipForms);
@@ -588,7 +659,7 @@ async function displayMemberScreen(user, member) {
   startGroupCountListener();
   startStudyContentListener();
 
-  showSection(takePendingSection());
+  showSection(takePendingSection(), { replace: true });
   markAuthReady(true);
 }
 
@@ -628,7 +699,8 @@ onAuthStateChanged(auth, async user => {
 
     document.body.classList.add("auth-locked");
     showMembershipChoice();
-    showSection("home");
+    hide($("member-dashboard"));
+    showSection("home", { replace: true });
     markAuthReady(false);
     return;
   }
@@ -1681,5 +1753,7 @@ addGroupIcons();
 // Returning members see the splash until Firebase restores their session;
 // everyone else gets the page (or the sign-in screen) right away.
 if (!document.documentElement.classList.contains("auth-pending")) {
-  showSection(isRoutableSection(pendingSection) ? pendingSection : "home");
+  showSection(isRoutableSection(pendingSection) ? pendingSection : "home", {
+    replace: true
+  });
 }

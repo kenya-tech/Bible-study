@@ -1740,3 +1740,339 @@ html.auth-pending .app-splash {
         animation: none;
     }
 }
+
+/* =========================================================
+   HOME — EXPLORE (clearer, centred)
+========================================================= */
+
+.home-explore {
+    padding-top: 88px;
+}
+
+.home-explore-heading {
+    max-width: 640px;
+    margin: 0 auto 36px;
+    text-align: center;
+}
+
+.home-explore-heading .section-label {
+    padding: 7px 14px;
+    border-radius: 999px;
+    color: var(--p-violet);
+    background: #efe7fb;
+}
+
+.home-explore-heading h2 {
+    margin: 16px 0 10px;
+    font-size: clamp(30px, 4vw, 44px);
+    letter-spacing: -0.02em;
+}
+
+.home-explore-heading p {
+    margin: 0;
+    color: var(--p-muted);
+    font-size: 16px;
+    line-height: 1.65;
+}
+
+/* give each card its own accent so they're easy to tell apart */
+.home-bento .bento-card:nth-child(2) .bento-icon { color: #2563eb; background: #e8f0fe; }
+.home-bento .bento-card:nth-child(3) .bento-icon { color: #b7791f; background: #fdf3e1; }
+.home-bento .bento-card:nth-child(4) .bento-icon { color: #16a34a; background: #e8f7ee; }
+.home-bento .bento-card:nth-child(5) .bento-icon { color: #c026d3; background: #fbe8fd; }
+
+.home-bento .bento-card:not(.bento-feature) {
+    border-color: #e4dcec;
+    box-shadow: 0 1px 2px rgba(20, 10, 29, 0.06), 0 12px 32px -18px rgba(20, 10, 29, 0.25);
+}
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+.profile-hero {
+    padding-top: calc(var(--header-h) + 48px) !important;
+}
+
+.profile-avatar {
+    width: 96px;
+    height: 96px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 18px;
+    border-radius: 50%;
+    color: var(--p-ink);
+    background: linear-gradient(135deg, #f5d896, var(--p-gold));
+    box-shadow:
+        0 0 0 6px rgba(255, 255, 255, 0.08),
+        0 20px 40px -16px rgba(226, 185, 104, 0.7);
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 36px;
+    font-weight: 600;
+}
+
+#membership .profile-hero h2 {
+    margin: 16px auto 10px !important;
+}
+
+#membership .profile-hero h2#dashboard-member-name {
+    background: none;
+    color: #fff;
+    -webkit-text-fill-color: #fff;
+}
+
+.profile-sub {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.75) !important;
+    font-size: 16px !important;
+}
+
+.profile-sub svg.lucide {
+    color: var(--p-gold);
+}
+
+.profile-chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.profile-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.06);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.profile-chip[hidden] {
+    display: none;
+}
+
+.profile-chip svg.lucide {
+    width: 15px;
+    height: 15px;
+    color: var(--p-gold);
+}
+
+.profile-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1.15fr 1fr;
+    gap: 16px;
+}
+
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 26px;
+    border: 1px solid var(--p-line);
+    border-radius: var(--p-radius);
+    background: var(--p-card);
+    box-shadow: var(--p-shadow);
+}
+
+.profile-card h3 {
+    margin: 0 0 8px;
+    color: var(--p-text);
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.profile-kicker {
+    color: var(--p-violet);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.profile-card-group {
+    color: #fff;
+    border-color: transparent;
+    background:
+        radial-gradient(120% 100% at 100% 0%, rgba(168, 85, 247, 0.5), transparent 60%),
+        linear-gradient(160deg, #2a1240, #140a1d);
+}
+
+.profile-card-group .profile-kicker {
+    color: var(--p-gold);
+}
+
+.profile-card-group h3 {
+    color: #fff;
+    font-size: 28px;
+}
+
+.profile-card-icon {
+    width: 50px;
+    height: 50px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 14px;
+    border-radius: 16px;
+    color: var(--p-ink);
+    background: linear-gradient(135deg, #f5d896, var(--p-gold));
+}
+
+.profile-card-icon svg.lucide {
+    width: 24px;
+    height: 24px;
+}
+
+.profile-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: auto 0 0;
+    padding-top: 12px;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.profile-steps {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.profile-steps a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid var(--p-line);
+    border-radius: 14px;
+    color: var(--p-text);
+    font-size: 14px;
+    font-weight: 600;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.profile-steps a:hover {
+    border-color: #d8c8ea;
+    background: #faf7fd;
+}
+
+.profile-steps a > span {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    color: var(--p-violet);
+    background: #f3edf9;
+}
+
+.profile-steps a > svg.lucide:last-child {
+    margin-left: auto;
+    color: #9a90a4;
+}
+
+.profile-links {
+    display: grid;
+    gap: 8px;
+}
+
+.profile-links a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    color: var(--p-text);
+    background: #f8f6fb;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+.profile-links a:hover {
+    background: #f0eaf7;
+}
+
+.profile-links a svg.lucide {
+    color: var(--p-violet);
+}
+
+#membership .profile-logout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: auto;
+    padding: 12px;
+    border: 1px solid #f3d4d4;
+    border-radius: 12px;
+    color: #b91c1c;
+    background: #fff;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.profile-card:last-child .profile-links {
+    margin-bottom: 14px;
+}
+
+#membership .profile-logout:hover {
+    background: #fef2f2;
+}
+
+/* community grid: highlight the member's group */
+#member-groups-content .group-card {
+    position: relative;
+}
+
+#member-groups-content .group-card.is-mine {
+    border-color: var(--p-violet);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12), var(--p-shadow);
+}
+
+#member-groups-content .group-card.is-mine::after {
+    content: "Your group";
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    color: #fff;
+    background: var(--p-violet);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+@media (max-width: 900px) {
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* keep profile chips on one row and initials centred
+   (overrides the older ".dashboard-header > div" column layout) */
+#membership .profile-hero > .profile-chips {
+    flex-direction: row;
+    align-items: center;
+}
+
+#membership .profile-hero > .profile-avatar {
+    display: grid;
+    place-items: center;
+    padding-top: 4px;
+}
