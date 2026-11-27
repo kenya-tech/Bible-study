@@ -303,20 +303,15 @@ textarea:focus {
 }
 
 /* ---------- No white flash when over-scrolling ---------- */
-/* Disable the rubber-band bounce and match the backdrop to the page,
-   so scrolling past the top or bottom never reveals a white strip. */
-
-html,
-body {
-    overscroll-behavior-y: none;
-}
+/* The bounce area shows the <html> background. Every page starts with a
+   dark header/banner and ends with the dark footer, so a dark backdrop
+   matches both ends. The bounce itself stays on, so mobile
+   pull-to-refresh keeps working. */
 
 html {
-    background: #f7f4fa;
+    background: #140a1d;
 }
 
-/* signed-out: dark sign-in screen */
-html:has(body.auth-locked),
 body.auth-locked {
     background: #140a1d;
 }

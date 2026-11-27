@@ -150,3 +150,42 @@
     onScroll();
   }
 })();
+
+// ======================================================
+// UPDATE CHECK
+// GitHub Pages lets browsers cache pages for ~10 minutes, so a freshly
+// deployed version may not show until a manual refresh. Compare our
+// version with version.json (fetched uncached) and reload when it changes:
+// on load and whenever the user comes back to the tab.
+// ======================================================
+
+(function () {
+  "use strict";
+
+  const meta = document.querySelector('meta[name="app-version"]');
+  const current = meta && meta.content;
+  if (!current || !window.fetch) return;
+
+  async function checkForUpdate() {
+    try {
+      const response = await fetch(`version.json?t=${Date.now()}`, { cache: "no-store" });
+      if (!response.ok) return;
+      const { version } = await response.json();
+      if (!version || version === current) return;
+
+      // Reload once per new version, to avoid a loop if a CDN is still stale.
+      const key = `stmonica-reloaded-${version}`;
+      if (sessionStorage.getItem(key)) return;
+      sessionStorage.setItem(key, "1");
+      window.location.reload();
+    } catch {
+      // Offline or storage blocked: keep the current page.
+    }
+  }
+
+  checkForUpdate();
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") checkForUpdate();
+  });
+})();

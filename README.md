@@ -53,6 +53,7 @@ Bible-study/
 ├── pages.css      # Page redesign: header, home, story, chat, footer
 ├── modern.js      # Icons, sign-in helpers, reading progress
 ├── script.js      # Firebase, auth, navigation, chat, admin logic
+├── version.json   # Current release version (see "Releasing an update")
 └── assets/
     └── logo.svg   # Logo and favicon
 ```
@@ -75,6 +76,19 @@ Then open <http://localhost:8080>.
 
 > **Note:** Sign-in and chat use the project's live Firebase backend, so any
 > account you create locally is a real account.
+
+## Releasing an update
+
+GitHub Pages lets browsers cache files for about 10 minutes. So that people
+see a new release straight away, bump the version in **three places** in the
+same commit:
+
+1. `<meta name="app-version" content="…">` in `index.html`
+2. the `?v=…` on the CSS and JS links in `index.html`
+3. `version.json`
+
+Open pages check `version.json` when they load and whenever the tab becomes
+visible, and reload themselves when the version has changed.
 
 ## Contributing
 
